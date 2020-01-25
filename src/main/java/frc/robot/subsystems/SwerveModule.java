@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
@@ -30,8 +33,8 @@ public class SwerveModule extends SubsystemBase {
   private double offset;
   private boolean isInverted;
 
-  private final WPI_TalonSRX m_driveMotor;
-  private final WPI_TalonSRX m_turningMotor;
+  private final CANSparkMax m_driveMotor;
+  private final CANSparkMax m_turningMotor;
 
   private final Encoder m_driveEncoder;
 
@@ -61,8 +64,8 @@ public class SwerveModule extends SubsystemBase {
     isInverted = reversed;
 
     ai = new AnalogInput(aiPort);
-    m_driveMotor = new WPI_TalonSRX(driveMotorChannel);
-    m_turningMotor = new WPI_TalonSRX(turningMotorChannel);
+    m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
+    m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
     p = turnP;
     i = turnI;
