@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveSwerveWithXbox;
+import frc.robot.commands.PivotPIDTuner;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.SwerveModule;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -36,6 +38,7 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    swerveDrive.setDefaultCommand(new PivotPIDTuner(swerveDrive));//new DriveSwerveWithXbox());
     // Configure the button bindings
     configureButtonBindings();
   }

@@ -7,43 +7,37 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveModule extends SubsystemBase {
-  private final AnalogInput ai;
-
-  private double p, i, d;
-  //private static final int kEncoderResolution = 2048;
-
-  private static final double MIN_VOLTAGE = 0.2, MAX_VOLTAGE = 4.76,
-      DELTA_VOLTAGE = MAX_VOLTAGE - MIN_VOLTAGE;
-      //distancePerPulse = (0.0254 * 4 * Math.PI * 12 * 19) / (kEncoderResolution * 32 * 60);
-      //kModuleMaxAngularVelocity = SwerveDrive.kMaxAngularSpeed, kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared;
-
-  private double offset;
   private boolean isInverted;
+  public final String name;
 
-  private final CANSparkMax m_driveMotor;
-  private final CANSparkMax m_turningMotor;
+  private final CANSparkMax driveMotor;
+  private final CANSparkMax pivotMotor;
 
-  private final Encoder m_driveEncoder;
+  private final CANPIDController pivotPID;
 
-  private final PIDController m_turningPIDController;
+  private final CANEncoder pivotEncoder;
+  private final CANEncoder driveEncoder;
 
   //private final PIDController m_drivePIDController = new PIDController(1 / 10.0, 0, 0);
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Position (Degrees) of " + name, getAngle());
+    SmartDashboard.putNumber("Speed of " + name, driveEncoder.getVelocity());
   }
 
   /**
@@ -59,25 +53,35 @@ public class SwerveModule extends SubsystemBase {
    * @param encB                Port of Encoder B Channel
    * @param offset              Offset of the Pivot Motor, 0 by default
    */
-  public SwerveModule(int driveMotorChannel, int turningMotorChannel, int aiPort, double turnP, double turnI,
-      double turnD, int encA, int encB, boolean reversed) {
+  public SwerveModule(String name, int driveMotorChannel, int pivotMotorChannel, double turnP, double turnI,
+      double turnD, boolean reversed) {
     isInverted = reversed;
 
-    ai = new AnalogInput(aiPort);
-    m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
-    m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
+    this.name = name;
 
-    p = turnP;
-    i = turnI;
-    d = turnD;
+    driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
+    pivotMotor = new CANSparkMax(pivotMotorChannel, MotorType.kBrushless);
+    pivotMotor.setSmartCurrentLimit(30);
 
-    m_turningPIDController = new PIDController(p, i, d);
-    m_driveEncoder = new Encoder(encA, encB);
+    pivotMotor.setIdleMode(IdleMode.kBrake);
+    driveMotor.setIdleMode(IdleMode.kBrake);
+
+    pivotEncoder = pivotMotor.getEncoder();
+    pivotEncoder.setPositionConversionFactor(360.0 / 18.0);
+
+    driveEncoder = driveMotor.getEncoder();
+    driveEncoder.setVelocityConversionFactor((2 * Math.PI * 2) / 8.31); // 4" wheel
+
+    pivotPID = pivotMotor.getPIDController();
+
+    pivotPID.setP(turnP);
+    pivotPID.setI(turnI);
+    pivotPID.setD(turnD);
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
     // resolution.
-    //m_driveEncoder.setDistancePerPulse(distancePerPulse);
+    //driveEncoder.setDistancePerPulse(distancePerPulse);
 
     // // Set the distance (in this case, angle) per pulse for the turning encoder.
     // // This is the the angle through an entire rotation (2 * wpi::math::pi)
@@ -86,11 +90,11 @@ public class SwerveModule extends SubsystemBase {
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
-    m_turningPIDController.enableContinuousInput(MIN_VOLTAGE, MAX_VOLTAGE);
+    //pivotPID.enableContinuousInput(MIN_VOLTAGE, MAX_VOLTAGE);
   }
 
-  public SwerveModule(int driveMotorChannel, int turningMotorChannel, int aiPort, double pVal, double iVal, double dVal, int encA, int encB) {
-    this(driveMotorChannel, turningMotorChannel, aiPort, pVal, iVal, dVal, encA, encB, false);
+  public SwerveModule(String name, int driveMotorChannel, int pivotMotorChannel, double pVal, double iVal, double dVal) {
+    this(name, driveMotorChannel, pivotMotorChannel, pVal, iVal, dVal, false);
   }
 
   /**
@@ -99,7 +103,7 @@ public class SwerveModule extends SubsystemBase {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(m_driveEncoder.getRate(), new Rotation2d(Math.toRadians(getAngle())));
+    return new SwerveModuleState(driveEncoder.getVelocity(), new Rotation2d(Math.toRadians(getAngle())));
   }
 
   /**
@@ -107,14 +111,23 @@ public class SwerveModule extends SubsystemBase {
    *
    * @param state Desired state with speed and angle.
    */
+
+  public void setPid (double p, double i, double d) {
+    pivotPID.setP(p);
+    pivotPID.setI(i);
+    pivotPID.setD(d);
+  }
+
   public double setDesiredState(SwerveModuleState state) {
     // Calculate the drive output from the drive PID controller.
-    //final var driveOutput = m_drivePIDController.calculate(m_driveEncoder.getRate(), state.speedMetersPerSecond);
-    double dAngle = Math.abs(toAngle(ai.getAverageVoltage()) - state.angle.getDegrees());
+    //final var driveOutput = m_drivePIDController.calculate(driveEncoder.getRate(), state.speedMetersPerSecond);
+    double targetAngle = to360(state.angle.getDegrees());
+    double dAngle = Math.abs(to360(getAngle()) - targetAngle);
+    
     boolean isFlipped = dAngle >= 90 && dAngle <= 270;
 
     // Calculate the turning motor output from the turning PID controller.
-    final var turnOutput = m_turningPIDController.calculate(ai.getAverageVoltage(), degreesToVolts((state.angle.getDegrees() + 360.0 + (isFlipped ? 180.0 : 0)) % 360.0));
+    //final var turnOutput = pivotPID.calculate(ai.getAverageVoltage(), degreesToVolts((state.angle.getDegrees() + 360.0 + (isFlipped ? 180.0 : 0)) % 360.0));
 
     // Calculate the turning motor output from the turning PID controller.
     double driveCalculation = state.speedMetersPerSecond;
@@ -126,30 +139,33 @@ public class SwerveModule extends SubsystemBase {
       driveCalculation = -driveCalculation;
     }
 
-    m_driveMotor.set(driveCalculation);
-    m_turningMotor.set(turnOutput);
+    driveMotor.set(driveCalculation);
+    pivotPID.setReference(targetAngle, ControlType.kPosition);
 
     return state.angle.getDegrees();
   }
 
-  public double toAngle(double voltage) {
-    return ((360.0 * (voltage - MIN_VOLTAGE) / DELTA_VOLTAGE) + 360.0 - offset) % 360;
-  }
-
-  public double voltsToRadians(double voltage) {
-    return Math.toRadians(toAngle(voltage));
-  }
-
-  public double degreesToVolts(double angle) {
-    return ((DELTA_VOLTAGE / 360.0) * angle) + MIN_VOLTAGE;
-  }
-
   public double getAngle() {
-    var angle = toAngle(ai.getAverageVoltage());
+    var angle = pivotEncoder.getPosition();
+    angle %= 360;
+
     if(angle > 180) {
       angle -= 360;
     }
+    if(angle < -180) {
+      angle += 360;
+    }
 
     return -angle;
+  }
+
+  private double to360(double angle) {
+    if (angle < 0) {
+      angle = -angle;
+    } else if (angle > 0) {
+      angle = -angle;
+      angle += 360;
+    }
+    return angle;
   }
 }

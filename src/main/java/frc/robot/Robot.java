@@ -9,13 +9,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.DriveSwerveWithXbox;
-
 public class Robot extends TimedRobot {
+
+  RobotContainer robotContainer;
 
   @Override
   public void robotInit() {
-    RobotContainer.swerveDrive.setDefaultCommand(new DriveSwerveWithXbox());
+    robotContainer = new RobotContainer();
   }
 
   @Override
