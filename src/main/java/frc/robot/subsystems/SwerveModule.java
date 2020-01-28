@@ -113,9 +113,7 @@ public class SwerveModule extends SubsystemBase {
    * @param d the d value for the pivot module
    */
   public void setPid(double p, double i, double d) {
-    pivotPID.setP(p);
-    pivotPID.setI(i);
-    pivotPID.setD(d);
+    pivotPID.setPID(p, i, d);
   }
 
   /**
