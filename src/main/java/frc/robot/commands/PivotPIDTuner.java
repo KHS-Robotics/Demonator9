@@ -8,16 +8,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.SwerveModule;
 
 public class PivotPIDTuner extends CommandBase {
-  double p, i, d;
-  Rotation2d setPoint;
+  double p, i, d, setPoint;
   SwerveModule sModule;
 
   public PivotPIDTuner(SwerveDrive swerve) {
@@ -42,12 +40,10 @@ public class PivotPIDTuner extends CommandBase {
     i = SmartDashboard.getNumber("I-Value", 0.0);
     d = SmartDashboard.getNumber("D-Value", 0.0);
 
-    setPoint = Rotation2d.fromDegrees(SmartDashboard.getNumber("Setpoint (Angle)", 0.0));
+    setPoint = SmartDashboard.getNumber("Setpoint (Angle)", 0.0);
 
     sModule.setPid(p, i, d);
-    sModule.setDesiredState(new SwerveModuleState(0.0, setPoint));
-
-    SmartDashboard.putNumber("Angle", sModule.getAngle());
+    sModule.setDesiredState(0, setPoint, false);
   }
 
   // Make this return true when this Command no longer needs to run execute()
