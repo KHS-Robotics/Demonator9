@@ -18,9 +18,9 @@ public class PivotPIDTuner extends CommandBase {
   double p, i, d, setPoint;
   SwerveModule sModule;
 
-  public PivotPIDTuner(SwerveDrive swerve) {
-    this.addRequirements(swerve);
-    sModule = swerve.m_frontRight;
+  public PivotPIDTuner() {
+    this.addRequirements(RobotContainer.swerveDrive);
+    sModule = RobotContainer.swerveDrive.m_frontLeft;
   }
 
   // Called just before this Command runs the first time

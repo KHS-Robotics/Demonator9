@@ -16,21 +16,21 @@ package frc.robot;
 public class Constants {
   // If you are using multiple modules, make sure to define both the port
   // number and the module.
-  public static final double FRONT_LEFT_P = 2.0;
-  public static final double FRONT_LEFT_I = 0.005;
-  public static final double FRONT_LEFT_D = 0.09;
+  public static final double FRONT_LEFT_P = 0.015;
+  public static final double FRONT_LEFT_I = 0.0;
+  public static final double FRONT_LEFT_D = 0.0;
   
-  public static final double FRONT_RIGHT_P = 2.0;
-  public static final double FRONT_RIGHT_D = 0.005;
-  public static final double FRONT_RIGHT_I = 0.09;
+  public static final double FRONT_RIGHT_P = 0.015;
+  public static final double FRONT_RIGHT_D = 0.0;
+  public static final double FRONT_RIGHT_I = 0.0;
 
-  public static final double REAR_LEFT_P = 2.0;
-  public static final double REAR_LEFT_I = 0.005;
-  public static final double REAR_LEFT_D = 0.09;
+  public static final double REAR_LEFT_P = 0.015;
+  public static final double REAR_LEFT_I = 0.0;
+  public static final double REAR_LEFT_D = 0.0;
 
-  public static final double REAR_RIGHT_P = 2.0;
-  public static final double REAR_RIGHT_I = 0.005;
-  public static final double REAR_RIGHT_D = 0.09;
+  public static final double REAR_RIGHT_P = 0.015;
+  public static final double REAR_RIGHT_I = 0.0;
+  public static final double REAR_RIGHT_D = 0.0;
 
   public static final double TARGET_P = 0.0275;
   public static final double TARGET_I = 0.0;

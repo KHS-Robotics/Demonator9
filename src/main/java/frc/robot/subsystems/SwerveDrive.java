@@ -31,16 +31,42 @@ public class SwerveDrive extends SubsystemBase {
   private final Translation2d m_backLeftLocation = new Translation2d(-0.5969, 0.5969);
   private final Translation2d m_backRightLocation = new Translation2d(-0.5969, -0.5969);
 
-  public static final SwerveModule m_frontLeft = new SwerveModule("FL", RobotMap.FRONT_LEFT_DRIVE,
-      RobotMap.FRONT_LEFT_PIVOT, Constants.FRONT_LEFT_P, Constants.FRONT_LEFT_I, Constants.FRONT_LEFT_D);
-  public static final SwerveModule m_frontRight = new SwerveModule("FR", RobotMap.FRONT_RIGHT_DRIVE,
-      RobotMap.FRONT_RIGHT_PIVOT, Constants.FRONT_RIGHT_P, Constants.FRONT_RIGHT_I, Constants.FRONT_RIGHT_D, true);
-  public static final SwerveModule m_backLeft = new SwerveModule("RL", RobotMap.REAR_LEFT_DRIVE,
-      RobotMap.REAR_LEFT_PIVOT, Constants.REAR_LEFT_P, Constants.REAR_LEFT_I, Constants.REAR_LEFT_D);
-  public static final SwerveModule m_backRight = new SwerveModule("RR", RobotMap.REAR_RIGHT_DRIVE,
-      RobotMap.REAR_RIGHT_PIVOT, Constants.REAR_RIGHT_P, Constants.REAR_RIGHT_I, Constants.REAR_RIGHT_D, true);
-
-  // private final AnalogGyro m_gyro = new AnalogGyro(0);
+  public static final SwerveModule m_frontLeft = new SwerveModule(
+    "FL", 
+    RobotMap.FRONT_LEFT_DRIVE,
+    RobotMap.FRONT_LEFT_PIVOT, 
+    Constants.FRONT_LEFT_P, 
+    Constants.FRONT_LEFT_I, 
+    Constants.FRONT_LEFT_D, 
+    RobotMap.FRONT_LEFT_DIGITAL_INPUT
+  );
+  public static final SwerveModule m_frontRight = new SwerveModule(
+    "FR", 
+    RobotMap.FRONT_RIGHT_DRIVE,
+    RobotMap.FRONT_RIGHT_PIVOT, 
+    Constants.FRONT_RIGHT_P, 
+    Constants.FRONT_RIGHT_I, 
+    Constants.FRONT_RIGHT_D, 
+    RobotMap.FRONT_RIGHT_DIGITAL_INPUT
+  );
+  public static final SwerveModule m_backLeft = new SwerveModule(
+    "RL", 
+    RobotMap.REAR_LEFT_DRIVE,
+    RobotMap.REAR_LEFT_PIVOT, 
+    Constants.REAR_LEFT_P, 
+    Constants.REAR_LEFT_I, 
+    Constants.REAR_LEFT_D, 
+    RobotMap.REAR_LEFT_DIGITAL_INPUT
+  );
+  public static final SwerveModule m_backRight = new SwerveModule(
+    "RR",
+    RobotMap.REAR_RIGHT_DRIVE,
+    RobotMap.REAR_RIGHT_PIVOT, 
+    Constants.REAR_RIGHT_P, 
+    Constants.REAR_RIGHT_I, 
+    Constants.REAR_RIGHT_D, 
+    RobotMap.REAR_RIGHT_DIGITAL_INPUT 
+  );
 
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_frontLeftLocation,
       m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
@@ -75,16 +101,25 @@ public class SwerveDrive extends SubsystemBase {
         .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getAngle())
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, kMaxSpeed);
+
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_frontRight.setDesiredState(swerveModuleStates[1]);
+    m_backLeft.setDesiredState(swerveModuleStates[2]);
+    m_backRight.setDesiredState(swerveModuleStates[3]);
+    // System.out.println("FR " + swerveModuleStates[0].angle.getDegrees());
+    // System.out.println("FL " + swerveModuleStates[1].angle.getDegrees());
+    // System.out.println("RL" + swerveModuleStates[2].angle.getDegrees());
+    // System.out.println("RR " + swerveModuleStates[3].angle.getDegrees());
   }
 
   @Override
 
   public void periodic() {
-    var pose = this.getPose();
-    SmartDashboard.putNumber("Pose-X (meters)", pose.getTranslation().getX());
-    SmartDashboard.putNumber("Pose-Y (meters)", pose.getTranslation().getY());
-    SmartDashboard.putNumber("Pose-Norm (meters)", pose.getTranslation().getNorm());
-    SmartDashboard.putNumber("Pose-Rotation (Deg)", pose.getRotation().getDegrees());
+    // var pose = this.getPose();
+    // SmartDashboard.putNumber("Pose-X (meters)", pose.getTranslation().getX());
+    // SmartDashboard.putNumber("Pose-Y (meters)", pose.getTranslation().getY());
+    // SmartDashboard.putNumber("Pose-Norm (meters)", pose.getTranslation().getNorm());
+    // SmartDashboard.putNumber("Pose-Rotation (Deg)", pose.getRotation().getDegrees());
 
     SmartDashboard.putNumber("Robot Angle (Deg)", getAngle().getDegrees());
   }
@@ -101,10 +136,21 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void stop() {
-    RobotContainer.swerveDrive.drive(0, 0, 0, false);
+    m_frontRight.stop();
+    m_frontLeft.stop();
+    m_backRight.stop();
+    m_backLeft.stop();
   }
 
   public void resetNavx() {
     RobotContainer.navx.reset();
+  }
+
+  public boolean resetEncoders() { 
+    boolean fl = m_frontLeft.resetEncoder();
+    boolean fr = m_frontRight.resetEncoder();
+    boolean rl = m_backLeft.resetEncoder();
+    boolean rr = m_backRight.resetEncoder();
+    return fl && fr && rl && rr;
   }
 }

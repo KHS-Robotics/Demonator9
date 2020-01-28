@@ -12,6 +12,8 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.CenterSwerveModules;
 import frc.robot.commands.DriveSwerveWithXbox;
 import frc.robot.commands.PivotPIDTuner;
 import frc.robot.subsystems.SwerveDrive;
@@ -29,15 +31,13 @@ public class RobotContainer {
   public static final SwerveDrive swerveDrive = new SwerveDrive();
   public static final XboxController xboxController = new XboxController(RobotMap.XBOX_PORT);
 
-  public static final DriveSwerveWithXbox driveSwerveWithXbox = new DriveSwerveWithXbox();
-
-
-
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    swerveDrive.setDefaultCommand(new PivotPIDTuner(swerveDrive));//new DriveSwerveWithXbox());
+    swerveDrive.setDefaultCommand(new DriveSwerveWithXbox());
+    //swerveDrive.setDefaultCommand(new PivotPIDTuner());
+    
     // Configure the button bindings
     configureButtonBindings();
   }

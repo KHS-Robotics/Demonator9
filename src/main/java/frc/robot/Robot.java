@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.CenterSwerveModules;
 public class Robot extends TimedRobot {
 
   RobotContainer robotContainer;
@@ -32,6 +33,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //driveWithJoystick(false);
+    if(RobotContainer.xboxController.getBackButton()) {
+      new CenterSwerveModules().schedule();
+    }
   }
  
 }

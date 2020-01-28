@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
@@ -34,6 +35,7 @@ public class SwerveModule extends SubsystemBase {
   private final CANEncoder pivotEncoder;
 
   private final PIDController pivotPID;
+  private final DigitalInput setDetection;
   // private final CANPIDController pivotPID;
 
   // TODO: speed control for driving
@@ -49,7 +51,7 @@ public class SwerveModule extends SubsystemBase {
    * @param pivotD D value of Pivot PID
    * @param reversed true if drive motor is reversed
    */
-  public SwerveModule(String name, int driveMotorChannel, int pivotMotorChannel, double pivotP, double pivotI, double pivotD, boolean reversed) {
+  public SwerveModule(String name, int driveMotorChannel, int pivotMotorChannel, double pivotP, double pivotI, double pivotD, int digitalInputPort, boolean reversed) {
     isInverted = reversed;
 
     this.name = name;
@@ -73,6 +75,8 @@ public class SwerveModule extends SubsystemBase {
     pivotPID = new PIDController(pivotP, pivotI, pivotD);
     pivotPID.enableContinuousInput(-180, 180);
     pivotPID.setTolerance(2);
+
+    setDetection = new DigitalInput(digitalInputPort);
   }
 
   /**
@@ -84,18 +88,19 @@ public class SwerveModule extends SubsystemBase {
    * @param pivotI I value of Pivot PID
    * @param pivotD D value of Pivot PID
    */
-  public SwerveModule(String name, int driveMotorChannel, int pivotMotorChannel, double pivotP, double pivotI, double pivotD) {
-    this(name, driveMotorChannel, pivotMotorChannel, pivotP, pivotP, pivotP, false);
+  public SwerveModule(String name, int driveMotorChannel, int pivotMotorChannel, double pivotP, double pivotI, double pivotD, int digitalInputPort) {
+    this(name, driveMotorChannel, pivotMotorChannel, pivotP, pivotP, pivotP, digitalInputPort, false);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber(name + " Speed (m/s)", driveEncoder.getVelocity());
+    // SmartDashboard.putNumber(name + " Speed (m/s)", driveEncoder.getVelocity());
     SmartDashboard.putNumber(name + " Angle (Deg)", this.getAngle());
     SmartDashboard.putNumber(name + " Setpoint (Deg)", pivotPID.getSetpoint());
     SmartDashboard.putNumber(name + " Error (Deg)", pivotPID.getPositionError());
     SmartDashboard.putBoolean(name + " atSetpoint", pivotPID.atSetpoint());
     SmartDashboard.putBoolean(name + " isFlipped", this.isFlipped);
+    SmartDashboard.putBoolean(name + " isCenter", !this.setDetection.get());
   }
 
   /**
@@ -123,7 +128,7 @@ public class SwerveModule extends SubsystemBase {
    */
   public void setDesiredState(SwerveModuleState state, boolean useShortestPath) {
     pivotMotor.set(pivotPID.calculate(getAngle(), useShortestPath ? calculateShortestPath(state.angle.getDegrees()) : state.angle.getDegrees()));
-    driveMotor.set(state.speedMetersPerSecond*(isInverted ? -1 : 1)*(isFlipped && useShortestPath ? -1 : 1)); // TODO: speed control for driving
+    //driveMotor.set(state.speedMetersPerSecond*(isInverted ? -1 : 1)*(isFlipped && useShortestPath ? -1 : 1)); // TODO: speed control for driving
   }
 
   /**
@@ -181,6 +186,21 @@ public class SwerveModule extends SubsystemBase {
     driveMotor.set(0);
     pivotMotor.set(0);
     pivotPID.reset();
+  }
+
+  /**
+   * For homing the modules
+   * @return true if all modules are homed
+   */
+  public boolean resetEncoder() {
+    if(setDetection.get()) { // sensor inverted
+      pivotMotor.set(0.025);
+      return false;
+    } else {
+      pivotMotor.set(0);
+      pivotEncoder.setPosition(0.0);
+      return true;
+    }
   }
 
   /**
