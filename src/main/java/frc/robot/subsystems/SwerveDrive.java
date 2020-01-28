@@ -25,10 +25,10 @@ public class SwerveDrive extends SubsystemBase {
   public static final double kMaxSpeed = 1.0; // 1 meters per second
   public static final double kMaxAngularSpeed = 1; // 1 radian per second
 
-  private final Translation2d m_frontLeftLocation = new Translation2d(0.2667, 0.327025);
-  private final Translation2d m_frontRightLocation = new Translation2d(0.2667, -0.327025);
-  private final Translation2d m_backLeftLocation = new Translation2d(-0.2667, 0.327025);
-  private final Translation2d m_backRightLocation = new Translation2d(-0.2667, -0.327025);
+  private final Translation2d m_frontLeftLocation = new Translation2d(0.5969, 0.5969);
+  private final Translation2d m_frontRightLocation = new Translation2d(0.5969, -0.5969);
+  private final Translation2d m_backLeftLocation = new Translation2d(-0.5969, 0.5969);
+  private final Translation2d m_backRightLocation = new Translation2d(-0.5969, -0.5969);
 
   public static final SwerveModule m_frontLeft = new SwerveModule(
     "FL",
