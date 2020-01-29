@@ -131,7 +131,8 @@ public class SwerveModule extends SubsystemBase {
    */
   public void setDesiredState(SwerveModuleState state, boolean useShortestPath) {
     pivotMotor.set(MathUtil.clamp(pivotPID.calculate(getAngle(), useShortestPath ? calculateShortestPath(state.angle.getDegrees()) : state.angle.getDegrees()), -1, 1));
-    //driveMotor.set(state.speedMetersPerSecond*(isInverted ? -1 : 1)*(isFlipped && useShortestPath ? -1 : 1)); // TODO: speed control for driving
+    //driveMotor.set(state.speedMetersPerSecond*(isInverted ? -1 : 1)*(isFlipped && useShortestPath ? -1 : 1)); 
+    // TODO: speed control for driving
   }
 
   /**
@@ -165,7 +166,7 @@ public class SwerveModule extends SubsystemBase {
    * Gets the angle of the pivot module.
    * @return the angle of the pivot module ranging from [-180,180]
    */
-  public double getAngle() {
+  private double getAngle() {
     var angle = pivotEncoder.getPosition();
     if(angle > 0) {
       angle %= 360;
