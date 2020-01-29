@@ -38,7 +38,8 @@ public class SwerveDrive extends SubsystemBase {
     Constants.FRONT_LEFT_P, 
     Constants.FRONT_LEFT_I, 
     Constants.FRONT_LEFT_D, 
-    RobotMap.FRONT_LEFT_DIGITAL_INPUT
+    RobotMap.FRONT_LEFT_DIGITAL_INPUT,
+    true
   );
   public static final SwerveModule frontRight = new SwerveModule(
     "FR", 
@@ -56,7 +57,8 @@ public class SwerveDrive extends SubsystemBase {
     Constants.REAR_LEFT_P, 
     Constants.REAR_LEFT_I, 
     Constants.REAR_LEFT_D, 
-    RobotMap.REAR_LEFT_DIGITAL_INPUT
+    RobotMap.REAR_LEFT_DIGITAL_INPUT,
+    true
   );
   public static final SwerveModule rearRight = new SwerveModule(
     "RR",
