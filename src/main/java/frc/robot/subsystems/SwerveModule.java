@@ -219,10 +219,10 @@ public class SwerveModule extends SubsystemBase {
     isFlipped = dAngle > 90 && dAngle < 270;
     
     if(isFlipped) {
-      if(targetAngle > 0) {
+      if(targetAngle > 0 || targetAngle == 0 && currentAngle < 0) {
         targetAngle -= 180;
       }
-      else if(targetAngle < 0) {
+      else if(targetAngle < 0 || targetAngle == 0 && currentAngle > 0) {
         targetAngle += 180;
       }
     }
