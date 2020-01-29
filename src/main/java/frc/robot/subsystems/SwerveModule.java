@@ -90,7 +90,7 @@ public class SwerveModule extends SubsystemBase {
    * @param pivotD D value of Pivot PID
    */
   public SwerveModule(String name, int driveMotorChannel, int pivotMotorChannel, double pivotP, double pivotI, double pivotD, int digitalInputPort) {
-    this(name, driveMotorChannel, pivotMotorChannel, pivotP, pivotP, pivotP, digitalInputPort, false);
+    this(name, driveMotorChannel, pivotMotorChannel, pivotP, pivotI, pivotD, digitalInputPort, false);
   }
 
   @Override
@@ -128,7 +128,6 @@ public class SwerveModule extends SubsystemBase {
    * @param useShortestPath whether or not to use the shortest path
    */
   public void setDesiredState(SwerveModuleState state, boolean useShortestPath) {
-    pivotPID.reset();
     pivotMotor.set(MathUtil.clamp(pivotPID.calculate(getAngle(), useShortestPath ? calculateShortestPath(state.angle.getDegrees()) : state.angle.getDegrees()), -1, 1));
     //driveMotor.set(state.speedMetersPerSecond*(isInverted ? -1 : 1)*(isFlipped && useShortestPath ? -1 : 1)); // TODO: speed control for driving
   }
