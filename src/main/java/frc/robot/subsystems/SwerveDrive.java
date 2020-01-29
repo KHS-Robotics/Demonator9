@@ -137,7 +137,7 @@ public class SwerveDrive extends SubsystemBase {
   public void rotateToAngleInPlace(double setAngle) {
     this.setAngle = setAngle;
     SmartDashboard.putNumber("Target Angle", setAngle);
-    var rotateOutput = targetPid.calculate(RobotContainer.navx.getAngle() % 360, setAngle);
+    var rotateOutput = targetPid.calculate(getAngle().getDegrees(), setAngle);
     this.drive(0, 0, MathUtil.clamp(rotateOutput, -1, 1), false);
   }
 
