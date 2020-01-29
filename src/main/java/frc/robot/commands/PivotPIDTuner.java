@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.SwerveModule;
 
 public class PivotPIDTuner extends CommandBase {
@@ -19,7 +20,7 @@ public class PivotPIDTuner extends CommandBase {
 
   public PivotPIDTuner() {
     this.addRequirements(RobotContainer.swerveDrive);
-    sModule = RobotContainer.swerveDrive.m_frontLeft;
+    sModule = SwerveDrive.frontLeft;
   }
 
   // Called just before this Command runs the first time

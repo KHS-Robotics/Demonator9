@@ -26,12 +26,12 @@ public class SwerveDrive extends SubsystemBase {
   public static final double kMaxSpeed = 1.0; // 1 meters per second
   public static final double kMaxAngularSpeed = 1; // 1 radian per second
 
-  private final Translation2d m_frontLeftLocation = new Translation2d(0.5969, 0.5969);
-  private final Translation2d m_frontRightLocation = new Translation2d(0.5969, -0.5969);
-  private final Translation2d m_backLeftLocation = new Translation2d(-0.5969, 0.5969);
-  private final Translation2d m_backRightLocation = new Translation2d(-0.5969, -0.5969);
+  private final Translation2d frontLeftLocation = new Translation2d(0.5969, 0.5969);
+  private final Translation2d frontRightLocation = new Translation2d(0.5969, -0.5969);
+  private final Translation2d rearLeftLocation = new Translation2d(-0.5969, 0.5969);
+  private final Translation2d rearRightLocation = new Translation2d(-0.5969, -0.5969);
 
-  public static final SwerveModule m_frontLeft = new SwerveModule(
+  public static final SwerveModule frontLeft = new SwerveModule(
     "FL", 
     RobotMap.FRONT_LEFT_DRIVE,
     RobotMap.FRONT_LEFT_PIVOT, 
@@ -40,7 +40,7 @@ public class SwerveDrive extends SubsystemBase {
     Constants.FRONT_LEFT_D, 
     RobotMap.FRONT_LEFT_DIGITAL_INPUT
   );
-  public static final SwerveModule m_frontRight = new SwerveModule(
+  public static final SwerveModule frontRight = new SwerveModule(
     "FR", 
     RobotMap.FRONT_RIGHT_DRIVE,
     RobotMap.FRONT_RIGHT_PIVOT, 
@@ -49,7 +49,7 @@ public class SwerveDrive extends SubsystemBase {
     Constants.FRONT_RIGHT_D, 
     RobotMap.FRONT_RIGHT_DIGITAL_INPUT
   );
-  public static final SwerveModule m_backLeft = new SwerveModule(
+  public static final SwerveModule rearLeft = new SwerveModule(
     "RL", 
     RobotMap.REAR_LEFT_DRIVE,
     RobotMap.REAR_LEFT_PIVOT, 
@@ -58,7 +58,7 @@ public class SwerveDrive extends SubsystemBase {
     Constants.REAR_LEFT_D, 
     RobotMap.REAR_LEFT_DIGITAL_INPUT
   );
-  public static final SwerveModule m_backRight = new SwerveModule(
+  public static final SwerveModule rearRight = new SwerveModule(
     "RR",
     RobotMap.REAR_RIGHT_DRIVE,
     RobotMap.REAR_RIGHT_PIVOT, 
@@ -68,11 +68,14 @@ public class SwerveDrive extends SubsystemBase {
     RobotMap.REAR_RIGHT_DIGITAL_INPUT 
   );
 
-  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_frontLeftLocation,
-      m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+  private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,
+      frontRightLocation, rearLeftLocation, rearRightLocation);
 
-  private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, this.getAngle());
+  private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, this.getAngle());
 
+  /**
+   * Constructs Swerve Drive
+   */
   public SwerveDrive() {
     RobotContainer.navx.reset();
   }
@@ -97,15 +100,15 @@ public class SwerveDrive extends SubsystemBase {
    *                      field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    var swerveModuleStates = m_kinematics
+    var swerveModuleStates = kinematics
         .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getAngle())
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, kMaxSpeed);
 
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_backLeft.setDesiredState(swerveModuleStates[2]);
-    m_backRight.setDesiredState(swerveModuleStates[3]);
+    frontLeft.setDesiredState(swerveModuleStates[0]);
+    frontRight.setDesiredState(swerveModuleStates[1]);
+    rearLeft.setDesiredState(swerveModuleStates[2]);
+    rearRight.setDesiredState(swerveModuleStates[3]);
     // System.out.println("FR " + swerveModuleStates[0].angle.getDegrees());
     // System.out.println("FL " + swerveModuleStates[1].angle.getDegrees());
     // System.out.println("RL" + swerveModuleStates[2].angle.getDegrees());
@@ -125,21 +128,21 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    return odometry.getPoseMeters();
   }
   /**
    * Updates the field relative position of the robot.
    */
   public void updateOdometry() {
-    m_odometry.update(this.getAngle(), m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(),
-        m_backRight.getState());
+    odometry.update(this.getAngle(), frontLeft.getState(), frontRight.getState(), rearLeft.getState(),
+        rearRight.getState());
   }
 
   public void stop() {
-    m_frontRight.stop();
-    m_frontLeft.stop();
-    m_backRight.stop();
-    m_backLeft.stop();
+    frontRight.stop();
+    frontLeft.stop();
+    rearRight.stop();
+    rearLeft.stop();
   }
 
   public void resetNavx() {
@@ -147,10 +150,10 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public boolean resetEncoders() { 
-    boolean fl = m_frontLeft.resetEncoder();
-    boolean fr = m_frontRight.resetEncoder();
-    boolean rl = m_backLeft.resetEncoder();
-    boolean rr = m_backRight.resetEncoder();
+    boolean fl = frontLeft.resetEncoder();
+    boolean fr = frontRight.resetEncoder();
+    boolean rl = rearLeft.resetEncoder();
+    boolean rr = rearRight.resetEncoder();
     return fl && fr && rl && rr;
   }
 }

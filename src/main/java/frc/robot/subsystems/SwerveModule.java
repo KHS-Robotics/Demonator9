@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * Swerve Module
  */
 public class SwerveModule extends SubsystemBase {
-  public final String name;
+  private final String name;
 
   private boolean isFlipped;
   private final boolean isInverted;
@@ -40,7 +40,7 @@ public class SwerveModule extends SubsystemBase {
   // private final CANPIDController pivotPID;
 
   // TODO: speed control for driving
-  //private final PIDController m_drivePIDController = new PIDController(0, 0, 0);
+  //private final PIDController drivePIDController = new PIDController(0, 0, 0);
 
   /**
    * Constructs a Swerve Module.
@@ -88,6 +88,7 @@ public class SwerveModule extends SubsystemBase {
    * @param pivotP P value of Pivot PID
    * @param pivotI I value of Pivot PID
    * @param pivotD D value of Pivot PID
+   * @param digitalInputPort port number for the digital input, used to calibrate pivots
    */
   public SwerveModule(String name, int driveMotorChannel, int pivotMotorChannel, double pivotP, double pivotI, double pivotD, int digitalInputPort) {
     this(name, driveMotorChannel, pivotMotorChannel, pivotP, pivotI, pivotD, digitalInputPort, false);
@@ -191,7 +192,7 @@ public class SwerveModule extends SubsystemBase {
 
   /**
    * For homing the modules
-   * @return true if all modules are homed
+   * @return true if module is homed
    */
   public boolean resetEncoder() {
     if(setDetection.get()) { // sensor inverted
