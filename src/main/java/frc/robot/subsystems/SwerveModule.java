@@ -50,6 +50,7 @@ public class SwerveModule extends SubsystemBase {
    * @param pivotP P value of Pivot PID
    * @param pivotI I value of Pivot PID
    * @param pivotD D value of Pivot PID
+   * @param digitalInputPort port number for the digital input, used to calibrate pivots
    * @param reversed true if drive motor is reversed
    */
   public SwerveModule(String name, int driveMotorChannel, int pivotMotorChannel, double pivotP, double pivotI, double pivotD, int digitalInputPort, boolean reversed) {
