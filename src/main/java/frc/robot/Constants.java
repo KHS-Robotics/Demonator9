@@ -32,8 +32,8 @@ public class Constants {
   public static final double REAR_RIGHT_I = 0.0;
   public static final double REAR_RIGHT_D = 0.0;
 
-  public static final double TARGET_P = 0.0275;
+  public static final double TARGET_P = 0.0;
   public static final double TARGET_I = 0.0;
-  public static final double TARGET_D = 0.015;
+  public static final double TARGET_D = 0.0;
   
 }

@@ -8,6 +8,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -25,7 +27,9 @@ import frc.robot.RobotMap;
 public class SwerveDrive extends SubsystemBase {
   public static final double kMaxSpeed = 1.0; // 1 meters per second
   public static final double kMaxAngularSpeed = 1; // 1 radian per second
+  private double setAngle;
 
+  private PIDController targetPid;
   private final Translation2d frontLeftLocation = new Translation2d(0.29845, 0.29845);
   private final Translation2d frontRightLocation = new Translation2d(0.29845, -0.29845);
   private final Translation2d rearLeftLocation = new Translation2d(-0.29845, 0.29845);
@@ -80,6 +84,7 @@ public class SwerveDrive extends SubsystemBase {
    */
   public SwerveDrive() {
     RobotContainer.navx.reset();
+    targetPid = new PIDController(Constants.TARGET_P, Constants.TARGET_I, Constants.TARGET_D);
   }
 
   /**
@@ -118,7 +123,6 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   @Override
-
   public void periodic() {
     // var pose = this.getPose();
     // SmartDashboard.putNumber("Pose-X (meters)", pose.getTranslation().getX());
@@ -127,6 +131,18 @@ public class SwerveDrive extends SubsystemBase {
     // SmartDashboard.putNumber("Pose-Rotation (Deg)", pose.getRotation().getDegrees());
 
     SmartDashboard.putNumber("Robot Angle (Deg)", getAngle().getDegrees());
+  }
+
+
+  public void rotateToAngleInPlace(double setAngle) {
+    this.setAngle = setAngle;
+    SmartDashboard.putNumber("Target Angle", setAngle);
+    var rotateOutput = targetPid.calculate(RobotContainer.navx.getAngle() % 360, setAngle);
+    this.drive(0, 0, MathUtil.clamp(rotateOutput, -1, 1), false);
+  }
+
+  public boolean atSetpoint() {
+    return Math.abs(setAngle - (RobotContainer.navx.getAngle() % 360)) < 4;
   }
 
   public Pose2d getPose() {
