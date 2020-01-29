@@ -28,7 +28,7 @@ public class Constants {
   public static final double REAR_LEFT_I = 0.0;
   public static final double REAR_LEFT_D = 0.0;
 
-  public static final double REAR_RIGHT_P = 0.001;//0.015;
+  public static final double REAR_RIGHT_P = 0.015;
   public static final double REAR_RIGHT_I = 0.0;
   public static final double REAR_RIGHT_D = 0.0;
 
