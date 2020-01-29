@@ -7,6 +7,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
@@ -127,7 +128,8 @@ public class SwerveModule extends SubsystemBase {
    * @param useShortestPath whether or not to use the shortest path
    */
   public void setDesiredState(SwerveModuleState state, boolean useShortestPath) {
-    pivotMotor.set(pivotPID.calculate(getAngle(), useShortestPath ? calculateShortestPath(state.angle.getDegrees()) : state.angle.getDegrees()));
+    pivotPID.reset();
+    pivotMotor.set(MathUtil.clamp(pivotPID.calculate(getAngle(), useShortestPath ? calculateShortestPath(state.angle.getDegrees()) : state.angle.getDegrees()), -1, 1));
     //driveMotor.set(state.speedMetersPerSecond*(isInverted ? -1 : 1)*(isFlipped && useShortestPath ? -1 : 1)); // TODO: speed control for driving
   }
 
