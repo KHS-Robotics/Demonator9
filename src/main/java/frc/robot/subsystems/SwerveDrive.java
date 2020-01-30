@@ -138,8 +138,12 @@ public class SwerveDrive extends SubsystemBase {
 
 
   public void rotateToAngleInPlace(double setAngle) {
-    var rotateOutput = targetPid.calculate(-RobotContainer.navx.getYaw(), setAngle);
-    this.drive(0, 0, MathUtil.clamp(rotateOutput, -1, 1), false);
+    holdAngleWhileDriving(0, 0, setAngle);
+  }
+
+  public void holdAngleWhileDriving(double x, double y, double setAngle) {
+    var rotateOutput = targetPid.calculate(-RobotContainer.navx.getYaw(), normalizeAngle(setAngle));
+    this.drive(x, y, MathUtil.clamp(rotateOutput, -1, 1), false);
   }
 
   public boolean atSetpoint() {
@@ -174,5 +178,21 @@ public class SwerveDrive extends SubsystemBase {
     boolean rl = rearLeft.resetEncoder();
     boolean rr = rearRight.resetEncoder();
     return fl && fr && rl && rr;
+  }
+
+  private static double normalizeAngle(double angle) {
+    if(angle > 0) {
+      angle %= 360;
+      if(angle > 180) {
+        angle -= 360;
+      }
+    }
+    else if(angle < 0) {
+      angle %= -360;
+      if(angle < -180) {
+        angle += 360;
+      }
+    }
+    return angle;
   }
 }

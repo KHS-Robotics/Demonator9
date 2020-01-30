@@ -12,7 +12,8 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.CenterSwerveModules;
 import frc.robot.commands.DriveSwerveWithXbox;
 //import frc.robot.commands.PivotPIDTuner;
 import frc.robot.subsystems.SwerveDrive;
@@ -48,6 +49,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    JoystickButton calibrate = new JoystickButton(xboxController, XboxController.Button.kBack.value);
+    calibrate.whenPressed(new CenterSwerveModules());
   }
 
 

@@ -33,9 +33,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //driveWithJoystick(false);
-    if(RobotContainer.xboxController.getBackButton()) {
-      new CenterSwerveModules().schedule();
-    }
   }
  
 }
