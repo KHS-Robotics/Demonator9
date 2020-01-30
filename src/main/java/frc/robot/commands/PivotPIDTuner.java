@@ -7,8 +7,10 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveDrive;
@@ -17,30 +19,35 @@ import frc.robot.subsystems.SwerveModule;
 public class PivotPIDTuner extends CommandBase {
   double p, i, d, setPoint;
   SwerveModule sModule;
+  ShuffleboardTab tab;
+
+  private NetworkTableEntry pVal, iVal, dVal, setPointEntry;
 
   public PivotPIDTuner() {
     this.addRequirements(RobotContainer.swerveDrive);
     sModule = SwerveDrive.frontLeft;
+
+    tab = Shuffleboard.getTab(sModule.name + " Module");
+    pVal = tab.add("P-Value", 0).getEntry();
+    iVal = tab.add("I-Value", 0).getEntry();
+    dVal = tab.add("D-Value", 0).getEntry();
+
+    setPointEntry = tab.add("Setpoint (Angle)", 0).getEntry();
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("P-Value", 0.0);
-    SmartDashboard.putNumber("I-Value", 0.0);
-    SmartDashboard.putNumber("D-Value", 0.0);
-
-    SmartDashboard.putNumber("Setpoint (Angle)", 0.0);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    p = SmartDashboard.getNumber("P-Value", 0.0);
-    i = SmartDashboard.getNumber("I-Value", 0.0);
-    d = SmartDashboard.getNumber("D-Value", 0.0);
+    p = pVal.getDouble(0.0);
+    i = iVal.getDouble(0.0);
+    d = dVal.getDouble(0.0);
 
-    setPoint = SmartDashboard.getNumber("Setpoint (Angle)", 0.0);
+    setPoint = setPointEntry.getDouble(0.0);
 
     sModule.setPid(p, i, d);
     sModule.setDesiredState(0, setPoint, false);

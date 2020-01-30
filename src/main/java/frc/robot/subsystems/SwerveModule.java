@@ -18,13 +18,13 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 /**
  * Swerve Module
  */
 public class SwerveModule extends SubsystemBase {
-  private final String name;
+  public final String name;
 
   private boolean isFlipped;
   private final boolean isInverted;
@@ -79,6 +79,14 @@ public class SwerveModule extends SubsystemBase {
     pivotPID.setTolerance(2);
 
     setDetection = new DigitalInput(digitalInputPort);
+
+    var tab = Shuffleboard.getTab(name + " Module");
+    tab.addNumber("Angle (Deg)", this::getAngle);
+    tab.addNumber("Setpoint (Deg)", pivotPID::getSetpoint);
+    tab.addNumber("Error (Deg)", pivotPID::getPositionError);
+    tab.addBoolean("atSetpoint", pivotPID::atSetpoint);
+    tab.addBoolean("isFlipped", () -> isFlipped);
+    tab.addBoolean("isCenter", () -> !this.setDetection.get());
   }
 
   /**
@@ -97,13 +105,6 @@ public class SwerveModule extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // SmartDashboard.putNumber(name + " Speed (m/s)", driveEncoder.getVelocity());
-    SmartDashboard.putNumber(name + " Angle (Deg)", this.getAngle());
-    SmartDashboard.putNumber(name + " Setpoint (Deg)", pivotPID.getSetpoint());
-    SmartDashboard.putNumber(name + " Error (Deg)", pivotPID.getPositionError());
-    SmartDashboard.putBoolean(name + " atSetpoint", pivotPID.atSetpoint());
-    SmartDashboard.putBoolean(name + " isFlipped", this.isFlipped);
-    SmartDashboard.putBoolean(name + " isCenter", !this.setDetection.get());
   }
 
   /**

@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
@@ -86,6 +86,10 @@ public class SwerveDrive extends SubsystemBase {
     targetPid = new PIDController(Constants.TARGET_P, Constants.TARGET_I, Constants.TARGET_D);
     targetPid.enableContinuousInput(-180.0, 180.0);
     targetPid.setTolerance(2);
+
+    var tab = Shuffleboard.getTab("Swervedrive");
+    tab.addNumber("Target Angle", targetPid::getSetpoint);
+    tab.addNumber("Current Angle", () -> -RobotContainer.navx.getYaw());
   }
 
   /**
@@ -126,17 +130,10 @@ public class SwerveDrive extends SubsystemBase {
   @Override
   public void periodic() {
     // var pose = this.getPose();
-    // SmartDashboard.putNumber("Pose-X (meters)", pose.getTranslation().getX());
-    // SmartDashboard.putNumber("Pose-Y (meters)", pose.getTranslation().getY());
-    // SmartDashboard.putNumber("Pose-Norm (meters)", pose.getTranslation().getNorm());
-    // SmartDashboard.putNumber("Pose-Rotation (Deg)", pose.getRotation().getDegrees());
-
-    SmartDashboard.putNumber("Robot Angle (Deg)", getAngle().getDegrees());
   }
 
 
   public void rotateToAngleInPlace(double setAngle) {
-    SmartDashboard.putNumber("Target Angle", setAngle);
     var rotateOutput = targetPid.calculate(-RobotContainer.navx.getYaw(), setAngle);
     this.drive(0, 0, MathUtil.clamp(rotateOutput, -1, 1), false);
   }
