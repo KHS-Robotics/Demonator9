@@ -27,7 +27,6 @@ import frc.robot.RobotMap;
 public class SwerveDrive extends SubsystemBase {
   public static final double kMaxSpeed = 1.0; // 1 meters per second
   public static final double kMaxAngularSpeed = 1; // 1 radian per second
-  private double setAngle;
 
   private PIDController targetPid;
   private final Translation2d frontLeftLocation = new Translation2d(0.29845, 0.29845);
@@ -85,6 +84,8 @@ public class SwerveDrive extends SubsystemBase {
   public SwerveDrive() {
     RobotContainer.navx.reset();
     targetPid = new PIDController(Constants.TARGET_P, Constants.TARGET_I, Constants.TARGET_D);
+    targetPid.enableContinuousInput(-180.0, 180.0);
+    targetPid.setTolerance(2);
   }
 
   /**
@@ -135,14 +136,13 @@ public class SwerveDrive extends SubsystemBase {
 
 
   public void rotateToAngleInPlace(double setAngle) {
-    this.setAngle = setAngle;
     SmartDashboard.putNumber("Target Angle", setAngle);
-    var rotateOutput = targetPid.calculate(getAngle().getDegrees(), setAngle);
+    var rotateOutput = targetPid.calculate(-RobotContainer.navx.getYaw(), setAngle);
     this.drive(0, 0, MathUtil.clamp(rotateOutput, -1, 1), false);
   }
 
   public boolean atSetpoint() {
-    return Math.abs(setAngle - (RobotContainer.navx.getAngle() % 360)) < 4;
+    return targetPid.atSetpoint();
   }
 
   public Pose2d getPose() {

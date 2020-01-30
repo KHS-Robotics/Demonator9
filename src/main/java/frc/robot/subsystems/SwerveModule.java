@@ -111,7 +111,7 @@ public class SwerveModule extends SubsystemBase {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(driveEncoder.getVelocity(), Rotation2d.fromDegrees(getAngle()));
+    return new SwerveModuleState((isInverted ? -1 : 1) * driveEncoder.getVelocity(), Rotation2d.fromDegrees(getAngle()));
   }
 
   /**

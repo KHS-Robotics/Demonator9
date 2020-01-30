@@ -11,13 +11,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Limelight;
 import frc.robot.RobotContainer;
 
-public class RotateToTarget extends CommandBase {
+public class RotateToTarget extends RotateToAngle {
   double angle;
   double startTime;
   /**
    * Creates a new RotateToAngle.
    */
   public RotateToTarget() {
+    super(0);
     addRequirements(RobotContainer.swerveDrive);
   }
 
@@ -29,25 +30,5 @@ public class RotateToTarget extends CommandBase {
     RobotContainer.swerveDrive.stop();
     RobotContainer.swerveDrive.rotateToAngleInPlace(angle);
     //RobotContainer.swerveDrive.rotateToTargetInPlace();
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return RobotContainer.swerveDrive.atSetpoint() || this.isTimedOut();
-  }
-
-  private boolean isTimedOut() {
-    return (System.currentTimeMillis() - startTime) > 1500;
   }
 }
