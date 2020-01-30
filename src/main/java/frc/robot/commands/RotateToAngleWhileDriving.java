@@ -12,21 +12,21 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveDrive;
 
-public class HoldAngleWhileDriving extends CommandBase {
+public class RotateToAngleWhileDriving extends CommandBase {
   double angle;
   double startTime;
 
   /**
    * Creates a new RotateToAngle.
    */
-  public HoldAngleWhileDriving() {
+  public RotateToAngleWhileDriving(double angle) {
+    this.angle = angle;
     addRequirements(RobotContainer.swerveDrive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    angle = -RobotContainer.navx.getYaw();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -50,6 +50,10 @@ public class HoldAngleWhileDriving extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return RobotContainer.swerveDrive.atSetpoint() || this.isTimedOut();
+  }
+
+  private boolean isTimedOut() {
+    return (System.currentTimeMillis() - startTime) > 1500;
   }
 }

@@ -15,6 +15,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.CenterSwerveModules;
 import frc.robot.commands.DriveSwerveWithXbox;
+import frc.robot.commands.HoldAngleWhileDriving;
+import frc.robot.commands.RotateToTarget;
+import frc.robot.commands.RotateToTargetWhileDriving;
 //import frc.robot.commands.PivotPIDTuner;
 import frc.robot.subsystems.SwerveDrive;
 
@@ -31,11 +34,17 @@ public class RobotContainer {
   public static final SwerveDrive swerveDrive = new SwerveDrive();
   public static final XboxController xboxController = new XboxController(RobotMap.XBOX_PORT);
 
+  public static final DriveSwerveWithXbox driveSwerve = new DriveSwerveWithXbox();
+  public static final RotateToTargetWhileDriving driveToTarget = new RotateToTargetWhileDriving();
+  public static final RotateToTarget rotateToTargetInPlace = new RotateToTarget();
+  public static final HoldAngleWhileDriving holdAngleWhileDriving = new HoldAngleWhileDriving();
+
+
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    swerveDrive.setDefaultCommand(new DriveSwerveWithXbox());
+    swerveDrive.setDefaultCommand(driveSwerve);
     //swerveDrive.setDefaultCommand(new PivotPIDTuner());
     
     // Configure the button bindings
@@ -51,6 +60,12 @@ public class RobotContainer {
   private void configureButtonBindings() {
     JoystickButton calibrate = new JoystickButton(xboxController, XboxController.Button.kBack.value);
     calibrate.whenPressed(new CenterSwerveModules());
+
+    JoystickButton holdAngle = new JoystickButton(xboxController, XboxController.Button.kA.value);
+    holdAngle.whenHeld(holdAngleWhileDriving);
+
+    JoystickButton rotateToTarget = new JoystickButton(xboxController, XboxController.Button.kY.value);
+    rotateToTarget.whenHeld(rotateToTargetInPlace);
   }
 
 

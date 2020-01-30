@@ -10,14 +10,14 @@ package frc.robot.commands;
 import frc.robot.Limelight;
 import frc.robot.RobotContainer;
 
-public class RotateToTarget extends RotateToAngle {
+public class RotateToTarget extends RotateToTargetWhileDriving {
   double angle;
   double startTime;
   /**
    * Creates a new RotateToAngle.
    */
   public RotateToTarget() {
-    super(0);
+    super();
     addRequirements(RobotContainer.swerveDrive);
   }
 
@@ -26,6 +26,7 @@ public class RotateToTarget extends RotateToAngle {
   public void initialize() {
     this.angle = -RobotContainer.navx.getYaw() + Limelight.getTx();
     startTime = System.currentTimeMillis();
+    
     RobotContainer.swerveDrive.stop();
     RobotContainer.swerveDrive.rotateToAngleInPlace(angle);
     //RobotContainer.swerveDrive.rotateToTargetInPlace();
