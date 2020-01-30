@@ -90,6 +90,10 @@ public class SwerveDrive extends SubsystemBase {
     var tab = Shuffleboard.getTab("Swervedrive");
     tab.addNumber("Target Angle", targetPid::getSetpoint);
     tab.addNumber("Current Angle", () -> -RobotContainer.navx.getYaw());
+    tab.addNumber("Pose X", () -> this.getPose().getTranslation().getX());
+    tab.addNumber("Pose Y", () -> this.getPose().getTranslation().getY());
+    tab.addNumber("Pose Norm", () -> this.getPose().getTranslation().getNorm());
+    tab.addNumber("Pose Rotation", () -> this.getPose().getRotation().getDegrees());
   }
 
   /**

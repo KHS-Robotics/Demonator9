@@ -24,7 +24,7 @@ public class RotateToTarget extends RotateToAngle {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.angle = RobotContainer.swerveDrive.getAngle().getDegrees() + Limelight.getTx();
+    this.angle = -RobotContainer.navx.getYaw() + Limelight.getTx();
     startTime = System.currentTimeMillis();
     RobotContainer.swerveDrive.stop();
     RobotContainer.swerveDrive.rotateToAngleInPlace(angle);
