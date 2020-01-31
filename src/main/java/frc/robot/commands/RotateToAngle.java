@@ -31,7 +31,7 @@ public class RotateToAngle extends RotateToAngleWhileDriving {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.swerveDrive.holdAngleWhileDriving(0, 0, angle);
+    RobotContainer.swerveDrive.rotateToAngleInPlace(angle);
   }
 
   // Called once the command ends or is interrupted.

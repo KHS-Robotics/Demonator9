@@ -138,12 +138,12 @@ public class SwerveDrive extends SubsystemBase {
 
 
   public void rotateToAngleInPlace(double setAngle) {
-    holdAngleWhileDriving(0, 0, setAngle);
+    holdAngleWhileDriving(0, 0, setAngle, false);
   }
 
-  public void holdAngleWhileDriving(double x, double y, double setAngle) {
+  public void holdAngleWhileDriving(double x, double y, double setAngle, boolean fod) {
     var rotateOutput = targetPid.calculate(-RobotContainer.navx.getYaw(), normalizeAngle(setAngle));
-    this.drive(x, y, MathUtil.clamp(rotateOutput, -1, 1), false);
+    this.drive(x, y, MathUtil.clamp(rotateOutput, -1, 1), fod);
   }
 
   public boolean atSetpoint() {
