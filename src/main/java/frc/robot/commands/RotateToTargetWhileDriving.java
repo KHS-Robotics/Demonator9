@@ -34,7 +34,7 @@ public class RotateToTargetWhileDriving extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    angle = -RobotContainer.navx.getYaw() + Limelight.getTx();
+    angle = -RobotContainer.navx.getYaw() - Limelight.getTx();
 
     var xSpeed = -RobotContainer.xboxController.getY(Hand.kLeft) * SwerveDrive.kMaxSpeed;
     if (Math.abs(xSpeed) < 0.17) {

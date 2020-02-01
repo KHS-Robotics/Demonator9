@@ -82,7 +82,6 @@ public class SwerveDrive extends SubsystemBase {
    * Constructs Swerve Drive
    */
   public SwerveDrive() {
-    RobotContainer.navx.reset();
     targetPid = new PIDController(Constants.TARGET_P, Constants.TARGET_I, Constants.TARGET_D);
     targetPid.enableContinuousInput(-180.0, 180.0);
     targetPid.setTolerance(2);
@@ -142,7 +141,7 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void holdAngleWhileDriving(double x, double y, double setAngle, boolean fod) {
-    var rotateOutput = targetPid.calculate(-RobotContainer.navx.getYaw(), normalizeAngle(setAngle));
+    var rotateOutput = targetPid.calculate(-RobotContainer.navx.getYaw(), normalizeAngle(setAngle)) * kMaxAngularSpeed;
     this.drive(x, y, MathUtil.clamp(rotateOutput, -1, 1), fod);
   }
 

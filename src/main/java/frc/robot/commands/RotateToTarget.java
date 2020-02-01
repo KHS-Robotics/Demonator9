@@ -24,11 +24,15 @@ public class RotateToTarget extends RotateToTargetWhileDriving {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.angle = -RobotContainer.navx.getYaw() + Limelight.getTx();
+    this.angle = -RobotContainer.navx.getYaw() - Limelight.getTx();
     startTime = System.currentTimeMillis();
     
     RobotContainer.swerveDrive.stop();
     RobotContainer.swerveDrive.rotateToAngleInPlace(angle);
     //RobotContainer.swerveDrive.rotateToTargetInPlace();
+  }
+
+  @Override
+  public void execute() {
   }
 }
