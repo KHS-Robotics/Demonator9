@@ -38,4 +38,7 @@ public class RobotMap {
   
   public static final SPI.Port NAVX_PORT = SPI.Port.kMXP;
   public static final byte NAVX_UPDATE_RATE_HZ = (byte) 50;
+
+  public static final int INTAKE = 0;
+  public static final int SOLENOID = 0;
 }
