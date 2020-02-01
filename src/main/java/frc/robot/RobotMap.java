@@ -40,5 +40,12 @@ public class RobotMap {
   public static final byte NAVX_UPDATE_RATE_HZ = (byte) 50;
 
   public static final int INTAKE = 0;
-  public static final int SOLENOID = 0;
+  public static final int INTAKE_SOLENOID = 0;
+
+  public static final int TELESCOPE = 0;
+  public static final int PTO = 0;
+
+  public static final int SHOOTER1 = 0;
+  public static final int SHOOTER2 = 0;
+  public static final int HOOD = 0;
 }

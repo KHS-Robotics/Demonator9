@@ -11,16 +11,23 @@ import frc.robot.RobotMap;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
   private CANSparkMax motor;
   private Solenoid solenoid;
   private double speed = 0.4;
+  private boolean intaking, releasing, down;
 
   public Intake() {
     motor = new CANSparkMax(RobotMap.INTAKE, MotorType.kBrushless);
-    solenoid = new Solenoid(RobotMap.SOLENOID);
+    solenoid = new Solenoid(RobotMap.INTAKE_SOLENOID);
+
+    var tab = Shuffleboard.getTab("Intake");
+    tab.addBoolean("Intaking", () -> intaking);
+    tab.addBoolean("Releasing", () -> releasing);
+    tab.addBoolean("Down", () -> down);
   }
 
   @Override
@@ -29,22 +36,36 @@ public class Intake extends SubsystemBase {
   }
 
   public void stop() {
+    intaking = false;
+    releasing = false;
 		motor.set(0.0);
 	}
 	
 	public void intake() {
-		motor.set(speed);
+    if (intaking) 
+      return;
+    
+    intaking = true;
+    releasing = false;
+		motor.set(speed); // TODO: might want to use velocity pid
 	}
 
 	public void reverse() {
+    if (releasing) 
+      return;
+    
+    intaking = false;
+    releasing = true;
 		motor.set(-speed);
 	}
 
   public void down() {
+    down = true;
     solenoid.set(true);
   } 
 
   public void up() {
+    down = false;
     solenoid.set(false);
   }
 }
