@@ -7,16 +7,16 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
-public class RotateToAngle extends RotateToAngleWhileDriving {
+public class RotateToAngle extends CommandBase {
   double angle;
   double startTime;
   /**
    * Creates a new RotateToAngle.
    */
   public RotateToAngle(double angle) {
-    super(angle);
     this.angle = angle;
     addRequirements(RobotContainer.swerveDrive);
   }

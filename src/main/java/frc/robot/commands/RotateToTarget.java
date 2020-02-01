@@ -7,17 +7,17 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Limelight;
 import frc.robot.RobotContainer;
 
-public class RotateToTarget extends RotateToTargetWhileDriving {
+public class RotateToTarget extends CommandBase {
   double angle;
   double startTime;
   /**
    * Creates a new RotateToAngle.
    */
   public RotateToTarget() {
-    super();
     addRequirements(RobotContainer.swerveDrive);
   }
 
@@ -34,5 +34,14 @@ public class RotateToTarget extends RotateToTargetWhileDriving {
 
   @Override
   public void execute() {
+  }
+
+  @Override
+  public boolean isFinished() {
+    return RobotContainer.swerveDrive.atSetpoint() || this.isTimedOut();
+  }
+
+  private boolean isTimedOut() {
+    return (System.currentTimeMillis() - startTime) > 1500;
   }
 }

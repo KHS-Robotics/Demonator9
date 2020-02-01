@@ -14,7 +14,6 @@ import frc.robot.subsystems.SwerveDrive;
 
 public class RotateToAngleWhileDriving extends CommandBase {
   private double angle;
-  private double startTime;
   private boolean isFieldOriented;
   /**
    * Creates a new RotateToAngle.
@@ -50,10 +49,6 @@ public class RotateToAngleWhileDriving extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.swerveDrive.atSetpoint() || this.isTimedOut();
-  }
-
-  private boolean isTimedOut() {
-    return (System.currentTimeMillis() - startTime) > 1500;
+    return false;
   }
 }
