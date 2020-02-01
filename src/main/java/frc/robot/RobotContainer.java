@@ -15,9 +15,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.CenterSwerveModules;
 import frc.robot.commands.DriveSwerveWithXbox;
-import frc.robot.commands.HoldAngleWhileDriving;
-import frc.robot.commands.RotateToTarget;
-import frc.robot.commands.RotateToTargetWhileDriving;
+import frc.robot.commands.rotate.HoldAngleWhileDriving;
+import frc.robot.commands.rotate.RotateToTarget;
+import frc.robot.commands.rotate.RotateToTargetWhileDriving;
 //import frc.robot.commands.PivotPIDTuner;
 import frc.robot.subsystems.SwerveDrive;
 

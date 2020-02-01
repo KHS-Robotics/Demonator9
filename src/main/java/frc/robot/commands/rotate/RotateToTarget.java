@@ -5,30 +5,43 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.rotate;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Limelight;
 import frc.robot.RobotContainer;
 
-public class RotateToTarget extends RotateToTargetWhileDriving {
+public class RotateToTarget extends CommandBase {
   double angle;
   double startTime;
   /**
    * Creates a new RotateToAngle.
    */
   public RotateToTarget() {
-    super();
     addRequirements(RobotContainer.swerveDrive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.angle = -RobotContainer.navx.getYaw() + Limelight.getTx();
+    this.angle = -RobotContainer.navx.getYaw() - Limelight.getTx();
     startTime = System.currentTimeMillis();
     
     RobotContainer.swerveDrive.stop();
     RobotContainer.swerveDrive.rotateToAngleInPlace(angle);
     //RobotContainer.swerveDrive.rotateToTargetInPlace();
+  }
+
+  @Override
+  public void execute() {
+  }
+
+  @Override
+  public boolean isFinished() {
+    return RobotContainer.swerveDrive.atSetpoint() || this.isTimedOut();
+  }
+
+  private boolean isTimedOut() {
+    return (System.currentTimeMillis() - startTime) > 1500;
   }
 }
