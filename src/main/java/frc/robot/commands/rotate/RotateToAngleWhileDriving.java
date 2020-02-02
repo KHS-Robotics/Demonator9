@@ -38,6 +38,8 @@ public class RotateToAngleWhileDriving extends CommandBase {
 
     var ySpeed = -RobotContainer.xboxController.getX(Hand.kLeft) * SwerveDrive.kMaxSpeed;
 
+    isFieldOriented = (!RobotContainer.xboxController.getBumper(Hand.kLeft));
+
     RobotContainer.swerveDrive.holdAngleWhileDriving(xSpeed, ySpeed, angle, isFieldOriented);
   }
 
