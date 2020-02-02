@@ -10,14 +10,18 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.CenterSwerveModules;
-import frc.robot.commands.DriveSwerveWithXbox;
-import frc.robot.commands.rotate.HoldAngleWhileDriving;
-import frc.robot.commands.rotate.RotateToTarget;
-import frc.robot.commands.rotate.RotateToTargetWhileDriving;
+import frc.robot.commands.drive.DriveSwerveWithXbox;
+import frc.robot.commands.drive.rotate.HoldAngleWhileDriving;
+import frc.robot.commands.drive.rotate.RotateToTarget;
+import frc.robot.commands.drive.rotate.RotateToTargetWhileDriving;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 //import frc.robot.commands.PivotPIDTuner;
 import frc.robot.subsystems.SwerveDrive;
 
@@ -31,8 +35,15 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   public final static AHRS navx = new AHRS();
+
   public static final SwerveDrive swerveDrive = new SwerveDrive();
+  public static final Intake intake = new Intake();
+  public static final Climber climber = new Climber();
+  public static final Shooter shooter = new Shooter();
+
+
   public static final XboxController xboxController = new XboxController(RobotMap.XBOX_PORT);
+  public static final Joystick switchbox = new Joystick(RobotMap.SWITCHBOX_PORT);
 
   public static final DriveSwerveWithXbox driveSwerve = new DriveSwerveWithXbox();
   public static final RotateToTargetWhileDriving driveToTarget = new RotateToTargetWhileDriving();

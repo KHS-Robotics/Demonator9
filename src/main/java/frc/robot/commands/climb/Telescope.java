@@ -5,48 +5,35 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.rotate;
+package frc.robot.commands.climb;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.ButtonMap;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.SwerveDrive;
 
-public class HoldAngleWhileDriving extends CommandBase {
-  private double angle;
-  private boolean isFieldOriented;
-
+public class Telescope extends CommandBase {
   /**
-   * Creates a new RotateToAngle.
+   * Creates a new Telescope.
    */
-  public HoldAngleWhileDriving() {
-    addRequirements(RobotContainer.swerveDrive);
+  public Telescope() {
+    addRequirements(RobotContainer.climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    angle = -RobotContainer.navx.getYaw();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    var xSpeed = -RobotContainer.xboxController.getY(Hand.kLeft) * SwerveDrive.kMaxSpeed;
-    if (Math.abs(xSpeed) < 0.17) {
-      xSpeed = 0;
-    }
-
-    var ySpeed = -RobotContainer.xboxController.getX(Hand.kLeft) * SwerveDrive.kMaxSpeed;
-
-    isFieldOriented = (!RobotContainer.xboxController.getBumper(Hand.kLeft));
-
-    RobotContainer.swerveDrive.holdAngleWhileDriving(xSpeed, ySpeed, angle, isFieldOriented);
+    RobotContainer.climber.setTelescope(RobotContainer.switchbox.getRawAxis(ButtonMap.kTelescopeAxis.value));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    RobotContainer.climber.setTelescope(0);
   }
 
   // Returns true when the command should end.

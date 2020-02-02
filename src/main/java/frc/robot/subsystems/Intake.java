@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -18,7 +19,7 @@ public class Intake extends SubsystemBase {
   private CANSparkMax motor;
   private Solenoid solenoid;
   private double speed = 0.4;
-  private boolean intaking, releasing, down;
+  private boolean intaking, releasing;
 
   public Intake() {
     motor = new CANSparkMax(RobotMap.INTAKE, MotorType.kBrushless);
@@ -27,7 +28,7 @@ public class Intake extends SubsystemBase {
     var tab = Shuffleboard.getTab("Intake");
     tab.addBoolean("Intaking", () -> intaking);
     tab.addBoolean("Releasing", () -> releasing);
-    tab.addBoolean("Down", () -> down);
+    tab.addBoolean("Down", () -> solenoid.get());
   }
 
   @Override
@@ -60,12 +61,10 @@ public class Intake extends SubsystemBase {
 	}
 
   public void down() {
-    down = true;
     solenoid.set(true);
   } 
 
   public void up() {
-    down = false;
     solenoid.set(false);
   }
 }

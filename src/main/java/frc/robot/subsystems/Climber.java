@@ -11,6 +11,7 @@ import frc.robot.RobotMap;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
@@ -27,7 +28,9 @@ public class Climber extends SubsystemBase {
     pto = new Solenoid(RobotMap.PTO);
     setPTO(false); // TODO: Might be inverted
 
-    // TODO: add shuffleboard tab
+    var tab = Shuffleboard.getTab("Climber");
+    tab.addNumber("Raise Speed", () -> speed);
+    tab.addBoolean("PTO Engaged", pto::get);
   }
 
   @Override
@@ -35,15 +38,13 @@ public class Climber extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void up() {
+  public void setTelescope(double speed) {
+    this.speed = speed;
     telescope.set(speed);
   }
 
-  public void down() {
-    telescope.set(-speed);
-  }
-
   public void setPTO(boolean climbing) {
+    //TODO: Inverted?
     pto.set(climbing);
   }
 }

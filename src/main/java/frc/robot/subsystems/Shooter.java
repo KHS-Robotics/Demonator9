@@ -14,14 +14,17 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
   
   private CANSparkMax leader, follower, hood;
   private CANPIDController shooterPid, hoodPid;
-  private CANEncoder leaderEnc, followerEnc;
+  private CANEncoder leaderEnc, followerEnc, hoodEnc;
+
+  private double hoodPidSetpoint;
+  private boolean isClimbing;
 
   public Shooter() {
     leader = new CANSparkMax(RobotMap.SHOOTER1, MotorType.kBrushless);
@@ -33,8 +36,14 @@ public class Shooter extends SubsystemBase {
     hoodPid = hood.getPIDController();
     leaderEnc = leader.getEncoder();
     followerEnc = follower.getEncoder();
+    hoodEnc = hood.getEncoder();
 
-    // TODO: add shuffleboard tab
+    var tab = Shuffleboard.getTab("Shooter");
+    tab.addNumber("Leader Speed", leaderEnc::getVelocity);
+    tab.addNumber("Follower Speed", followerEnc::getVelocity);
+    tab.addNumber("Hood Setpoint", () -> hoodPidSetpoint);
+    tab.addNumber("Hood Error", () -> hoodPidSetpoint - hoodEnc.getPosition());
+    tab.addBoolean("Is Climbing", () -> isClimbing);
   }
 
   @Override
@@ -48,13 +57,21 @@ public class Shooter extends SubsystemBase {
 
   public void stop() {
     leader.set(0.0);
+    isClimbing = false;
   }
 
   public void setHood(double angle) {
     hoodPid.setReference(angle, ControlType.kPosition);
+    hoodPidSetpoint = angle;
   }
 
   public void enableForClimb() {
+    isClimbing = true;
     leader.set(0.5);
+  }
+
+  public void disableForClimb() {
+    isClimbing = false;
+    leader.set(0.0);
   }
 }

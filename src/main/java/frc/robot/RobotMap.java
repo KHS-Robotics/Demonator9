@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.SPI;
  */
 public class RobotMap {
   public static final int XBOX_PORT = 0;
+  public static final int SWITCHBOX_PORT = 1;
 
   public static final int JOYSTICK_XY = 1;
   public static final int JOYSTICK_Z = 2;
@@ -48,4 +49,11 @@ public class RobotMap {
   public static final int SHOOTER1 = 0;
   public static final int SHOOTER2 = 0;
   public static final int HOOD = 0;
+
+  public static final int INDEX_MOTOR = 0;
+  public static final int LIMIT_PORT_1 = 0;
+  public static final int LIMIT_PORT_2 = 0;
+  public static final int LIMIT_PORT_3 = 0;
+  public static final int LIMIT_PORT_4 = 0;
+  public static final int LIMIT_PORT_5 = 0;  
 }

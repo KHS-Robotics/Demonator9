@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveDrive;

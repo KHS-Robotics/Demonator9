@@ -5,18 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.rotate;
+package frc.robot.commands.drive.rotate;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.SwerveDrive;
 
-public class RotateToAngle extends CommandBase {
-  double angle;
-  double startTime;
+public class RotateToAngleWhileDriving extends CommandBase {
+  private double angle;
+  private boolean isFieldOriented;
   /**
    * Creates a new RotateToAngle.
    */
-  public RotateToAngle(double angle) {
+  public RotateToAngleWhileDriving(double angle) {
     this.angle = angle;
     addRequirements(RobotContainer.swerveDrive);
   }
@@ -24,14 +26,21 @@ public class RotateToAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startTime = System.currentTimeMillis();
-    //RobotContainer.swerveDrive.rotateToTargetInPlace();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.swerveDrive.rotateToAngleInPlace(angle);
+    var xSpeed = -RobotContainer.xboxController.getY(Hand.kLeft) * SwerveDrive.kMaxSpeed;
+    if (Math.abs(xSpeed) < 0.17) {
+      xSpeed = 0;
+    }
+
+    var ySpeed = -RobotContainer.xboxController.getX(Hand.kLeft) * SwerveDrive.kMaxSpeed;
+
+    isFieldOriented = (!RobotContainer.xboxController.getBumper(Hand.kLeft));
+
+    RobotContainer.swerveDrive.holdAngleWhileDriving(xSpeed, ySpeed, angle, isFieldOriented);
   }
 
   // Called once the command ends or is interrupted.
@@ -42,10 +51,6 @@ public class RotateToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.swerveDrive.atSetpoint() || this.isTimedOut();
-  }
-
-  private boolean isTimedOut() {
-    return (System.currentTimeMillis() - startTime) > 1500;
+    return false;
   }
 }
