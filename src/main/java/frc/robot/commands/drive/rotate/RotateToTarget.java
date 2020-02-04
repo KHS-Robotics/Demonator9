@@ -23,6 +23,9 @@ public class RotateToTarget extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.swerveDrive.resetPid();
+
+    
     this.angle = -RobotContainer.navx.getYaw() - Limelight.getTx();
     
     RobotContainer.swerveDrive.stop();

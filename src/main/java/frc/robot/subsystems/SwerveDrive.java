@@ -168,7 +168,12 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void resetNavx() {
+    targetPid.reset();
     RobotContainer.navx.reset();
+  }
+
+  public void resetPid() {
+    targetPid.reset();
   }
 
   public boolean resetEncoders() { 
