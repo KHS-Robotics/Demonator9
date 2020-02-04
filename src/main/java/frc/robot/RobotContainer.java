@@ -26,6 +26,8 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 //import frc.robot.commands.PivotPIDTuner;
 import frc.robot.subsystems.SwerveDrive;
+import io.github.pseudoresonance.pixy2api.Pixy2;
+import io.github.pseudoresonance.pixy2api.links.SPILink;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -36,7 +38,9 @@ import frc.robot.subsystems.SwerveDrive;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  public final static AHRS navx = new AHRS();
+  public static final Pixy2 pixy = Pixy2.createInstance(new SPILink());
+
+  public static final AHRS navx = new AHRS();
 
   public static final SwerveDrive swerveDrive = new SwerveDrive();
   public static final Intake intake = new Intake();

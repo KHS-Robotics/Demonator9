@@ -8,13 +8,14 @@
 package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
+import frc.robot.vision.PixyCam;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CPManipulator extends SubsystemBase {
-  
   private CANSparkMax motor;
   private double speed;
   private final String[] colors = {"R", "G", "B", "Y"};
