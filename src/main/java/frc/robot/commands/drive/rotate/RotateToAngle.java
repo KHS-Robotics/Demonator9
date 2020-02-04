@@ -12,7 +12,6 @@ import frc.robot.RobotContainer;
 
 public class RotateToAngle extends CommandBase {
   double angle;
-  double startTime;
   /**
    * Creates a new RotateToAngle.
    */
@@ -24,7 +23,6 @@ public class RotateToAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startTime = System.currentTimeMillis();
     //RobotContainer.swerveDrive.rotateToTargetInPlace();
   }
 
@@ -42,10 +40,6 @@ public class RotateToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.swerveDrive.atSetpoint() || this.isTimedOut();
-  }
-
-  private boolean isTimedOut() {
-    return (System.currentTimeMillis() - startTime) > 1500;
+    return RobotContainer.swerveDrive.atSetpoint();
   }
 }

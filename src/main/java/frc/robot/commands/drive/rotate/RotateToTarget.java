@@ -13,7 +13,6 @@ import frc.robot.RobotContainer;
 
 public class RotateToTarget extends CommandBase {
   double angle;
-  double startTime;
   /**
    * Creates a new RotateToAngle.
    */
@@ -25,7 +24,6 @@ public class RotateToTarget extends CommandBase {
   @Override
   public void initialize() {
     this.angle = -RobotContainer.navx.getYaw() - Limelight.getTx();
-    startTime = System.currentTimeMillis();
     
     RobotContainer.swerveDrive.stop();
     RobotContainer.swerveDrive.rotateToAngleInPlace(angle);
@@ -38,10 +36,6 @@ public class RotateToTarget extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return RobotContainer.swerveDrive.atSetpoint() || this.isTimedOut();
-  }
-
-  private boolean isTimedOut() {
-    return (System.currentTimeMillis() - startTime) > 1500;
+    return RobotContainer.swerveDrive.atSetpoint();
   }
 }
