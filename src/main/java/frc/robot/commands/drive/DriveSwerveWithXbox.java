@@ -22,7 +22,6 @@ public class DriveSwerveWithXbox extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    RobotContainer.swerveDrive.stop();
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -32,9 +31,6 @@ public class DriveSwerveWithXbox extends CommandBase {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
     var xSpeed = -RobotContainer.xboxController.getY(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
-    if (Math.abs(xSpeed) < 0.17) {
-      xSpeed = 0;
-    }
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
@@ -73,6 +69,5 @@ public class DriveSwerveWithXbox extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.swerveDrive.stop();
   }
 }

@@ -12,6 +12,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.CenterSwerveModules;
@@ -56,7 +57,7 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    swerveDrive.setDefaultCommand(driveSwerve);
+    swerveDrive.setDefaultCommand(holdAngleWhileDriving);
     //swerveDrive.setDefaultCommand(new PivotPIDTuner());
     
     // Configure the button bindings
@@ -73,8 +74,8 @@ public class RobotContainer {
     JoystickButton calibrate = new JoystickButton(xboxController, XboxController.Button.kBack.value);
     calibrate.whenPressed(new CenterSwerveModules());
 
-    JoystickButton holdAngle = new JoystickButton(xboxController, XboxController.Button.kA.value);
-    holdAngle.whenHeld(holdAngleWhileDriving);
+    CustomButton turnAndDrive = new CustomButton( () -> Math.abs(xboxController.getX(Hand.kLeft)) > 0.05 );
+    turnAndDrive.whenHeld(driveSwerve);
 
     JoystickButton rotateToTarget = new JoystickButton(xboxController, XboxController.Button.kY.value);
     rotateToTarget.whenHeld(rotateToTargetInPlace);

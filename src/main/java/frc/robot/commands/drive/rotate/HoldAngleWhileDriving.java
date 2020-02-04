@@ -33,9 +33,6 @@ public class HoldAngleWhileDriving extends CommandBase {
   @Override
   public void execute() {
     var xSpeed = -RobotContainer.xboxController.getY(Hand.kLeft) * SwerveDrive.kMaxSpeed;
-    if (Math.abs(xSpeed) < 0.17) {
-      xSpeed = 0;
-    }
 
     var ySpeed = -RobotContainer.xboxController.getX(Hand.kLeft) * SwerveDrive.kMaxSpeed;
 
