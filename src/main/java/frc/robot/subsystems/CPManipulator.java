@@ -17,7 +17,7 @@ public class CPManipulator extends SubsystemBase {
   
   private CANSparkMax motor;
   private double speed;
-  private final String[] colors = {"red", "green", "blue", "yellow"};
+  private final String[] colors = {"R", "G", "B", "Y"};
 
   public CPManipulator() {
     motor = new CANSparkMax(RobotMap.MANIPULATOR, MotorType.kBrushless);
