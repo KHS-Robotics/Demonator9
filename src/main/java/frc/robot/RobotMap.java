@@ -56,4 +56,6 @@ public class RobotMap {
   public static final int LIMIT_PORT_3 = 0;
   public static final int LIMIT_PORT_4 = 0;
   public static final int LIMIT_PORT_5 = 0;  
+
+  public static final int MANIPULATOR = 0;
 }

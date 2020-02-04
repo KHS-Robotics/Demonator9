@@ -7,18 +7,36 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.RobotMap;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CPManipulator extends SubsystemBase {
-  /**
-   * Creates a new CPManipulator.
-   */
+  
+  private CANSparkMax motor;
+  private double speed;
+  private final String[] colors = {"red", "green", "blue", "yellow"};
+
   public CPManipulator() {
-    
+    motor = new CANSparkMax(RobotMap.MANIPULATOR, MotorType.kBrushless);
+
+    var tab = Shuffleboard.getTab("Manipulator Speed");
+    tab.addNumber("Speed", () -> getSpeed());
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void spin(double speed) {
+    motor.set(speed);
+    this.speed = speed;
+  }
+
+  public double getSpeed() {
+    return speed;
   }
 }
