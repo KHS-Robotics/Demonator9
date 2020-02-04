@@ -46,6 +46,8 @@ public class RobotMap {
   public static final int TELESCOPE = 0;
   public static final int PTO = 0;
 
+  public static final int CP_SOLONOID = 0;
+
   public static final int SHOOTER1 = 0;
   public static final int SHOOTER2 = 0;
   public static final int HOOD = 0;

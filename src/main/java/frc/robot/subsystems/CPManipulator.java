@@ -12,19 +12,25 @@ import frc.robot.vision.PixyCam;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CPManipulator extends SubsystemBase {
   private CANSparkMax motor;
   private double speed;
-  private final String[] colors = {"R", "G", "B", "Y"};
+  private Solenoid solenoid;
+  private final String[] colors = {"R", "G", "B", "Y", "C"};
 
   public CPManipulator() {
+    solenoid = new Solenoid(RobotMap.CP_SOLONOID);
     motor = new CANSparkMax(RobotMap.MANIPULATOR, MotorType.kBrushless);
 
+    setPosition(false);
     var tab = Shuffleboard.getTab("Manipulator Speed");
-    tab.addNumber("Speed", () -> getSpeed());
+    tab.addNumber("Speed", this::getSpeed);
+    tab.addBoolean("Piston Up", solenoid::get);
   }
 
   @Override
@@ -39,5 +45,9 @@ public class CPManipulator extends SubsystemBase {
 
   public double getSpeed() {
     return speed;
+  }
+
+  public void setPosition(boolean up) {
+    solenoid.set(up);
   }
 }
