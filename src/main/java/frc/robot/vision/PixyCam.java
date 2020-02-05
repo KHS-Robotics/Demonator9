@@ -32,7 +32,7 @@ public class PixyCam {
 		}
 
 
-		return 
+		return new ColorBlock(xAverage, yAverage width, height, blocks.get(sigs.get(0)).getSignature());
 	}
 
 	public static ArrayList<Block> getBlocks() {
