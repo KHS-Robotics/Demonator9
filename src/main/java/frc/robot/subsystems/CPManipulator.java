@@ -13,6 +13,7 @@ import frc.robot.vision.PixyCam;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,7 +23,7 @@ public class CPManipulator extends SubsystemBase {
   private CANSparkMax motor;
   private double speed;
   private Solenoid solenoid;
-  private final String[] colors = {"R", "G", "B", "Y", "C"};
+  private final char[] colors = { 'R', 'G', 'B', 'Y', 'C' };
 
   public CPManipulator() {
     solenoid = new Solenoid(RobotMap.CP_SOLONOID);
@@ -50,5 +51,26 @@ public class CPManipulator extends SubsystemBase {
 
   public void setPosition(boolean up) {
     solenoid.set(up);
+  }
+
+  public static char getColor() {
+    String gameData;
+    gameData = DriverStation.getInstance().getGameSpecificMessage();
+    if (gameData.length() > 0) {
+      switch (gameData.charAt(0)) {
+      case 'B':
+        return 'B';
+      case 'G':
+        return 'G';
+      case 'R':
+        return 'R';
+      case 'Y':
+        return 'Y';
+      default:
+        return 'C';
+      }
+    } else {
+      return ' ';
+    }
   }
 }

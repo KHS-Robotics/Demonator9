@@ -23,7 +23,7 @@ public class Shooter extends SubsystemBase {
   private CANPIDController shooterPid, hoodPid;
   private CANEncoder leaderEnc, followerEnc, hoodEnc;
 
-  private double hoodPidSetpoint;
+  private double hoodPidSetpoint, shooterPidSetpoint;
   private boolean isClimbing;
 
   public Shooter() {
@@ -43,6 +43,8 @@ public class Shooter extends SubsystemBase {
     tab.addNumber("Follower Speed", followerEnc::getVelocity);
     tab.addNumber("Hood Setpoint", () -> hoodPidSetpoint);
     tab.addNumber("Hood Error", () -> hoodPidSetpoint - hoodEnc.getPosition());
+    tab.addNumber("Shooter Setpoint", () -> shooterPidSetpoint);
+    tab.addNumber("Shooter Error", () -> shooterPidSetpoint - leaderEnc.getVelocity());
     tab.addBoolean("Is Climbing", () -> isClimbing);
   }
 
@@ -51,13 +53,26 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void shoot() {
-    leader.set(0.25);
+  public void shoot(double speed) {
+    shooterPid.setReference(speed, ControlType.kVelocity);
+    shooterPidSetpoint = speed;
   }
 
   public void stop() {
     leader.set(0.0);
     isClimbing = false;
+  }
+
+  public void setHoodPid(double p, double i, double d) {
+    hoodPid.setP(p);
+    hoodPid.setI(i);
+    hoodPid.setD(d);
+  }
+
+  public void setShooterPid(double p, double i, double d) {
+    shooterPid.setP(p);
+    shooterPid.setI(i);
+    shooterPid.setD(d);
   }
 
   public void setHood(double angle) {
