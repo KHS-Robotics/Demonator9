@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CPManipulator extends SubsystemBase {
+  // TODO: Add a pid controller
   private CANSparkMax motor;
   private double speed;
   private Solenoid solenoid;

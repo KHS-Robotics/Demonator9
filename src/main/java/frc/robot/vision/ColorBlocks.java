@@ -8,6 +8,7 @@ public class ColorBlocks {
 	
 	public ColorBlocks(Block block) {
 		this.block = block;
+		update();
 	}
 
 	public void update() {
