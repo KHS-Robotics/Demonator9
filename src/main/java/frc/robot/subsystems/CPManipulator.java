@@ -122,7 +122,7 @@ public class CPManipulator extends SubsystemBase {
     newBlocks = PixyCam.sortByWeight(newBlocks);
 
     if (newBlocks.size() > 0) {
-      curColorSig = newBlocks.get(0).getBlock().getSignature();
+      curColorSig = newBlocks.get(0).getSig();
     }
 
     return curColorSig;

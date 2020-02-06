@@ -20,19 +20,38 @@ public class PixyCam {
 	}
 
 	public static ColorBlock averageDupBlocks(ArrayList<Integer> sigs, ArrayList<Block> blocks) {
-		double totalWidth = 0, totalHeight = 0, xAverage = 0, yAverage = 0;
+		double totalWidth = 0, totalHeight = 0, xAverage = 0, yAverage = 0, smallX, largeX, smallY, largeY;
 		for (int i = 0; i < sigs.size(); i++) {
 			totalWidth += blocks.get(sigs.get(i)).getWidth();
 			totalHeight += blocks.get(sigs.get(i)).getHeight();
 		}
+		
+		smallX = blocks.get(0).getX() - (blocks.get(0).getWidth() / 2.0);
+		largeX = blocks.get(0).getX() + (blocks.get(0).getWidth() / 2.0);
+
+		smallY = blocks.get(0).getY() - (blocks.get(0).getHeight() / 2.0);
+		largeY = blocks.get(0).getY() + (blocks.get(0).getHeight() / 2.0);
 
 		for (int i = 0; i < sigs.size(); i++) {
 			xAverage += (blocks.get(sigs.get(i)).getWidth() / totalWidth) * blocks.get(i).getX();
 			yAverage += (blocks.get(sigs.get(i)).getHeight() / totalWidth) * blocks.get(i).getY();
+
+			if(blocks.get(i).getX() - (blocks.get(i).getWidth() / 2.0) < smallX) {
+				smallX = blocks.get(i).getX() - (blocks.get(i).getWidth() / 2.0);
+			} else if(blocks.get(i).getX() + (blocks.get(i).getWidth() / 2.0) > largeX) {
+				largeX = blocks.get(i).getX() - (blocks.get(i).getWidth() / 2.0);
+			}
+
+			if(blocks.get(i).getY() - (blocks.get(i).getHeight() / 2.0) < smallY) {
+				smallY = blocks.get(i).getY() - (blocks.get(i).getHeight() / 2.0);
+			} else if(blocks.get(i).getY() + (blocks.get(i).getHeight() / 2.0) > largeY) {
+				largeY = blocks.get(i).getY() - (blocks.get(i).getHeight() / 2.0);
+			}
 		}
 
+		double width = largeX - smallX, height = largeY - smallY;
 
-		return new ColorBlock(xAverage, yAverage width, height, blocks.get(sigs.get(0)).getSignature());
+		return new ColorBlock(xAverage, yAverage, width, height, blocks.get(sigs.get(0)).getSignature());
 	}
 
 	public static ArrayList<Block> getBlocks() {
