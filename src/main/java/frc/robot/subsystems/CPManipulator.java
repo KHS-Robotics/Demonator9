@@ -29,8 +29,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class CPManipulator extends SubsystemBase {
 
   /**
-   * Spin specified number of times Figure out how many spins to get to specified
-   * color
+   * Spin specified number of times
    */
 
   private CANSparkMax motor;
@@ -38,6 +37,9 @@ public class CPManipulator extends SubsystemBase {
   private CANPIDController motorPid;
   private double speed;
   private Solenoid solenoid;
+  private int currentColorSignature;
+  private double curPos;
+  private double curRPM;
 
   public CPManipulator() {
     solenoid = new Solenoid(RobotMap.CP_SOLONOID);
@@ -59,6 +61,9 @@ public class CPManipulator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    currentColorSignature = getCurColor();
+    curPos = motorEnc.getPosition();
+    curRPM = motorEnc.getVelocity();
   }
 
   public int distToColor(char curColor, char toColor) {
@@ -76,6 +81,12 @@ public class CPManipulator extends SubsystemBase {
     double spins = dist / 8.0;
 
     return spins;
+  }
+
+  public double spinsToRadians(double spins) {
+    double degrees = spins * 360;
+    double radians = (degrees * Math.PI) / 180;
+    return radians;
   }
 
   public double spinsToColor(char curColor, char toColor) {
@@ -135,5 +146,4 @@ public class CPManipulator extends SubsystemBase {
   public void setPosition(boolean up) {
     solenoid.set(up);
   }
-
 }
