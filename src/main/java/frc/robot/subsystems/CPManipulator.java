@@ -38,6 +38,7 @@ public class CPManipulator extends SubsystemBase {
   private double speed;
   private Solenoid solenoid;
   private int currentColorSignature;
+  private int initialColor;
   private double curPos;
   private double curRPM;
 
@@ -48,6 +49,7 @@ public class CPManipulator extends SubsystemBase {
     motorPid = motor.getPIDController();
 
     setPosition(false);
+    
     var tab = Shuffleboard.getTab("Manipulator Speed");
     tab.addNumber("Speed", this::getSpeed);
     tab.addBoolean("Piston Up", solenoid::get);
@@ -84,11 +86,19 @@ public class CPManipulator extends SubsystemBase {
 
     return dist;
   }
-
+   
   public double distToDegrees(int dist) {
     double spins = dist / 8.0;
 
     return spins * 360;
+  }
+
+  public int getInitialColor() {
+    return initialColor;
+  }
+
+  public void updateInitColor(int sig) {
+    initialColor = sig;
   }
 
   public double degreesToColor(char curColor, char toColor) {
