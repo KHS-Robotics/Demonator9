@@ -72,14 +72,14 @@ public class CPManipulator extends SubsystemBase {
     return dist;
   }
 
-  public double distToSpins(int dist) {
+  public double distToDegrees(int dist) {
     double spins = dist / 8.0;
 
-    return spins;
+    return spins * 360;
   }
 
-  public double spinsToColor(char curColor, char toColor) {
-    return distToSpins(distToColor(curColor, toColor));
+  public double degreesToColor(char curColor, char toColor) {
+    return distToDegrees(distToColor(curColor, toColor));
   }
 
   public void spin(double speed) {
