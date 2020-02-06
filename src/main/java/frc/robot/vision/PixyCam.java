@@ -21,6 +21,7 @@ public class PixyCam {
 
 	public static ColorBlock averageDupBlocks(ArrayList<Integer> sigs, ArrayList<Block> blocks) {
 		double totalWidth = 0, totalHeight = 0, xAverage = 0, yAverage = 0, smallX, largeX, smallY, largeY;
+		
 		for (int i = 0; i < sigs.size(); i++) {
 			totalWidth += blocks.get(sigs.get(i)).getWidth();
 			totalHeight += blocks.get(sigs.get(i)).getHeight();
@@ -38,13 +39,15 @@ public class PixyCam {
 
 			if(blocks.get(i).getX() - (blocks.get(i).getWidth() / 2.0) < smallX) {
 				smallX = blocks.get(i).getX() - (blocks.get(i).getWidth() / 2.0);
-			} else if(blocks.get(i).getX() + (blocks.get(i).getWidth() / 2.0) > largeX) {
+			} 
+			if(blocks.get(i).getX() + (blocks.get(i).getWidth() / 2.0) > largeX) {
 				largeX = blocks.get(i).getX() - (blocks.get(i).getWidth() / 2.0);
 			}
 
 			if(blocks.get(i).getY() - (blocks.get(i).getHeight() / 2.0) < smallY) {
 				smallY = blocks.get(i).getY() - (blocks.get(i).getHeight() / 2.0);
-			} else if(blocks.get(i).getY() + (blocks.get(i).getHeight() / 2.0) > largeY) {
+			} 
+			if(blocks.get(i).getY() + (blocks.get(i).getHeight() / 2.0) > largeY) {
 				largeY = blocks.get(i).getY() - (blocks.get(i).getHeight() / 2.0);
 			}
 		}

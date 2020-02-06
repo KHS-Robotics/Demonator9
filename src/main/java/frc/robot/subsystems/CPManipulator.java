@@ -69,6 +69,14 @@ public class CPManipulator extends SubsystemBase {
 
     dist = toIndex - curIndex;
 
+    if(dist == 3) {
+      dist -= 4;
+    }
+
+    if(dist == -3) {
+      dist += 4;
+    }
+
     return dist;
   }
 
