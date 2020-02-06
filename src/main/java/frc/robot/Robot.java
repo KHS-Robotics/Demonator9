@@ -39,7 +39,10 @@ public class Robot extends TimedRobot {
         Limelight.setLedMode(LightMode.eOn); 
       }
     }
-    //driveWithJoystick(false);
+
+    if (RobotContainer.xboxController.getStartButton()) {
+      RobotContainer.swerveDrive.resetNavx();
+    }
   }
  
 }

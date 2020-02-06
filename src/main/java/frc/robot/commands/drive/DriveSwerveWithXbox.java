@@ -50,10 +50,6 @@ public class DriveSwerveWithXbox extends CommandBase {
       RobotContainer.swerveDrive.stop();
     }
 
-    if (RobotContainer.xboxController.getStartButton()) {
-      RobotContainer.swerveDrive.resetNavx();
-    }
-
     /*
      * if (Math.abs(x) + Math.abs(y) + Math.abs(z) > 0.35) {
      * Robot.swerveDrive.disablePID(); }
