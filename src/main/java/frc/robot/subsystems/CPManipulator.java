@@ -49,7 +49,7 @@ public class CPManipulator extends SubsystemBase {
     motorPid = motor.getPIDController();
 
     setPosition(false);
-    
+
     var tab = Shuffleboard.getTab("Manipulator Speed");
     tab.addNumber("Speed", this::getSpeed);
     tab.addBoolean("Piston Up", solenoid::get);
@@ -62,7 +62,6 @@ public class CPManipulator extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
     currentColorSignature = getCurColor();
     curPos = motorEnc.getPosition();
     curRPM = motorEnc.getVelocity();
@@ -74,19 +73,16 @@ public class CPManipulator extends SubsystemBase {
     curIndex = ColorWheel.toColor(curColor).signature;
     toIndex = ColorWheel.toColor(toColor).signature;
 
-    dist = toIndex - curIndex;
+    dist = toIndex + curIndex;
+    dist %= 4;
 
-    if(dist == 3) {
+    if (dist == 3) {
       dist -= 4;
-    }
-
-    if(dist == -3) {
-      dist += 4;
     }
 
     return dist;
   }
-   
+
   public double distToDegrees(int dist) {
     double spins = dist / 8.0;
 
@@ -99,6 +95,10 @@ public class CPManipulator extends SubsystemBase {
 
   public void updateInitColor(int sig) {
     initialColor = sig;
+  }
+
+  public int getSensorColor(int curSig) {
+    return curSig + 2;
   }
 
   public double degreesToColor(char curColor, char toColor) {
@@ -116,7 +116,7 @@ public class CPManipulator extends SubsystemBase {
     this.speed = speed;
   }
 
-  public static char getColor() {
+  public static char getGameColor() {
     String gameData;
     gameData = DriverStation.getInstance().getGameSpecificMessage();
     if (gameData.length() > 0) {
