@@ -34,7 +34,7 @@ public class PixyCam {
 
 		for (int i = 0; i < sigs.size(); i++) {
 			xAverage += (blocks.get(sigs.get(i)).getWidth() / totalWidth) * blocks.get(i).getX();
-			yAverage += (blocks.get(sigs.get(i)).getHeight() / totalWidth) * blocks.get(i).getY();
+			yAverage += (blocks.get(sigs.get(i)).getHeight() / totalHeight) * blocks.get(i).getY();
 
 			if(blocks.get(i).getX() - (blocks.get(i).getWidth() / 2.0) < smallX) {
 				smallX = blocks.get(i).getX() - (blocks.get(i).getWidth() / 2.0);
