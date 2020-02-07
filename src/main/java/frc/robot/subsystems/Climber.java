@@ -8,6 +8,8 @@
 package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
+
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -20,16 +22,21 @@ public class Climber extends SubsystemBase {
    */
 
   private CANSparkMax telescope;
+  private CANEncoder telescopeEnc;
   private Solenoid pto;
-  private double speed;
   
   public Climber() {
     telescope = new CANSparkMax(RobotMap.TELESCOPE, MotorType.kBrushless);
+    telescopeEnc = telescope.getEncoder();
     pto = new Solenoid(RobotMap.PTO);
     setPTO(false); // TODO: Might be inverted
 
+    telescopeEnc.setPositionConversionFactor(1.0 / 7.0);
+    telescopeEnc.setVelocityConversionFactor(1.0 / 7.0);
+
     var tab = Shuffleboard.getTab("Climber");
-    tab.addNumber("Raise Speed", () -> speed);
+    tab.addNumber("Raise Speed", () -> telescopeEnc.getVelocity());
+    tab.addNumber("Position", () -> telescopeEnc.getPosition());
     tab.addBoolean("PTO Engaged", pto::get);
   }
 
@@ -39,7 +46,6 @@ public class Climber extends SubsystemBase {
   }
 
   public void setTelescope(double speed) {
-    this.speed = speed;
     telescope.set(speed);
   }
 

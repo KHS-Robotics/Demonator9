@@ -38,9 +38,15 @@ public class Shooter extends SubsystemBase {
     followerEnc = follower.getEncoder();
     hoodEnc = hood.getEncoder();
 
+    leaderEnc.setVelocityConversionFactor(3.0); // 1 spin of neo = 3 spins of shooter
+    followerEnc.setVelocityConversionFactor(3.0);
+
+    hoodEnc.setPosition(1.0 / (10.0 * 5.0 * (60.0/24.0))); //Should be tested
+    
     var tab = Shuffleboard.getTab("Shooter");
     tab.addNumber("Leader Speed", leaderEnc::getVelocity);
     tab.addNumber("Follower Speed", followerEnc::getVelocity);
+    tab.addNumber("Hood Position", hoodEnc::getPosition);
     tab.addNumber("Hood Setpoint", () -> hoodPidSetpoint);
     tab.addNumber("Hood Error", () -> hoodPidSetpoint - hoodEnc.getPosition());
     tab.addNumber("Shooter Setpoint", () -> shooterPidSetpoint);
@@ -60,7 +66,12 @@ public class Shooter extends SubsystemBase {
 
   public void stop() {
     leader.set(0.0);
+    hood.set(0.0);
     isClimbing = false;
+  }
+
+  public void stopShooter() {
+    leader.set(0.0);
   }
 
   public void setHoodPid(double p, double i, double d) {

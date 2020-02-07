@@ -27,6 +27,9 @@ public class Indexer extends SubsystemBase {
     motor = new CANSparkMax(RobotMap.INDEX_MOTOR, MotorType.kBrushless);
     motorEnc = motor.getEncoder();
 
+    motorEnc.setPositionConversionFactor(1.0 / 2.0);
+    motorEnc.setVelocityConversionFactor(1.0 / 2.0);
+
     input1 = new DigitalInput(RobotMap.LIMIT_PORT_1);
     input2 = new DigitalInput(RobotMap.LIMIT_PORT_2);
     input3 = new DigitalInput(RobotMap.LIMIT_PORT_3);
@@ -40,7 +43,6 @@ public class Indexer extends SubsystemBase {
     tab.addBoolean("Limit Switch 3", input3::get);
     tab.addBoolean("Limit Switch 4", input4::get);
     tab.addBoolean("Limit Switch 5", input5::get);
-
   }
 
   @Override
