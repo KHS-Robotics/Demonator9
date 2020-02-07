@@ -68,7 +68,8 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    swerveDrive.setDefaultCommand(new HoldAngleWhileDriving());
+    //swerveDrive.setDefaultCommand(new HoldAngleWhileDriving());
+    swerveDrive.setDefaultCommand(new DriveSwerveWithXbox());
     indexer.setDefaultCommand(new ControlIndexer());
     //swerveDrive.setDefaultCommand(new PivotPIDTuner());
     
@@ -86,8 +87,8 @@ public class RobotContainer {
     JoystickButton calibrate = new JoystickButton(xboxController, XboxController.Button.kBack.value);
     calibrate.whenPressed(new CenterSwerveModules());
 
-    CustomButton turnAndDrive = new CustomButton( () -> Math.abs(xboxController.getX(Hand.kLeft)) > 0.05 );
-    turnAndDrive.whenHeld(new DriveSwerveWithXbox());
+    // CustomButton turnAndDrive = new CustomButton( () -> Math.abs(xboxController.getX(Hand.kLeft)) > 0.05 );
+    // turnAndDrive.whenHeld(new DriveSwerveWithXbox());
 
     JoystickButton rotateToTarget = new JoystickButton(xboxController, XboxController.Button.kY.value);
     rotateToTarget.whenHeld(new RotateToTargetWhileDriving());
