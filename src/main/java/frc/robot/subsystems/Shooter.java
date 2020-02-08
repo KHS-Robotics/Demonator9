@@ -41,7 +41,7 @@ public class Shooter extends SubsystemBase {
     leaderEnc.setVelocityConversionFactor(3.0); // 1 spin of neo = 3 spins of shooter
     followerEnc.setVelocityConversionFactor(3.0);
 
-    hoodEnc.setPosition(1.0 / (10.0 * 5.0 * (60.0/24.0))); //Should be tested
+    hoodEnc.setPositionConversionFactor(360.0 / (10.0 * 5.0 * (60.0/24.0))); //Should be tested
     
     var tab = Shuffleboard.getTab("Shooter");
     tab.addNumber("Leader Speed", leaderEnc::getVelocity);

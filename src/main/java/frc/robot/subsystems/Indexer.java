@@ -27,8 +27,8 @@ public class Indexer extends SubsystemBase {
     motor = new CANSparkMax(RobotMap.INDEX_MOTOR, MotorType.kBrushless);
     motorEnc = motor.getEncoder();
 
-    motorEnc.setPositionConversionFactor(1.0 / 2.0);
-    motorEnc.setVelocityConversionFactor(1.0 / 2.0);
+    motorEnc.setVelocityConversionFactor(1.0 / (3.0 * 4.0));
+    motorEnc.setPositionConversionFactor(1.0 / (3.0 * 4.0));
 
     input1 = new DigitalInput(RobotMap.LIMIT_PORT_1);
     input2 = new DigitalInput(RobotMap.LIMIT_PORT_2);

@@ -28,8 +28,8 @@ public class Intake extends SubsystemBase {
     solenoid = new Solenoid(RobotMap.INTAKE_SOLENOID);
     motorEnc = motor.getEncoder();
 
-    motorEnc.setVelocityConversionFactor(1.0 / (3.0 * 4.0));
-    motorEnc.setPositionConversionFactor(1.0 / (3.0 * 4.0));
+    motorEnc.setPositionConversionFactor(1.0 / 2.0);
+    motorEnc.setVelocityConversionFactor(1.0 / 2.0);
 
     var tab = Shuffleboard.getTab("Intake");
     tab.addNumber("Velocity", motorEnc::getVelocity);
