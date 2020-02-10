@@ -11,7 +11,6 @@ import frc.robot.RobotMap;
 import frc.robot.vision.ColorBlock;
 import frc.robot.vision.ColorWheel;
 import frc.robot.vision.PixyCam;
-import io.github.pseudoresonance.pixy2api.Pixy2CCC.Block;
 
 import java.util.ArrayList;
 
@@ -35,12 +34,12 @@ public class CPManipulator extends SubsystemBase {
   private CANSparkMax motor;
   private CANEncoder motorEnc;
   private CANPIDController motorPid;
-  private double speed;
   private Solenoid solenoid;
-  private int currentColorSignature;
-  private int initialColor;
-  private double curPos;
-  private double curRPM;
+  private ColorBlock currentBlock;
+
+  private int currentColorSignature, initialColor;
+  private double curPos, curRPM, speed;
+  private final double WHEEL_RADIUS = 2.0, CP_RADIUS = 16.0;
 
   public CPManipulator() {
     solenoid = new Solenoid(RobotMap.CP_SOLONOID);
@@ -54,6 +53,14 @@ public class CPManipulator extends SubsystemBase {
     tab.addNumber("Speed", this::getSpeed);
     tab.addBoolean("Piston Up", solenoid::get);
 
+    tab.addNumber("Current Color", () -> currentColorSignature);
+    tab.addNumber("Dist", this::distToCenter);
+    tab.addNumber("Dist to Green", () -> distToColor('G'));
+    tab.addNumber("X Dist", this::xDist);
+    tab.addNumber("X coord", this::centerX);
+    tab.addNumber("Y coord", this::centerY);
+    tab.addNumber("Initial Color", () -> initialColor);
+
     motorPid.setP(0.0);
     motorPid.setI(0.0);
     motorPid.setD(0.0);
@@ -62,31 +69,69 @@ public class CPManipulator extends SubsystemBase {
 
   @Override
   public void periodic() {
+    currentBlock = getCurBlock();
     currentColorSignature = getCurColor();
     curPos = motorEnc.getPosition();
     curRPM = motorEnc.getVelocity();
   }
 
-  public int distToColor(char curColor, char toColor) {
-    int dist, curIndex, toIndex;
+  public double distToColor(char toColor) {
+    int curIndex, toIndex;
+    double dist;
 
-    curIndex = ColorWheel.toColor(curColor).signature;
+    curIndex = currentColorSignature;
     toIndex = ColorWheel.toColor(toColor).signature;
 
-    dist = toIndex + curIndex;
+    dist = toIndex - curIndex;
     dist %= 4;
 
-    if (dist == 3) {
-      dist -= 4;
+    dist *= 360 / 8.0;
+
+    if (dist == 3 * 360 / 8.0) {
+      dist -= 4 * 360 / 8.0;
+      dist += xDist() * (60.0 / 315.0);
+    } else {
+      dist -= xDist() * (60.0 / 315.0);
     }
 
     return dist;
   }
 
-  public double distToDegrees(int dist) {
-    double spins = dist / 8.0;
+  public double degreesToArclength(double degrees) {
+    double arcLength = Math.toRadians(degrees) * CP_RADIUS;
+    return arcLength;
+  } 
 
-    return spins * 360;
+  public double distToCenter() {
+    if(currentBlock != null) {
+      return currentBlock.getDist();
+    } else {
+      return 0;
+    }
+  }
+
+  public double xDist() {
+    if(currentBlock!= null) {
+      return currentBlock.getXDist();
+    } else {
+      return 0;
+    }
+  }
+
+  public double centerX() {
+    if(currentBlock != null) {
+      return currentBlock.getX();
+    } else {
+      return 0;
+    }
+  }
+
+  public double centerY() {
+    if(currentBlock != null) {
+      return currentBlock.getY();
+    } else {
+      return 0;
+    }
   }
 
   public int getInitialColor() {
@@ -99,16 +144,6 @@ public class CPManipulator extends SubsystemBase {
 
   public int getSensorColor(int curSig) {
     return curSig + 2;
-  }
-
-  public double degreesToColor(char curColor, char toColor) {
-    return distToDegrees(distToColor(curColor, toColor));
-  }
-
-  public double spinsToRadians(double spins) {
-    double degrees = spins * 360;
-    double radians = (degrees * Math.PI) / 180;
-    return radians;
   }
 
   public void spin(double speed) {
@@ -139,22 +174,25 @@ public class CPManipulator extends SubsystemBase {
 
   public int getCurColor() {
     int curColorSig = -1;
-    ArrayList<ColorBlock> newBlocks = new ArrayList<ColorBlock>(0);
 
-    ArrayList<Block> blocks = PixyCam.getBlocks();
-
-    for (int i = 0; i < blocks.size(); i++) {
-      ColorBlock newBlock = new ColorBlock(blocks.get(i));
-      newBlocks.set(i, newBlock);
-    }
-
-    newBlocks = PixyCam.sortByWeight(newBlocks);
-
-    if (newBlocks.size() > 0) {
-      curColorSig = newBlocks.get(0).getSig();
+    if(currentBlock != null) {
+      curColorSig = currentBlock.getSig();
     }
 
     return curColorSig;
+  }
+
+  public ColorBlock getCurBlock() {
+    ColorBlock block = null;
+    ArrayList<ColorBlock> blocks = PixyCam.getBlocks();
+
+    if (blocks.size() > 0) {
+      blocks = PixyCam.sortByCenter(blocks);
+
+      block = blocks.get(0);
+    }
+
+    return block;
   }
 
   public double getSpeed() {

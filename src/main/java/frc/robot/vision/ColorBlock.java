@@ -3,23 +3,21 @@ package frc.robot.vision;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC.Block;
 
 public class ColorBlock {
-	private double size, weight, distance, x, y, width, height;
-	int sig;
+	private double size, distance, x, y, width, height;
+	private int sig;
 
-	private final static double sizeWeight = 0.01;
-	private final static double distWeight = 0.01;
-
-	public final static double xHalf = (315 / 2);
-	public final static double yHalf = (207 / 2);
+	public final static double xHalf = (315.0 / 2.0);
+	public final static double yHalf = (207.0 / 2.0);
 	// (0, 0) --> (315, 0)
-    // (0, 0) --> (0, 207)
-	
+	// (0, 0) --> (0, 207)
+
 	public ColorBlock(double x, double y, double width, double height, int sig) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		this.sig = sig;
+		update();
 	}
 
 	public ColorBlock(Block block) {
@@ -28,17 +26,12 @@ public class ColorBlock {
 		width = block.getWidth();
 		height = block.getHeight();
 		sig = block.getSignature();
+		update();
 	}
 
 	public void update() {
 		size = calcSize();
 		distance = calcDist();
-		weight = calcWeight(distance, size);
-	}
-
-	public double calcWeight(double dist, double size) {
-		double val = (sizeWeight * size) + (distWeight * dist);
-		return val;
 	}
 
 	public double calcDist() {
@@ -51,7 +44,7 @@ public class ColorBlock {
 	}
 
 	public double getSize(ColorBlock args) {
-		return (args.getWidth() * args.getLength());
+		return args.getWidth() * args.getLength();
 	}
 
 	public double getSize() {
@@ -62,8 +55,8 @@ public class ColorBlock {
 		return distance;
 	}
 
-	public double getWeight() {
-		return weight;
+	public double getXDist() {
+		return xHalf - x;
 	}
 
 	public double getLength() {
@@ -76,5 +69,13 @@ public class ColorBlock {
 
 	public int getSig() {
 		return sig;
+	}
+
+	public double getX() {
+		return x;
+	}
+
+	public double getY() {
+		return y;
 	}
 }
