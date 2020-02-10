@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.Limelight;
 import frc.robot.RobotMap;
 
 import com.revrobotics.CANEncoder;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
+  private final double LIMELIGHT_ANGLE = 20.0; // 20 Degree Tilt
   
   private CANSparkMax leader, follower, hood;
   private CANPIDController shooterPid, hoodPid;
@@ -99,5 +101,9 @@ public class Shooter extends SubsystemBase {
   public void disableForClimb() {
     isClimbing = false;
     leader.set(0.0);
+  }
+
+  public double getVertAngle() {
+    return LIMELIGHT_ANGLE + Limelight.getTy();
   }
 }
