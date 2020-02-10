@@ -10,6 +10,7 @@ package frc.robot.commands.drive.rotate;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Limelight;
+import frc.robot.Limelight.LightMode;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveDrive;
 
@@ -28,6 +29,7 @@ public class RotateToTargetWhileDriving extends CommandBase {
   @Override
   public void initialize() {
     RobotContainer.swerveDrive.resetPid();
+    Limelight.setLedMode(LightMode.eOn);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,6 +49,7 @@ public class RotateToTargetWhileDriving extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    Limelight.setLedMode(LightMode.eOff);
   }
 
   // Returns true when the command should end.

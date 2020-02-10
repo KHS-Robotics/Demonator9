@@ -5,17 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.climb;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
-public class Telescope extends CommandBase {
+public class MoveHood extends CommandBase {
   /**
-   * Creates a new Telescope.
+   * Creates a new MoveHood.
    */
-  public Telescope() {
-    addRequirements(RobotContainer.climber);
+  public MoveHood() {
+    addRequirements(RobotContainer.shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -26,13 +26,12 @@ public class Telescope extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.climber.setTelescope(RobotContainer.switchbox.getTelescopeSpeed());
+    RobotContainer.shooter.setHood(RobotContainer.switchbox.getHoodSpeed());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.climber.setTelescope(0);
   }
 
   // Returns true when the command should end.

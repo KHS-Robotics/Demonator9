@@ -49,7 +49,7 @@ public class CPManipulator extends SubsystemBase {
 
     setPosition(false);
 
-    var tab = Shuffleboard.getTab("Manipulator Speed");
+    var tab = Shuffleboard.getTab("Manipulator");
     tab.addNumber("Speed", this::getSpeed);
     tab.addBoolean("Piston Up", solenoid::get);
 
@@ -65,6 +65,9 @@ public class CPManipulator extends SubsystemBase {
     motorPid.setI(0.0);
     motorPid.setD(0.0);
     motorPid.setIZone(0.0);
+
+    motorEnc.setVelocityConversionFactor(1.0 / (3.0 * 4.0));
+    motorEnc.setPositionConversionFactor(1.0 / (3.0 * 4.0));
   }
 
   @Override

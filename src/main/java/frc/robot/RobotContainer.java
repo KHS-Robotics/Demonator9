@@ -10,22 +10,35 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 import frc.robot.commands.CenterSwerveModules;
+import frc.robot.commands.climb.SetPTO;
+import frc.robot.commands.climb.StartClimb;
+import frc.robot.commands.controlpanel.MoveControlPanel;
 import frc.robot.commands.drive.DriveSwerveWithXbox;
 import frc.robot.commands.drive.rotate.HoldAngleWhileDriving;
-import frc.robot.commands.drive.rotate.RotateToTarget;
 import frc.robot.commands.drive.rotate.RotateToTargetWhileDriving;
+import frc.robot.commands.indexer.ControlIndexer;
+import frc.robot.commands.intake.MoveDown;
+import frc.robot.commands.intake.MoveUp;
+import frc.robot.commands.intake.StartIntake;
+import frc.robot.commands.intake.StartReverse;
+import frc.robot.commands.intake.StopIntake;
+import frc.robot.commands.shooter.MoveHood;
+import frc.robot.commands.shooter.Shoot;
 import frc.robot.subsystems.CPManipulator;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-//import frc.robot.commands.PivotPIDTuner;
 import frc.robot.subsystems.SwerveDrive;
+
+//import frc.robot.commands.PivotPIDTuner;
+
 import io.github.pseudoresonance.pixy2api.Pixy2;
 import io.github.pseudoresonance.pixy2api.links.SPILink;
 
@@ -44,24 +57,20 @@ public class RobotContainer {
 
   public static final SwerveDrive swerveDrive = new SwerveDrive();
   public static final Intake intake = new Intake();
+  public static final Indexer indexer = new Indexer();
   public static final Climber climber = new Climber();
   public static final Shooter shooter = new Shooter();
   public static final CPManipulator CPManipulator = new CPManipulator();
 
   public static final XboxController xboxController = new XboxController(RobotMap.XBOX_PORT);
-  public static final Joystick switchbox = new Joystick(RobotMap.SWITCHBOX_PORT);
-
-  public static final DriveSwerveWithXbox driveSwerve = new DriveSwerveWithXbox();
-  public static final RotateToTargetWhileDriving driveToTarget = new RotateToTargetWhileDriving();
-  public static final RotateToTarget rotateToTargetInPlace = new RotateToTarget();
-  public static final HoldAngleWhileDriving holdAngleWhileDriving = new HoldAngleWhileDriving();
-
-
+  public static final SwitchBox switchbox = new SwitchBox(RobotMap.SWITCHBOX_PORT);
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    swerveDrive.setDefaultCommand(holdAngleWhileDriving);
+    //swerveDrive.setDefaultCommand(new HoldAngleWhileDriving());
+    swerveDrive.setDefaultCommand(new DriveSwerveWithXbox());
+    indexer.setDefaultCommand(new ControlIndexer());
     //swerveDrive.setDefaultCommand(new PivotPIDTuner());
     
     // Configure the button bindings
@@ -78,11 +87,45 @@ public class RobotContainer {
     JoystickButton calibrate = new JoystickButton(xboxController, XboxController.Button.kBack.value);
     calibrate.whenPressed(new CenterSwerveModules());
 
-    CustomButton turnAndDrive = new CustomButton( () -> Math.abs(xboxController.getX(Hand.kLeft)) > 0.05 );
-    turnAndDrive.whenHeld(driveSwerve);
+    // CustomButton turnAndDrive = new CustomButton( () -> Math.abs(xboxController.getX(Hand.kLeft)) > 0.05 );
+    // turnAndDrive.whenHeld(new DriveSwerveWithXbox());
 
     JoystickButton rotateToTarget = new JoystickButton(xboxController, XboxController.Button.kY.value);
-    rotateToTarget.whenHeld(rotateToTargetInPlace);
+    rotateToTarget.whenHeld(new RotateToTargetWhileDriving());
+
+    CustomButton moveHood = new CustomButton(switchbox::shooterOverride);
+    moveHood.whenHeld(new MoveHood());
+
+    CustomButton controlPanel = new CustomButton(switchbox::controlPanelOverride);
+    controlPanel.whenHeld(new MoveControlPanel());
+
+    CustomButton setPto = new CustomButton(switchbox::engagePTO);
+    setPto.whenPressed(new SetPTO(true));
+    setPto.whenReleased(new SetPTO(false));
+
+    CustomButton startClimb = new CustomButton(switchbox::climb);
+    startClimb.whenHeld(new StartClimb());
+
+    CustomButton shoot = new CustomButton(switchbox::shoot);
+    shoot.whenHeld(new Shoot());
+
+    CustomButton intakeDown = new CustomButton(switchbox::intakeDown);
+    intakeDown.whenPressed(new MoveDown());
+    intakeDown.whenReleased(new MoveUp());
+
+    CustomButton intaking = new CustomButton(switchbox::intake);
+    intaking.whenPressed(new StartIntake());
+    intaking.whenReleased(new StopIntake());
+
+    CustomButton outtaking = new CustomButton(switchbox::outtake);
+    outtaking.whenPressed(new StartReverse());
+    outtaking.whenReleased(new StopIntake());
+
+    CustomButton rotationControl = new CustomButton(() -> switchbox.rotationControl() && xboxController.getBButton());
+    //TODO: rotationControl.whenHeld();
+
+    CustomButton positionControl = new CustomButton(() -> switchbox.positionControl() && xboxController.getBButton());
+    //TODO: positionControl.whenHeld();
   }
 
 

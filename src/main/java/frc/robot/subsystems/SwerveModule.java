@@ -69,7 +69,7 @@ public class SwerveModule extends SubsystemBase {
     pivotEncoder.setPositionConversionFactor(360.0 / 18.0); // 360 degree per rotation, 18:1 -> 360 * 1/18
 
     driveEncoder = driveMotor.getEncoder();
-    driveEncoder.setVelocityConversionFactor((2 * Math.PI * 0.0508) / 8.31); // 4" diameter wheel (0.0508 meter radius), 8.31:1 -> 2*pi*0.0508 / 8.31
+    driveEncoder.setVelocityConversionFactor((2 * Math.PI * 0.0508) / 8.33); // 4" diameter wheel (0.0508 meter radius), 8.33:1 -> 2*pi*0.0508 / 8.33
 
     // pivotPID = pivotMotor.getPIDController();
     // this.setPid(pivotP, pivotI, pivotD);
