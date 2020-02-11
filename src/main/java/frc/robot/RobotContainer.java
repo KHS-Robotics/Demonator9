@@ -11,6 +11,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -86,39 +87,62 @@ public class RobotContainer {
     JoystickButton calibrate = new JoystickButton(xboxController, XboxController.Button.kBack.value);
     calibrate.whenPressed(new CenterSwerveModules());
 
-    // CustomButton turnAndDrive = new CustomButton( () -> Math.abs(xboxController.getX(Hand.kLeft)) > 0.05 );
-    // turnAndDrive.whenHeld(new DriveSwerveWithXbox());
-
     JoystickButton rotateToTarget = new JoystickButton(xboxController, XboxController.Button.kY.value);
     rotateToTarget.whenHeld(new RotateToTargetWhileDriving());
 
-    CustomButton moveHood = new CustomButton(switchbox::shooterOverride);
-    moveHood.whenHeld(new MoveHood());
+    // CustomButton turnAndDrive = new CustomButton( () -> Math.abs(xboxController.getX(Hand.kRight)) > 0.05 );
+    // turnAndDrive.whileHeld(() -> {
+    //   var xSpeed = -RobotContainer.xboxController.getY(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
+    //   var ySpeed = -RobotContainer.xboxController.getX(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
+    //   var rot = -RobotContainer.xboxController.getX(GenericHID.Hand.kRight) * SwerveDrive.kMaxAngularSpeed;
+
+    //   if(Math.abs(xSpeed) > 0.05 || Math.abs(ySpeed) > 0.05 || Math.abs(rot) > 0.05) {
+    //     RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot, !RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft));
+    //   } else {
+    //     RobotContainer.swerveDrive.stop();
+    //   }
+    // }, swerveDrive);
+
+    CustomButton moveHood = new CustomButton(() -> switchbox.shooterOverride() && !switchbox.shoot());
+    moveHood.whileHeld(() -> shooter.setHood(switchbox.getHoodSpeed()), shooter);
+    moveHood.whenReleased(() -> shooter.setHood(0), shooter);
 
     CustomButton controlPanel = new CustomButton(switchbox::controlPanelOverride);
-    controlPanel.whenHeld(new MoveControlPanel());
+    controlPanel.whileHeld(() -> CPManipulator.spin(switchbox.getControlPanel()), CPManipulator);
+    controlPanel.whenReleased(() -> CPManipulator.spin(0), CPManipulator);
 
     CustomButton setPto = new CustomButton(switchbox::engagePTO);
-    setPto.whenPressed(new SetPTO(true));
-    setPto.whenReleased(new SetPTO(false));
+    setPto.whenPressed(() -> climber.setPTO(true), climber);
+    setPto.whenReleased(() -> climber.setPTO(false), climber);
 
     CustomButton startClimb = new CustomButton(switchbox::climb);
-    startClimb.whenHeld(new StartClimb());
+    startClimb.whenPressed(shooter::enableForClimb, shooter, climber);
+    startClimb.whenReleased(shooter::disableForClimb, shooter, climber);
 
-    CustomButton shoot = new CustomButton(switchbox::shoot);
-    shoot.whenHeld(new Shoot());
+    CustomButton shoot = new CustomButton(() -> switchbox.shooterOverride() && switchbox.shoot());
+    shoot.whileHeld(() -> {
+      shooter.shoot(0.5);
+      shooter.setHood(switchbox.getHoodSpeed());
+    }, shooter);
+    shoot.whenReleased(shooter::stop, shooter);
 
     CustomButton intakeDown = new CustomButton(switchbox::intakeDown);
-    intakeDown.whenPressed(new MoveDown());
-    intakeDown.whenReleased(new MoveUp());
+    intakeDown.whenPressed(intake::down, intake);
+    intakeDown.whenReleased(intake::up, intake);
 
     CustomButton intaking = new CustomButton(switchbox::intake);
-    intaking.whenPressed(new StartIntake());
-    intaking.whenReleased(new StopIntake());
+    intaking.whenPressed(() -> {
+      intake.intake();
+      indexer.setMotor(0.5);
+    }, intake, indexer);
+    intaking.whenReleased(() -> {
+      intake.stop();
+      indexer.setMotor(0);
+    }, intake, indexer);
 
     CustomButton outtaking = new CustomButton(switchbox::outtake);
-    outtaking.whenPressed(new StartReverse());
-    outtaking.whenReleased(new StopIntake());
+    outtaking.whenPressed(intake::reverse, intake);
+    outtaking.whenReleased(intake::stop, intake);
 
     CustomButton rotationControl = new CustomButton(() -> switchbox.rotationControl() && xboxController.getBButton());
     //TODO: rotationControl.whenHeld();
