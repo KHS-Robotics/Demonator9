@@ -11,25 +11,14 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.CenterSwerveModules;
-import frc.robot.commands.climb.SetPTO;
-import frc.robot.commands.climb.StartClimb;
-import frc.robot.commands.controlpanel.MoveControlPanel;
 import frc.robot.commands.drive.DriveSwerveWithXbox;
 import frc.robot.commands.drive.rotate.HoldAngleWhileDriving;
 import frc.robot.commands.drive.rotate.RotateToTargetWhileDriving;
 import frc.robot.commands.indexer.ControlIndexer;
-import frc.robot.commands.intake.MoveDown;
-import frc.robot.commands.intake.MoveUp;
-import frc.robot.commands.intake.StartIntake;
-import frc.robot.commands.intake.StartReverse;
-import frc.robot.commands.intake.StopIntake;
-import frc.robot.commands.shooter.MoveHood;
-import frc.robot.commands.shooter.Shoot;
 import frc.robot.subsystems.CPManipulator;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Indexer;
