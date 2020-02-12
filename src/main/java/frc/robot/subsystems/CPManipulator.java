@@ -39,7 +39,9 @@ public class CPManipulator extends SubsystemBase {
 
   private int currentColorSignature, initialColor;
   private double curPos, curRPM, speed;
-  private final double WHEEL_RADIUS = 2.0, CP_RADIUS = 16.0;
+  private final double WHEEL_RADIUS = 2.0, CP_RADIUS = 16.0, MAX_ALLOWABLE_RPM = 55.0;
+  private final double MAX_RPM = (WHEEL_RADIUS / CP_RADIUS) * MAX_ALLOWABLE_RPM;
+
 
   public CPManipulator() {
     solenoid = new Solenoid(RobotMap.CP_SOLONOID);
