@@ -41,10 +41,10 @@ public class SwitchBox extends Joystick {
 		return this.getRawButton(12);
 	}
 
-	public boolean guard() {
+	public boolean guide() {
 		return !this.getRawButton(7);
 	}
-	
+
 	public boolean climb() {
 		return this.getRawButton(8);
 	}
