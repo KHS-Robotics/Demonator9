@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import frc.robot.RobotContainer;
 import io.github.pseudoresonance.pixy2api.Pixy2;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC.Block;
+import frc.robot.RobotContainer;
 
 public class PixyCam {
 	private static ArrayList<Block> blocks = new ArrayList<>();
@@ -99,5 +100,9 @@ public class PixyCam {
 		}
 
 		return returnBlocks;
+	}
+
+	public static void setLamp(boolean on) {
+		RobotContainer.pixy.setLamp((byte) (on ? 1 : 0), (byte) (on ? 1 : 0));
 	}
 }

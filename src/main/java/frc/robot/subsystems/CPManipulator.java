@@ -18,6 +18,7 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -51,7 +52,7 @@ public class CPManipulator extends SubsystemBase {
 
     setPosition(false);
 
-    var tab = Shuffleboard.getTab("Manipulator");
+    var tab = Shuffleboard.getTab("CP Manipulator");
     tab.addNumber("Speed", this::getSpeed);
     tab.addBoolean("Piston Up", solenoid::get);
 
@@ -67,6 +68,8 @@ public class CPManipulator extends SubsystemBase {
     motorPid.setI(0.0);
     motorPid.setD(0.0);
     motorPid.setIZone(0.0);
+
+    motor.setIdleMode(IdleMode.kBrake);
 
     motorEnc.setVelocityConversionFactor(1.0 / (3.0 * 4.0));
     motorEnc.setPositionConversionFactor(1.0 / (3.0 * 4.0));

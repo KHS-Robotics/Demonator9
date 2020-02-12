@@ -10,6 +10,7 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -21,7 +22,6 @@ import frc.robot.commands.drive.rotate.RotateToTargetWhileDriving;
 import frc.robot.commands.indexer.ControlIndexer;
 import frc.robot.subsystems.CPManipulator;
 import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Guide;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -51,7 +51,7 @@ public class RobotContainer {
   public static final Climber climber = new Climber();
   public static final Shooter shooter = new Shooter();
   public static final CPManipulator CPManipulator = new CPManipulator();
-  public static final Guide guide = new Guide();
+  public static final Solenoid guide = new Solenoid(RobotMap.GUIDE);
 
   public static final XboxController xboxController = new XboxController(RobotMap.XBOX_PORT);
   public static final SwitchBox switchbox = new SwitchBox(RobotMap.SWITCHBOX_PORT);
@@ -63,7 +63,8 @@ public class RobotContainer {
     swerveDrive.setDefaultCommand(new DriveSwerveWithXbox());
     indexer.setDefaultCommand(new ControlIndexer());
     //swerveDrive.setDefaultCommand(new PivotPIDTuner());
-    
+    pixy.init();
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -99,8 +100,14 @@ public class RobotContainer {
     moveHood.whenReleased(() -> shooter.setHood(0), shooter);
 
     CustomButton controlPanel = new CustomButton(switchbox::controlPanelOverride);
-    controlPanel.whileHeld(() -> CPManipulator.spin(switchbox.getControlPanel()), CPManipulator);
-    controlPanel.whenReleased(() -> CPManipulator.spin(0), CPManipulator);
+    controlPanel.whileHeld(() -> {
+      CPManipulator.spin(switchbox.getControlPanel());
+      CPManipulator.setPosition(true);
+    }, CPManipulator);
+    controlPanel.whenReleased(() -> {
+      CPManipulator.spin(0);
+      CPManipulator.setPosition(false);
+    }, CPManipulator);
 
     CustomButton setPto = new CustomButton(switchbox::engagePTO);
     setPto.whenPressed(() -> climber.setPTO(true), climber);
@@ -136,8 +143,8 @@ public class RobotContainer {
     outtaking.whenReleased(intake::stop, intake);
 
     CustomButton guideButton = new CustomButton(switchbox::guide);
-    guideButton.whenPressed(guide::guideDown);
-    guideButton.whenReleased(guide::guideUp);
+    guideButton.whenPressed(() -> guide.set(true));
+    guideButton.whenReleased(() -> guide.set(false));
 
     CustomButton rotationControl = new CustomButton(() -> switchbox.rotationControl() && xboxController.getBButton());
     //TODO: rotationControl.whenHeld();

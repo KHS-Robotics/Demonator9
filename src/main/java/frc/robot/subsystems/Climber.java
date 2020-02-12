@@ -11,6 +11,7 @@ import frc.robot.RobotMap;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -30,6 +31,8 @@ public class Climber extends SubsystemBase {
     telescopeEnc = telescope.getEncoder();
     pto = new Solenoid(RobotMap.PTO);
     setPTO(false); // TODO: Might be inverted
+
+    telescope.setIdleMode(IdleMode.kBrake);
 
     telescopeEnc.setPositionConversionFactor(1.0 / 7.0);
     telescopeEnc.setVelocityConversionFactor(1.0 / 7.0);

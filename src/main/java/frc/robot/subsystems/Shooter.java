@@ -13,6 +13,7 @@ import frc.robot.RobotMap;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -40,8 +41,8 @@ public class Shooter extends SubsystemBase {
     followerEnc = follower.getEncoder();
     hoodEnc = hood.getEncoder();
 
-    leaderEnc.setVelocityConversionFactor(3.0); // 1 spin of neo = 3 spins of shooter
-    followerEnc.setVelocityConversionFactor(3.0);
+    leader.setIdleMode(IdleMode.kBrake);
+    follower.setIdleMode(IdleMode.kBrake);
 
     hoodEnc.setPositionConversionFactor(360.0 / (10.0 * 5.0 * (60.0/24.0))); //Should be tested
     

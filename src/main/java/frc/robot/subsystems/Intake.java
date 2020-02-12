@@ -11,6 +11,7 @@ import frc.robot.RobotMap;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -27,6 +28,8 @@ public class Intake extends SubsystemBase {
     motor = new CANSparkMax(RobotMap.INTAKE, MotorType.kBrushless);
     solenoid = new Solenoid(RobotMap.INTAKE_SOLENOID);
     motorEnc = motor.getEncoder();
+
+    motor.setIdleMode(IdleMode.kBrake);
 
     motorEnc.setPositionConversionFactor(1.0 / 2.0);
     motorEnc.setVelocityConversionFactor(1.0 / 2.0);

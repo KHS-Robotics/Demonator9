@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -26,6 +27,8 @@ public class Indexer extends SubsystemBase {
   public Indexer() {
     motor = new CANSparkMax(RobotMap.INDEX_MOTOR, MotorType.kBrushless);
     motorEnc = motor.getEncoder();
+
+    motor.setIdleMode(IdleMode.kBrake);
 
     motorEnc.setVelocityConversionFactor(1.0 / (3.0 * 4.0));
     motorEnc.setPositionConversionFactor(1.0 / (3.0 * 4.0));
