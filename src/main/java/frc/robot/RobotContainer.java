@@ -21,6 +21,7 @@ import frc.robot.commands.drive.rotate.RotateToTargetWhileDriving;
 import frc.robot.commands.indexer.ControlIndexer;
 import frc.robot.subsystems.CPManipulator;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Guide;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -50,6 +51,7 @@ public class RobotContainer {
   public static final Climber climber = new Climber();
   public static final Shooter shooter = new Shooter();
   public static final CPManipulator CPManipulator = new CPManipulator();
+  public static final Guide guide = new Guide();
 
   public static final XboxController xboxController = new XboxController(RobotMap.XBOX_PORT);
   public static final SwitchBox switchbox = new SwitchBox(RobotMap.SWITCHBOX_PORT);
@@ -132,6 +134,10 @@ public class RobotContainer {
     CustomButton outtaking = new CustomButton(switchbox::outtake);
     outtaking.whenPressed(intake::reverse, intake);
     outtaking.whenReleased(intake::stop, intake);
+
+    CustomButton guideButton = new CustomButton(switchbox::guide);
+    guideButton.whenPressed(guide::guideDown);
+    guideButton.whenReleased(guide::guideUp);
 
     CustomButton rotationControl = new CustomButton(() -> switchbox.rotationControl() && xboxController.getBButton());
     //TODO: rotationControl.whenHeld();
