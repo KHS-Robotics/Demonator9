@@ -77,10 +77,10 @@ public class CPManipulator extends SubsystemBase {
 
   @Override
   public void periodic() {
-    currentBlock = getCurBlock();
-    currentColorSignature = getCurColor();
-    curPos = motorEnc.getPosition();
-    curRPM = motorEnc.getVelocity();
+    //currentBlock = getCurBlock();
+    //currentColorSignature = getCurColor();
+    //curPos = motorEnc.getPosition();
+    //curRPM = motorEnc.getVelocity();
   }
 
   public double distToColor(char toColor) {
