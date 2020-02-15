@@ -8,7 +8,7 @@
 package frc.robot.commands.drive.rotate;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Limelight;
+import frc.robot.vision.Limelight;
 import frc.robot.RobotContainer;
 
 public class RotateToTarget extends CommandBase {

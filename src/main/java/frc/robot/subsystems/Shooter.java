@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems;
 
-import frc.robot.Limelight;
+import frc.robot.vision.Limelight;
 import frc.robot.RobotMap;
 
 import com.revrobotics.CANEncoder;

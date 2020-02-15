@@ -73,7 +73,7 @@ public class SwerveDrive extends SubsystemBase {
     RobotMap.REAR_RIGHT_DIGITAL_INPUT 
   );
 
-  public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,
+  public final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,
       frontRightLocation, rearLeftLocation, rearRightLocation);
 
   private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, this.getAngle());
