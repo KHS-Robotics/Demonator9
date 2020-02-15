@@ -34,15 +34,15 @@ public class Shooter extends SubsystemBase {
     follower = new CANSparkMax(RobotMap.SHOOTER2, MotorType.kBrushless);
     hood = new CANSparkMax(RobotMap.HOOD, MotorType.kBrushless);
 
-    follower.follow(leader); // TODO: might need inverted
+    follower.follow(leader);
     shooterPid = leader.getPIDController();
     hoodPid = hood.getPIDController();
     leaderEnc = leader.getEncoder();
     followerEnc = follower.getEncoder();
     hoodEnc = hood.getEncoder();
 
-    leader.setIdleMode(IdleMode.kBrake);
-    follower.setIdleMode(IdleMode.kBrake);
+    leader.setIdleMode(IdleMode.kCoast);
+    follower.setIdleMode(IdleMode.kCoast);
 
     hoodEnc.setPositionConversionFactor(360.0 / (10.0 * 5.0 * (60.0/24.0))); //Should be tested
     
@@ -63,7 +63,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shoot(double speed) {
-    shooterPid.setReference(speed, ControlType.kVelocity);
+    //shooterPid.setReference(speed, ControlType.kVelocity);
+    leader.set(speed);
     shooterPidSetpoint = speed;
   }
 
@@ -90,13 +91,14 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setHood(double angle) {
-    hoodPid.setReference(angle, ControlType.kPosition);
+    //hoodPid.setReference(angle, ControlType.kPosition);
+    hood.set(angle);
     hoodPidSetpoint = angle;
   }
 
   public void enableForClimb() {
     isClimbing = true;
-    leader.set(0.5);
+    leader.set(0.15);
   }
 
   public void disableForClimb() {

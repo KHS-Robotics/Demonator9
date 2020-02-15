@@ -62,7 +62,7 @@ public class SwitchBox extends Joystick {
 	}
 
 	public double getHoodSpeed() {
-		return this.getRawAxis(0);
+		return -this.getRawAxis(0) * 0.4;
 	}
 
 	public double getIndexSpeed() {
@@ -70,7 +70,7 @@ public class SwitchBox extends Joystick {
 	}
 
 	public double getTelescopeSpeed() {
-		return this.getRawAxis(2);
+		return this.getRawAxis(2) * 0.8;
 	}
 
 	public double getControlPanel() {

@@ -13,20 +13,23 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
   private CANSparkMax motor;
   private CANEncoder motorEnc;
-  private Solenoid solenoid;
+  private DoubleSolenoid solenoid;
   private double speed = 0.35; //Probably Changing ~0.4
   private boolean intaking, releasing;
 
   public Intake() {
     motor = new CANSparkMax(RobotMap.INTAKE, MotorType.kBrushless);
-    solenoid = new Solenoid(RobotMap.INTAKE_SOLENOID);
+    solenoid = new DoubleSolenoid(RobotMap.INTAKE_SOLENOID_1, RobotMap.INTAKE_SOLENOID_2);
     motorEnc = motor.getEncoder();
 
     motor.setIdleMode(IdleMode.kBrake);
@@ -38,7 +41,7 @@ public class Intake extends SubsystemBase {
     tab.addNumber("Velocity", motorEnc::getVelocity);
     tab.addBoolean("Intaking", () -> intaking);
     tab.addBoolean("Releasing", () -> releasing);
-    tab.addBoolean("Down", () -> solenoid.get());
+    //tab.addBoolean("Down", () -> solenoid.get());
 
     up();
   }
@@ -73,10 +76,10 @@ public class Intake extends SubsystemBase {
 	}
 
   public void down() {
-    solenoid.set(true);
+    solenoid.set(Value.kForward);
   } 
 
   public void up() {
-    solenoid.set(false);
+    solenoid.set(Value.kReverse);
   }
 }

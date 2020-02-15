@@ -64,7 +64,7 @@ public class RobotContainer {
     indexer.setDefaultCommand(new ControlIndexer());
     //swerveDrive.setDefaultCommand(new PivotPIDTuner());
     pixy.init();
-
+    guide.set(false);
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -80,7 +80,7 @@ public class RobotContainer {
     calibrate.whenPressed(new CenterSwerveModules());
 
     JoystickButton rotateToTarget = new JoystickButton(xboxController, XboxController.Button.kY.value);
-    rotateToTarget.whenHeld(new RotateToTargetWhileDriving());
+    //rotateToTarget.whenHeld(new RotateToTargetWhileDriving());
 
     // CustomButton turnAndDrive = new CustomButton( () -> Math.abs(xboxController.getX(Hand.kRight)) > 0.05 );
     // turnAndDrive.whileHeld(() -> {
@@ -119,7 +119,7 @@ public class RobotContainer {
 
     CustomButton shoot = new CustomButton(() -> switchbox.shooterOverride() && switchbox.shoot());
     shoot.whileHeld(() -> {
-      shooter.shoot(0.5);
+      shooter.shoot(-0.5);
       shooter.setHood(switchbox.getHoodSpeed());
     }, shooter);
     shoot.whenReleased(shooter::stop, shooter);

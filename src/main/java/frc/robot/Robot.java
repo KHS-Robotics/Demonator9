@@ -23,6 +23,11 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void disabledPeriodic() {
+    Limelight.setLedMode(LightMode.eOff);
+  }
+
+  @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
   }

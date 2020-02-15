@@ -33,33 +33,34 @@ public class RobotMap {
   public static final int REAR_RIGHT_DRIVE = 20;
 
   public static final int FRONT_LEFT_DIGITAL_INPUT = 1;
-  public static final int FRONT_RIGHT_DIGITAL_INPUT = 3;
+  public static final int FRONT_RIGHT_DIGITAL_INPUT = 2;
   public static final int REAR_LEFT_DIGITAL_INPUT = 0;
-  public static final int REAR_RIGHT_DIGITAL_INPUT = 2;
+  public static final int REAR_RIGHT_DIGITAL_INPUT = 3;
   
   public static final SPI.Port NAVX_PORT = SPI.Port.kMXP;
   public static final byte NAVX_UPDATE_RATE_HZ = (byte) 50;
 
-  public static final int INTAKE = 0;
-  public static final int INTAKE_SOLENOID = 0;
+  public static final int INTAKE = 15;
+  public static final int INTAKE_SOLENOID_1 = 3;
+  public static final int INTAKE_SOLENOID_2 = 4;
 
-  public static final int TELESCOPE = 0;
-  public static final int PTO = 0;
+  public static final int TELESCOPE = 14;
+  public static final int PTO = 1;
 
   public static final int CP_SOLONOID = 0;
 
-  public static final int SHOOTER1 = 0;
-  public static final int SHOOTER2 = 0;
-  public static final int HOOD = 0;
+  public static final int SHOOTER1 = 12;
+  public static final int SHOOTER2 = 13;
+  public static final int HOOD = 10;
 
-  public static final int INDEX_MOTOR = 0;
-  public static final int LIMIT_PORT_1 = 0;
-  public static final int LIMIT_PORT_2 = 0;
-  public static final int LIMIT_PORT_3 = 0;
-  public static final int LIMIT_PORT_4 = 0;
-  public static final int LIMIT_PORT_5 = 0;  
+  public static final int INDEX_MOTOR = 9;
+  public static final int LIMIT_PORT_1 = 4;
+  public static final int LIMIT_PORT_2 = 5;
+  public static final int LIMIT_PORT_3 = 6;
+  public static final int LIMIT_PORT_4 = 7;
+  public static final int LIMIT_PORT_5 = 8;  
 
-  public static final int MANIPULATOR = 0;
+  public static final int MANIPULATOR = 11;
 
-  public static final int GUIDE = 0;
+  public static final int GUIDE = 2;
 }

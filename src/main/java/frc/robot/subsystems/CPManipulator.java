@@ -58,7 +58,7 @@ public class CPManipulator extends SubsystemBase {
 
     tab.addNumber("Current Color", () -> currentColorSignature);
     tab.addNumber("Dist", this::distToCenter);
-    tab.addNumber("Dist to Green", () -> distToColor('G'));
+    //tab.addNumber("Dist to Green", () -> distToColor('G'));
     tab.addNumber("X Dist", this::xDist);
     tab.addNumber("X coord", this::centerX);
     tab.addNumber("Y coord", this::centerY);
@@ -155,7 +155,8 @@ public class CPManipulator extends SubsystemBase {
   }
 
   public void spin(double speed) {
-    motorPid.setReference(speed, ControlType.kSmartMotion);
+    //motorPid.setReference(speed, ControlType.kSmartMotion);
+    motor.set((Math.abs(speed) > 0.05) ? speed : 0);
     this.speed = speed;
   }
 
