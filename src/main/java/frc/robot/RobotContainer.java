@@ -128,6 +128,8 @@ public class RobotContainer {
     }, shooter);
     shoot.whenPressed(() -> shooter.setHood(shooter.getPosition()), shooter);
 
+    CustomButton overrideHood = new CustomButton(() -> switchbox.shooterOverride());
+
     CustomButton intakeDown = new CustomButton(switchbox::intakeDown);
     intakeDown.whenPressed(intake::down, intake);
     intakeDown.whenReleased(intake::up, intake);
