@@ -45,7 +45,7 @@ public class ShooterPIDTuner extends CommandBase {
 
     setPoint = setPointEntry.getDouble(0.0);
 
-    RobotContainer.shooter.setShooterPid(p, i, d);
+    RobotContainer.shooter.setShooterPidF(p, i, d, 1.0 / 6000.0);
     RobotContainer.shooter.setShooter(setPoint);
   }
 

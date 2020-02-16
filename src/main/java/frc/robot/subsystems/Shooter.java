@@ -43,7 +43,10 @@ public class Shooter extends SubsystemBase {
     hoodEnc = hood.getEncoder();
 
     setHoodPid(Constants.HOOD_P, Constants.HOOD_I, Constants.HOOD_D);
-    setShooterPid(Constants.SHOOTER_P, Constants.SHOOTER_I, Constants.SHOOTER_D);
+    setShooterPidF(Constants.SHOOTER_P, Constants.SHOOTER_I, Constants.SHOOTER_D, Constants.SHOOTER_FF);
+
+    shooterPid.setIZone(500);
+    shooterPid.setOutputRange(-1, 0);
 
     leader.setIdleMode(IdleMode.kCoast);
     follower.setIdleMode(IdleMode.kCoast);
@@ -95,10 +98,11 @@ public class Shooter extends SubsystemBase {
     hoodPid.setD(d);
   }
 
-  public void setShooterPid(double p, double i, double d) {
+  public void setShooterPidF(double p, double i, double d, double ff) {
     shooterPid.setP(p);
     shooterPid.setI(i);
     shooterPid.setD(d);
+    shooterPid.setFF(ff);
   }
 
   public void setHood(double angle) {
