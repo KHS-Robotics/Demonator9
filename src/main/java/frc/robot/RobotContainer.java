@@ -96,8 +96,8 @@ public class RobotContainer {
     // }, swerveDrive);
 
     CustomButton moveHood = new CustomButton(() -> switchbox.shooterOverride() && !switchbox.shoot());
-    moveHood.whileHeld(() -> shooter.setHood(switchbox.getHoodSpeed()), shooter);
-    moveHood.whenReleased(() -> shooter.setHood(0), shooter);
+    moveHood.whileHeld(() -> shooter.moveHood(switchbox.getHoodSpeed()), shooter);
+    moveHood.whenReleased(() -> shooter.moveHood(0), shooter);
 
     CustomButton controlPanel = new CustomButton(switchbox::controlPanelOverride);
     controlPanel.whileHeld(() -> {
@@ -119,8 +119,8 @@ public class RobotContainer {
 
     CustomButton shoot = new CustomButton(() -> switchbox.shooterOverride() && switchbox.shoot());
     shoot.whileHeld(() -> {
-      shooter.shoot(-0.5);
-      shooter.setHood(switchbox.getHoodSpeed());
+      shooter.setShooter(-4000);
+      shooter.moveHood(switchbox.getHoodSpeed());
     }, shooter);
     shoot.whenReleased(shooter::stop, shooter);
 

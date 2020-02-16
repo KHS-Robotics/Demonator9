@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.vision.Limelight;
+import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 import com.revrobotics.CANEncoder;
@@ -41,6 +42,9 @@ public class Shooter extends SubsystemBase {
     followerEnc = follower.getEncoder();
     hoodEnc = hood.getEncoder();
 
+    setHoodPid(Constants.HOOD_P, Constants.HOOD_I, Constants.HOOD_D);
+    setShooterPid(Constants.SHOOTER_P, Constants.SHOOTER_I, Constants.SHOOTER_D);
+
     leader.setIdleMode(IdleMode.kCoast);
     follower.setIdleMode(IdleMode.kCoast);
 
@@ -62,10 +66,17 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void shoot(double speed) {
-    //shooterPid.setReference(speed, ControlType.kVelocity);
-    leader.set(speed);
+  public void setShooter(double speed) {
+    shooterPid.setReference(speed, ControlType.kVelocity);
     shooterPidSetpoint = speed;
+  }
+
+  public void setShooterWithoutPID(double speed) {
+    leader.set(speed);
+  }
+
+  public void moveHood(double speed) {
+    hood.set(speed);
   }
 
   public void stop() {
@@ -91,8 +102,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setHood(double angle) {
-    //hoodPid.setReference(angle, ControlType.kPosition);
-    hood.set(angle);
+    hoodPid.setReference(angle, ControlType.kPosition);
     hoodPidSetpoint = angle;
   }
 

@@ -29,7 +29,8 @@ public class Shoot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.shooter.shoot(speed);
+    RobotContainer.shooter.setShooter(speed);
+    RobotContainer.indexer.setMotor(.6);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
