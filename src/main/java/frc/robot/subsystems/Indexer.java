@@ -78,4 +78,8 @@ public class Indexer extends SubsystemBase {
       motor.set(speed);
     }
   }
+
+  public void stop() {
+    motor.set(0);
+  }
 }

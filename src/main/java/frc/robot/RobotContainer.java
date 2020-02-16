@@ -117,12 +117,16 @@ public class RobotContainer {
     startClimb.whenPressed(shooter::enableForClimb, shooter, climber);
     startClimb.whenReleased(shooter::disableForClimb, shooter, climber);
 
-    CustomButton shoot = new CustomButton(() -> switchbox.shooterOverride() && switchbox.shoot());
+    CustomButton shoot = new CustomButton(() -> switchbox.shoot());
     shoot.whileHeld(() -> {
       shooter.setShooter(-4500);
-      shooter.moveHood(switchbox.getHoodSpeed());
+      indexer.setMotor(.6);
+    }, shooter, indexer);
+    shoot.whenReleased(() -> {
+      shooter.stop();
+      indexer.stop();
     }, shooter);
-    shoot.whenReleased(shooter::stop, shooter);
+    shoot.whenPressed(() -> shooter.setHood(shooter.getPosition()), shooter);
 
     CustomButton intakeDown = new CustomButton(switchbox::intakeDown);
     intakeDown.whenPressed(intake::down, intake);
@@ -131,12 +135,10 @@ public class RobotContainer {
     CustomButton intaking = new CustomButton(switchbox::intake);
     intaking.whenPressed(() -> {
       intake.intake();
-      indexer.setMotor(0.5);
-    }, intake, indexer);
+    }, intake);
     intaking.whenReleased(() -> {
       intake.stop();
-      indexer.setMotor(0);
-    }, intake, indexer);
+    }, intake);
 
     CustomButton outtaking = new CustomButton(switchbox::outtake);
     outtaking.whenPressed(intake::reverse, intake);

@@ -110,6 +110,10 @@ public class Shooter extends SubsystemBase {
     hoodPidSetpoint = angle;
   }
 
+  public double getPosition() {
+    return hoodEnc.getPosition();
+  }
+
   public void enableForClimb() {
     isClimbing = true;
     leader.set(0.15);
