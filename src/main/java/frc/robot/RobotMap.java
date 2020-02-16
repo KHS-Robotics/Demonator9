@@ -54,7 +54,7 @@ public class RobotMap {
   public static final int HOOD = 10;
 
   public static final int INDEX_MOTOR = 9;
-  public static final int LIMIT_PORT_1 = 4;
+  public static final int LIMIT_PORT_1 = 9;
   public static final int LIMIT_PORT_2 = 5;
   public static final int LIMIT_PORT_3 = 6;
   public static final int LIMIT_PORT_4 = 7;

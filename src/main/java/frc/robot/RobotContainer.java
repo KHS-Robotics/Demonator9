@@ -119,7 +119,7 @@ public class RobotContainer {
 
     CustomButton shoot = new CustomButton(() -> switchbox.shooterOverride() && switchbox.shoot());
     shoot.whileHeld(() -> {
-      shooter.setShooter(-4000);
+      shooter.setShooter(-4500);
       shooter.moveHood(switchbox.getHoodSpeed());
     }, shooter);
     shoot.whenReleased(shooter::stop, shooter);

@@ -44,4 +44,9 @@ public class Constants {
   public static final double SHOOTER_I = 0.000001;
   public static final double SHOOTER_D = 0.01;
   public static final double SHOOTER_FF = 1.0 / 6000.0;
+
+  public static final double INDEXER_P = 0.0001;
+  public static final double INDEXER_I = 0.000001;
+  public static final double INDEXER_D = 0.006;
+  public static final double INDEXER_FF = 1.0 / 1000.0;
 }
