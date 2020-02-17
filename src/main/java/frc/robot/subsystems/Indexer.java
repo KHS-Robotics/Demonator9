@@ -11,6 +11,7 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANPIDController.AccelStrategy;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -34,6 +35,8 @@ public class Indexer extends SubsystemBase {
     motorPid = motor.getPIDController();
     motorEnc = motor.getEncoder();
 
+    motorEnc.setPosition(0);
+
     motorPid.setIZone(200);
     motorPid.setOutputRange(0, 1);
 
@@ -43,8 +46,10 @@ public class Indexer extends SubsystemBase {
     motorPid.setFF(Constants.INDEXER_FF);
 
     motorPid.setSmartMotionMaxAccel(10000, 0);
+    motorPid.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
     motorPid.setSmartMotionMaxVelocity(MAX_VEL, 0);
-    motorPid.setSmartMotionAllowedClosedLoopError(25, 0);
+    motorPid.setSmartMotionMinOutputVelocity(100, 0);
+    motorPid.setSmartMotionAllowedClosedLoopError(0.5, 0);
 
     motor.setIdleMode(IdleMode.kBrake);
 
@@ -56,6 +61,7 @@ public class Indexer extends SubsystemBase {
 
     var tab = Shuffleboard.getTab("Indexer");
     tab.addNumber("Motor Speed", motorEnc::getVelocity);
+    tab.addNumber("Position", motorEnc::getPosition);
     tab.addBoolean("Limit Switch 1", input1::get);
     tab.addBoolean("Limit Switch 2", input2::get);
     tab.addBoolean("Limit Switch 3", input3::get);
@@ -78,5 +84,21 @@ public class Indexer extends SubsystemBase {
 
   public void stop() {
     motor.set(0);
+  }
+
+  public boolean getSwitch1() {
+    return !input1.get();
+  }
+
+  public double getPosition() {
+    return motorEnc.getPosition();
+  }
+
+  public void setSMPid(double position) {
+    motorPid.setReference(position, ControlType.kSmartMotion);
+  }
+
+  public boolean atSetpoint(double setpoint) {
+    return Math.abs(motorEnc.getPosition() - setpoint) < .5;
   }
 }

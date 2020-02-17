@@ -20,6 +20,7 @@ import frc.robot.commands.drive.DriveSwerveWithXbox;
 import frc.robot.commands.drive.rotate.HoldAngleWhileDriving;
 import frc.robot.commands.drive.rotate.RotateToTargetWhileDriving;
 import frc.robot.commands.indexer.ControlIndexer;
+import frc.robot.commands.indexer.IndexBall;
 import frc.robot.subsystems.CPManipulator;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Indexer;
@@ -155,6 +156,9 @@ public class RobotContainer {
 
     CustomButton positionControl = new CustomButton(() -> switchbox.positionControl() && xboxController.getBButton());
     //TODO: positionControl.whenHeld();
+
+    CustomButton moveIndexer = new CustomButton(() -> indexer.getSwitch1()); // && Math.abs(switchbox.getIndexSpeed()) < 0.05
+    moveIndexer.whenPressed(new IndexBall());
   }
 
 
