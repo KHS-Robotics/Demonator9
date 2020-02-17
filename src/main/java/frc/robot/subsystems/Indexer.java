@@ -21,7 +21,7 @@ import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 public class Indexer extends SubsystemBase {
-  private final double MAX_VEL = 1000;
+  private final double MAX_VEL = 10000;
   private CANSparkMax motor;
   private CANPIDController motorPid;
   private CANEncoder motorEnc;
