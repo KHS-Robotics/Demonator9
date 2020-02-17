@@ -48,9 +48,6 @@ public class Indexer extends SubsystemBase {
 
     motor.setIdleMode(IdleMode.kBrake);
 
-    motorEnc.setVelocityConversionFactor(1.0 / (3.0 * 4.0));
-    motorEnc.setPositionConversionFactor(1.0 / (3.0 * 4.0));
-
     input1 = new DigitalInput(RobotMap.LIMIT_PORT_1);
     input2 = new DigitalInput(RobotMap.LIMIT_PORT_2);
     input3 = new DigitalInput(RobotMap.LIMIT_PORT_3);
