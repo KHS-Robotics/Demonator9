@@ -42,9 +42,9 @@ public class Indexer extends SubsystemBase {
     motorPid.setD(Constants.INDEXER_D);
     motorPid.setFF(Constants.INDEXER_FF);
 
-    motorPid.setSmartMotionMaxAccel(1000, 0);
+    motorPid.setSmartMotionMaxAccel(10000, 0);
     motorPid.setSmartMotionMaxVelocity(MAX_VEL, 0);
-    motorPid.setSmartMotionAllowedClosedLoopError(250, 0);
+    motorPid.setSmartMotionAllowedClosedLoopError(25, 0);
 
     motor.setIdleMode(IdleMode.kBrake);
 
