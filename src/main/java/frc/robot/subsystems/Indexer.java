@@ -43,6 +43,7 @@ public class Indexer extends SubsystemBase {
     motorPid.setP(Constants.INDEXER_P);
     motorPid.setI(Constants.INDEXER_I);
     motorPid.setD(Constants.INDEXER_D);
+    motorPid.setFF(0);
 
     // motorPid.setSmartMotionMaxAccel(10000, 0);
     // motorPid.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
@@ -74,7 +75,11 @@ public class Indexer extends SubsystemBase {
   }
 
   public void setMotor(double speed) {
+    // if(speed > 0) {
+    //   motorPid.setReference(speed * MAX_VEL, ControlType.kVelocity);
+    // } else {
     motor.set(speed);
+    // }
   }
 
   public void stop() {
@@ -89,8 +94,8 @@ public class Indexer extends SubsystemBase {
     return motorEnc.getPosition();
   }
 
-  public void setSMPid(double position) {
-    motorPid.setReference(position, ControlType.kSmartMotion);
+  public void setPosition(double position) {
+    motorPid.setReference(position, ControlType.kPosition);
   }
 
   public boolean atSetpoint(double setpoint) {

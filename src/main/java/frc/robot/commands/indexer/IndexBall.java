@@ -22,13 +22,13 @@ public class IndexBall extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    position = RobotContainer.indexer.getPosition() + 4.0;
+    position = RobotContainer.indexer.getPosition() + 30.0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.indexer.setSMPid(position);
+    RobotContainer.indexer.setPosition(position);
   }
 
   // Called once the command ends or is interrupted.
