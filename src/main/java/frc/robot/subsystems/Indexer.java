@@ -35,6 +35,9 @@ public class Indexer extends SubsystemBase {
     motorPid = motor.getPIDController();
     motorEnc = motor.getEncoder();
 
+    motorEnc.setVelocityConversionFactor(1);
+    motorEnc.setPositionConversionFactor(1);
+
     motorEnc.setPosition(0);
 
     motorPid.setIZone(200);
@@ -43,13 +46,13 @@ public class Indexer extends SubsystemBase {
     motorPid.setP(Constants.INDEXER_P);
     motorPid.setI(Constants.INDEXER_I);
     motorPid.setD(Constants.INDEXER_D);
-    motorPid.setFF(0);
+    motorPid.setFF(Constants.INDEXER_FF);
 
-    // motorPid.setSmartMotionMaxAccel(10000, 0);
-    // motorPid.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
-    // motorPid.setSmartMotionMaxVelocity(MAX_VEL, 0);
-    // motorPid.setSmartMotionMinOutputVelocity(100, 0);
-    // motorPid.setSmartMotionAllowedClosedLoopError(0.5, 0);
+    motorPid.setSmartMotionMaxAccel(10000, 0);
+    motorPid.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
+    motorPid.setSmartMotionMaxVelocity(MAX_VEL, 0);
+    //motorPid.setSmartMotionMinOutputVelocity(100, 0);
+    motorPid.setSmartMotionAllowedClosedLoopError(0.5, 0);
 
     motor.setIdleMode(IdleMode.kBrake);
 
@@ -75,11 +78,11 @@ public class Indexer extends SubsystemBase {
   }
 
   public void setMotor(double speed) {
-    // if(speed > 0) {
-    //   motorPid.setReference(speed * MAX_VEL, ControlType.kVelocity);
-    // } else {
-    motor.set(speed);
-    // }
+    if(speed > 0) {
+      motorPid.setReference(speed * MAX_VEL, ControlType.kVelocity);
+    } else {
+      motor.set(speed);
+   }
   }
 
   public void stop() {
@@ -95,7 +98,7 @@ public class Indexer extends SubsystemBase {
   }
 
   public void setPosition(double position) {
-    motorPid.setReference(position, ControlType.kPosition);
+    motorPid.setReference(position, ControlType.kSmartMotion);
   }
 
   public boolean atSetpoint(double setpoint) {

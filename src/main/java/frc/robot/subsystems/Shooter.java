@@ -51,7 +51,7 @@ public class Shooter extends SubsystemBase {
     leader.setIdleMode(IdleMode.kCoast);
     follower.setIdleMode(IdleMode.kCoast);
 
-    hood.setIdleMode(IdleMode.kCoast); //TODO: CHANGE BACK!!
+    hood.setIdleMode(IdleMode.kBrake);
     // hoodEnc.setPositionConversionFactor(360.0 / (10.0 * 5.0 * (60.0/24.0))); //Should be tested
     
     var tab = Shuffleboard.getTab("Shooter");
@@ -127,5 +127,13 @@ public class Shooter extends SubsystemBase {
 
   public double getVertAngle() {
     return LIMELIGHT_ANGLE + Limelight.getTy();
+  }
+
+  public void hoodMode(boolean brake) {
+    if(brake) {
+      hood.setIdleMode(IdleMode.kBrake);
+    } else {
+      hood.setIdleMode(IdleMode.kCoast);
+    }
   }
 }

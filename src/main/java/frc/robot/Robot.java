@@ -28,14 +28,28 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void disabledInit() {
+    RobotContainer.shooter.hoodMode(false);
+  }
+
+  @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
   }
 
   @Override
+  public void autonomousInit() {
+    RobotContainer.shooter.hoodMode(true);
+  }
+
+  @Override
   public void autonomousPeriodic() {
-    //driveWithJoystick(false);
     RobotContainer.swerveDrive.updateOdometry();
+  }
+
+  @Override
+  public void teleopInit() {
+    RobotContainer.shooter.hoodMode(true);
   }
 
   @Override

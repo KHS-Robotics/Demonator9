@@ -48,6 +48,7 @@ public class RobotMap {
   public static final int PTO = 1;
 
   public static final int CP_SOLONOID = 0;
+  public static final int MANIPULATOR = 11;
 
   public static final int SHOOTER1 = 12;
   public static final int SHOOTER2 = 13;
@@ -55,12 +56,10 @@ public class RobotMap {
 
   public static final int INDEX_MOTOR = 9;
   public static final int LIMIT_PORT_1 = 9;
-  public static final int LIMIT_PORT_2 = 5;
+  public static final int LIMIT_PORT_2 = 8;
   public static final int LIMIT_PORT_3 = 6;
   public static final int LIMIT_PORT_4 = 7;
-  public static final int LIMIT_PORT_5 = 8;  
-
-  public static final int MANIPULATOR = 11;
+  public static final int LIMIT_PORT_5 = 10;  
 
   public static final int GUIDE = 2;
 }

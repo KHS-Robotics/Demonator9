@@ -157,7 +157,7 @@ public class RobotContainer {
     CustomButton positionControl = new CustomButton(() -> switchbox.positionControl() && xboxController.getBButton());
     //TODO: positionControl.whenHeld();
 
-    CustomButton moveIndexer = new CustomButton(() -> indexer.getSwitch1()); // && Math.abs(switchbox.getIndexSpeed()) < 0.05
+    CustomButton moveIndexer = new CustomButton(() -> (indexer.getSwitch1() && Math.abs(switchbox.getIndexSpeed()) < 0.05));
     moveIndexer.whenPressed(new IndexBall());
   }
 

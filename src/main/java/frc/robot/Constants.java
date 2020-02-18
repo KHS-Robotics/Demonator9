@@ -45,12 +45,19 @@ public class Constants {
   public static final double SHOOTER_D = 0.01;
   public static final double SHOOTER_FF = 1.0 / 6000.0;
 
-  // public static final double INDEXER_P = 0.0001;
-  // public static final double INDEXER_I = 0.000001;
-  // public static final double INDEXER_D = 0.006;
-  // public static final double INDEXER_FF = 1.0 / 1000.0;
+  //Smart Motion / Velocity
+  public static final double INDEXER_P = 0.0001;
+  public static final double INDEXER_I = 0.000001;
+  public static final double INDEXER_D = 0.006;
+  public static final double INDEXER_FF = 1.0 / 10000.0;
 
-  public static final double INDEXER_P = 0.2;
-  public static final double INDEXER_I = 0.0000015;
-  public static final double INDEXER_D = 0.5;
+  public static final double CP_MANIPULATOR_P = 0.0015;
+  public static final double CP_MANIPULATOR_I = 0.00001;
+  public static final double CP_MANIPULATOR_D = 0.01;
+  public static final double CP_MANIPULATOR_FF = 0.0001;
+
+  //POSITION PID
+ // public static final double INDEXER_P = 0.2;
+ // public static final double INDEXER_I = 0.0000015;
+ // public static final double INDEXER_D = 0.5;
 }

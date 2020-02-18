@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.Constants;
 import frc.robot.RobotMap;
 import frc.robot.vision.ColorBlock;
 import frc.robot.vision.ColorWheel;
@@ -14,10 +15,12 @@ import frc.robot.vision.PixyCam;
 
 import java.util.ArrayList;
 
+import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANPIDController.AccelStrategy;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -41,7 +44,7 @@ public class CPManipulator extends SubsystemBase {
   private int currentColorSignature, initialColor;
   private double curPos, curRPM, speed;
   private final double WHEEL_RADIUS = 2.0, CP_RADIUS = 16.0, MAX_ALLOWABLE_RPM = 55.0;
-  private final double MAX_RPM = (WHEEL_RADIUS / CP_RADIUS) * MAX_ALLOWABLE_RPM;
+  private final double MAX_RPM = (CP_RADIUS / WHEEL_RADIUS) * MAX_ALLOWABLE_RPM;
 
 
   public CPManipulator() {
@@ -49,6 +52,17 @@ public class CPManipulator extends SubsystemBase {
     motor = new CANSparkMax(RobotMap.MANIPULATOR, MotorType.kBrushless);
     motorEnc = motor.getEncoder();
     motorPid = motor.getPIDController();
+
+    motorPid.setP(Constants.CP_MANIPULATOR_P);
+    motorPid.setI(Constants.CP_MANIPULATOR_I);
+    motorPid.setD(Constants.CP_MANIPULATOR_D);
+    motorPid.setFF(Constants.CP_MANIPULATOR_FF);
+
+    motorPid.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
+    motorPid.setSmartMotionAllowedClosedLoopError(1.0 / 16.0, 0);
+    motorPid.setOutputRange(-1, 1);
+    motorPid.setSmartMotionMaxVelocity(MAX_RPM, 0);
+    motorPid.setSmartMotionMaxAccel(MAX_RPM, 0);
 
     setPosition(false);
 
@@ -156,8 +170,12 @@ public class CPManipulator extends SubsystemBase {
 
   public void spin(double speed) {
     //motorPid.setReference(speed, ControlType.kSmartMotion);
-    motor.set((Math.abs(speed) > 0.05) ? speed : 0);
+    motorPid.setReference(((Math.abs(speed) > 0.05) ? speed : 0) * MAX_RPM, ControlType.kVelocity);
     this.speed = speed;
+  }
+
+  public void spinCPNumTimes(double num) {
+    motorPid.setReference(num * (CP_RADIUS / WHEEL_RADIUS), ControlType.kSmartMotion);
   }
 
   public static char getGameColor() {
