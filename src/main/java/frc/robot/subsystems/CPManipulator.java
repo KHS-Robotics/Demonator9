@@ -57,6 +57,7 @@ public class CPManipulator extends SubsystemBase {
     motorPid.setI(Constants.CP_MANIPULATOR_I);
     motorPid.setD(Constants.CP_MANIPULATOR_D);
     motorPid.setFF(Constants.CP_MANIPULATOR_FF);
+    motorPid.setIZone(200);
 
     motorPid.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
     motorPid.setSmartMotionAllowedClosedLoopError(1.0 / 16.0, 0);
@@ -77,11 +78,6 @@ public class CPManipulator extends SubsystemBase {
     tab.addNumber("X coord", this::centerX);
     tab.addNumber("Y coord", this::centerY);
     tab.addNumber("Initial Color", () -> initialColor);
-
-    motorPid.setP(0.0);
-    motorPid.setI(0.0);
-    motorPid.setD(0.0);
-    motorPid.setIZone(0.0);
 
     motor.setIdleMode(IdleMode.kBrake);
 

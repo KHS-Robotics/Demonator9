@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class IndexBall extends CommandBase {
-  double position;
+  double position, startTime;
+  boolean isDone = false, firstBall = false, toggled = false;
+
   /**
    * Creates a new IndexBall.
    */
@@ -22,13 +24,33 @@ public class IndexBall extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    position = RobotContainer.indexer.getPosition() + 35.0;
+    isDone = false;
+    firstBall = false; 
+    toggled = false;
+    firstBall = !RobotContainer.indexer.getSwitch2();
+    position = RobotContainer.indexer.getPosition() + (firstBall ? 35 : 15.0);
+    startTime = System.currentTimeMillis();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.indexer.setPosition(position);
+    if (!toggled) {
+      RobotContainer.indexer.setMotor(0.75);
+      if (!RobotContainer.indexer.getSwitch1()) {
+        toggled = true;
+      }
+    } else {
+      if (!RobotContainer.indexer.getSwitch2()) {
+        RobotContainer.indexer.setMotor(0.75);
+      } else {
+        isDone = true;
+      }
+    } //else {
+     // RobotContainer.indexer.setPosition(position);
+     // isDone = RobotContainer.indexer.atSetpoint(position);
+    //}
+
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +62,6 @@ public class IndexBall extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.indexer.atSetpoint(position);
+    return isDone;
   }
 }

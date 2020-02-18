@@ -93,6 +93,10 @@ public class Indexer extends SubsystemBase {
     return !input1.get();
   }
 
+  public boolean getSwitch2() {
+    return !input2.get();
+  }
+
   public double getPosition() {
     return motorEnc.getPosition();
   }
