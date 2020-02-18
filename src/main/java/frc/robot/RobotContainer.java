@@ -101,10 +101,10 @@ public class RobotContainer {
     moveHood.whenReleased(() -> shooter.moveHood(0), shooter);
 
     CustomButton controlPanel = new CustomButton(switchbox::controlPanelOverride);
-    controlPanel.whileHeld(() -> {
+  controlPanel.whileHeld(() -> {
       CPManipulator.spin(switchbox.getControlPanel());
       CPManipulator.setPosition(true);
-    }, CPManipulator);
+    }, CPManipulator);  
     controlPanel.whenReleased(() -> {
       CPManipulator.spin(0);
       CPManipulator.setPosition(false);
@@ -152,7 +152,7 @@ public class RobotContainer {
     guideButton.whenReleased(() -> guide.set(false));
 
     CustomButton rotationControl = new CustomButton(() -> switchbox.rotationControl() && xboxController.getBButton());
-    //TODO: rotationControl.whenHeld();
+    //rotationControl.whenPressed();
 
     CustomButton positionControl = new CustomButton(() -> switchbox.positionControl() && xboxController.getBButton());
     //TODO: positionControl.whenHeld();

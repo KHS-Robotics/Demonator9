@@ -60,7 +60,7 @@ public class CPManipulator extends SubsystemBase {
     motorPid.setIZone(200);
 
     motorPid.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
-    motorPid.setSmartMotionAllowedClosedLoopError(1.0 / 16.0, 0);
+    motorPid.setSmartMotionAllowedClosedLoopError(1.0 / 64.0, 0);
     motorPid.setOutputRange(-1, 1);
     motorPid.setSmartMotionMaxVelocity(MAX_RPM, 0);
     motorPid.setSmartMotionMaxAccel(MAX_RPM, 0);
@@ -73,6 +73,7 @@ public class CPManipulator extends SubsystemBase {
 
     tab.addNumber("Current Color", () -> currentColorSignature);
     tab.addNumber("Dist", this::distToCenter);
+    tab.addNumber("Position", this::getPosition);
     //tab.addNumber("Dist to Green", () -> distToColor('G'));
     tab.addNumber("X Dist", this::xDist);
     tab.addNumber("X coord", this::centerX);
@@ -171,7 +172,11 @@ public class CPManipulator extends SubsystemBase {
   }
 
   public void spinCPNumTimes(double num) {
-    motorPid.setReference(num * (CP_RADIUS / WHEEL_RADIUS), ControlType.kSmartMotion);
+    motorPid.setReference(num, ControlType.kSmartMotion);
+  }
+
+  public double getPosition() {
+    return motorEnc.getPosition();
   }
 
   public static char getGameColor() {

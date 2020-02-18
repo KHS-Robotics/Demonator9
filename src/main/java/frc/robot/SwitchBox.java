@@ -29,6 +29,10 @@ public class SwitchBox extends Joystick {
 		return this.getRawButton(2);
 	}
 
+	public boolean unusedSwitch() {
+		return this.getRawButton(4);
+	}
+
 	public boolean intake() {
 		return this.getRawButton(5);
 	}
