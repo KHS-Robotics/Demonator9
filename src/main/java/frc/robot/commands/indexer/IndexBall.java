@@ -12,7 +12,8 @@ import frc.robot.RobotContainer;
 
 public class IndexBall extends CommandBase {
   double position, startTime;
-  boolean isDone = false, firstBall = false, toggled = false;
+  boolean isDone = false, toggled = false;
+  //firstBall = false
 
   /**
    * Creates a new IndexBall.
@@ -25,10 +26,9 @@ public class IndexBall extends CommandBase {
   @Override
   public void initialize() {
     isDone = false;
-    firstBall = false; 
     toggled = false;
-    firstBall = !RobotContainer.indexer.getSwitch2();
-    position = RobotContainer.indexer.getPosition() + (firstBall ? 35 : 15.0);
+    //firstBall = false; 
+    //firstBall = !RobotContainer.indexer.getSwitch2();
     startTime = System.currentTimeMillis();
   }
 
