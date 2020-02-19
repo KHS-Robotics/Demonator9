@@ -126,7 +126,7 @@ public class RobotContainer {
     shoot.whenReleased(() -> {
       shooter.stop();
       indexer.stop();
-    }, shooter);
+    }, shooter, indexer);
     shoot.whenPressed(() -> shooter.setHood(shooter.getPosition()), shooter);
 
     CustomButton overrideHood = new CustomButton(() -> switchbox.shooterOverride());
@@ -152,13 +152,20 @@ public class RobotContainer {
     guideButton.whenReleased(() -> guide.set(false));
 
     CustomButton rotationControl = new CustomButton(() -> switchbox.rotationControl() && xboxController.getBButton());
-    //rotationControl.whenPressed();
+    rotationControl.whenPressed(() -> {
+      CPManipulator.spinCPNumTimes(CPManipulator.getPosition() + (8 * 3.5));
+    }, CPManipulator);
+    //rotationControl.whenReleased(() -> CPManipulator.setPosition(false));
+
+    CustomButton controlPanelSwitch = new CustomButton(() -> switchbox.rotationControl() || switchbox.positionControl());
+    controlPanelSwitch.whenPressed(() -> CPManipulator.setPosition(true), CPManipulator);
+    controlPanelSwitch.whenReleased(() -> CPManipulator.setPosition(false), CPManipulator);    
 
     CustomButton positionControl = new CustomButton(() -> switchbox.positionControl() && xboxController.getBButton());
     //TODO: positionControl.whenHeld();
 
     CustomButton moveIndexer = new CustomButton(() -> (indexer.getSwitch1() && Math.abs(switchbox.getIndexSpeed()) < 0.05));
-    moveIndexer.whenPressed(new IndexBall());
+    moveIndexer.whenPressed(new IndexBall().withTimeout(3));
   }
 
 

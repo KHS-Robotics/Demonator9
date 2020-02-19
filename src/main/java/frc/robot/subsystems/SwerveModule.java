@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -34,6 +35,7 @@ public class SwerveModule extends SubsystemBase {
 
   private final CANSparkMax pivotMotor;
   private final CANEncoder pivotEncoder;
+  private final CANPIDController drivePID;
 
   private final PIDController pivotPID;
   private final DigitalInput setDetection;
@@ -71,8 +73,8 @@ public class SwerveModule extends SubsystemBase {
     driveEncoder = driveMotor.getEncoder();
     driveEncoder.setVelocityConversionFactor((2 * Math.PI * 0.0508) / 8.33); // 4" diameter wheel (0.0508 meter radius), 8.33:1 -> 2*pi*0.0508 / 8.33
 
-    // pivotPID = pivotMotor.getPIDController();
-    // this.setPid(pivotP, pivotI, pivotD);
+    drivePID = driveMotor.getPIDController();
+    //drivePID.setP(driveP);
 
     pivotPID = new PIDController(pivotP, pivotI, pivotD);
     pivotPID.enableContinuousInput(-180, 180);
