@@ -27,8 +27,6 @@ public class IndexBall extends CommandBase {
   public void initialize() {
     isDone = false;
     toggled = false;
-    //firstBall = false; 
-    //firstBall = !RobotContainer.indexer.getSwitch2();
     startTime = System.currentTimeMillis();
   }
 
@@ -46,10 +44,7 @@ public class IndexBall extends CommandBase {
       } else {
         isDone = true;
       }
-    } //else {
-     // RobotContainer.indexer.setPosition(position);
-     // isDone = RobotContainer.indexer.atSetpoint(position);
-    //}
+    }
 
   }
 
