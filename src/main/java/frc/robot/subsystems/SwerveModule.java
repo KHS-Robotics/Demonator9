@@ -8,6 +8,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
+import frc.robot.Constants;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
@@ -55,7 +56,7 @@ public class SwerveModule extends SubsystemBase {
    * @param digitalInputPort port number for the digital input, used to calibrate pivots
    * @param reversed true if drive motor is reversed
    */
-  public SwerveModule(String name, int driveMotorChannel, int pivotMotorChannel, double pivotP, double pivotI, double pivotD, int digitalInputPort, boolean reversed) {
+  public SwerveModule(String name, int driveMotorChannel, int pivotMotorChannel, double pivotP, double pivotI, double pivotD, double driveP, double driveI, double driveD, double driveFF, int digitalInputPort, boolean reversed) {
     isInverted = reversed;
 
     this.name = name;
@@ -71,10 +72,15 @@ public class SwerveModule extends SubsystemBase {
     pivotEncoder.setPositionConversionFactor(360.0 / 18.0); // 360 degree per rotation, 18:1 -> 360 * 1/18
 
     driveEncoder = driveMotor.getEncoder();
-    driveEncoder.setVelocityConversionFactor((2 * Math.PI * 0.0508) / 8.33); // 4" diameter wheel (0.0508 meter radius), 8.33:1 -> 2*pi*0.0508 / 8.33
+    driveEncoder.setVelocityConversionFactor(Constants.DRIVE_VEL_ENCODER); // 4" diameter wheel (0.0508 meter radius), 8.33:1 -> 2*pi*0.0508 / 8.33
+    driveEncoder.setPositionConversionFactor(Constants.DRIVE_POS_ENCODER); // 4" diameter wheel (0.0508 meter radius), 8.33:1 -> 2*pi*0.0508 / 8.33
 
     drivePID = driveMotor.getPIDController();
-    //drivePID.setP(driveP);
+    drivePID.setP(driveP);
+    drivePID.setI(driveI);
+    drivePID.setD(driveD);
+    drivePID.setFF(driveFF);
+    drivePID.setIZone(1);
 
     pivotPID = new PIDController(pivotP, pivotI, pivotD);
     pivotPID.enableContinuousInput(-180, 180);
@@ -101,8 +107,8 @@ public class SwerveModule extends SubsystemBase {
    * @param pivotD D value of Pivot PID
    * @param digitalInputPort port number for the digital input, used to calibrate pivots
    */
-  public SwerveModule(String name, int driveMotorChannel, int pivotMotorChannel, double pivotP, double pivotI, double pivotD, int digitalInputPort) {
-    this(name, driveMotorChannel, pivotMotorChannel, pivotP, pivotI, pivotD, digitalInputPort, false);
+  public SwerveModule(String name, int driveMotorChannel, int pivotMotorChannel, double pivotP, double pivotI, double pivotD, double driveP, double driveI, double driveD, double driveFF, int digitalInputPort) {
+    this(name, driveMotorChannel, pivotMotorChannel, pivotP, pivotI, pivotD, driveP, driveI, driveD, driveFF, digitalInputPort, false);
   }
 
   @Override
