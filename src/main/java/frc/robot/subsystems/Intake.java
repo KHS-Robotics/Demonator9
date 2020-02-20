@@ -82,4 +82,8 @@ public class Intake extends SubsystemBase {
   public void up() {
     solenoid.set(Value.kReverse);
   }
+
+  public void setOff() {
+    solenoid.set(Value.kOff);
+  }
 }

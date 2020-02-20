@@ -93,7 +93,7 @@ public class SwerveModule extends SubsystemBase {
     tab.addNumber("Angle (Deg)", this::getAngle);
     tab.addNumber("Setpoint (Deg)", pivotPID::getSetpoint);
     tab.addNumber("Error (Deg)", pivotPID::getPositionError);
-    tab.addNumber("Speed m/s", driveEncoder::getVelocity);
+    tab.addNumber("Speed mps", driveEncoder::getVelocity);
     tab.addBoolean("atSetpoint", pivotPID::atSetpoint);
     tab.addBoolean("isFlipped", () -> isFlipped);
     tab.addBoolean("isCenter", () -> !this.setDetection.get());
@@ -142,6 +142,7 @@ public class SwerveModule extends SubsystemBase {
    */
   public void setDesiredState(SwerveModuleState state, boolean useShortestPath) {
     pivotMotor.set(MathUtil.clamp(pivotPID.calculate(getAngle(), useShortestPath ? calculateShortestPath(state.angle.getDegrees()) : state.angle.getDegrees()), -1, 1));
+    //driveMotor.set(state.speedMetersPerSecond*(isInverted ? -1 : 1)*(isFlipped && useShortestPath ? -1 : 1));
     drivePID.setReference(state.speedMetersPerSecond*(isInverted ? -1 : 1)*(isFlipped && useShortestPath ? -1 : 1), ControlType.kVelocity); 
     // TODO: speed control for driving
   }

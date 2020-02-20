@@ -66,6 +66,7 @@ public class Indexer extends SubsystemBase {
     var tab = Shuffleboard.getTab("Indexer");
     tab.addNumber("Motor Speed", motorEnc::getVelocity);
     tab.addNumber("Position", motorEnc::getPosition);
+    tab.addNumber("Num Balls", () -> numBalls);
     tab.addBoolean("Limit Switch 1", input1::get);
     tab.addBoolean("Limit Switch 2", input2::get);
     tab.addBoolean("Limit Switch 3", input3::get);

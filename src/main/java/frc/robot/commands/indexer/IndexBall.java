@@ -58,6 +58,6 @@ public class IndexBall extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isDone || RobotContainer.indexer.getNumBalls() <= 4;
+    return isDone || RobotContainer.indexer.getNumBalls() > 4;
   }
 }

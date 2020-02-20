@@ -23,7 +23,7 @@ public class TargetPIDTuner extends CommandBase {
   public TargetPIDTuner() {
     this.addRequirements(RobotContainer.swerveDrive);
 
-    tab = Shuffleboard.getTab("Swerve Drive");
+    tab = Shuffleboard.getTab("Swervedrive");
     pVal = tab.add("P-Value", 0).getEntry();
     iVal = tab.add("I-Value", 0).getEntry();
     dVal = tab.add("D-Value", 0).getEntry();

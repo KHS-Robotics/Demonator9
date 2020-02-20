@@ -26,7 +26,7 @@ import frc.robot.RobotMap;
  */
 public class SwerveDrive extends SubsystemBase {
   public static final double kMaxSpeed = 3.5; // 3.5 meters per second
-  public static final double kMaxAngularSpeed = 1; // 1 radian per second
+  public static final double kMaxAngularSpeed = Math.PI; // 1 radian per second
 
   private PIDController targetPid;
   private final Translation2d frontLeftLocation = new Translation2d(0.29845, 0.29845);

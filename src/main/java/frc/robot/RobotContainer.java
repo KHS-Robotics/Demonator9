@@ -12,7 +12,9 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.CenterSwerveModules;
@@ -21,6 +23,7 @@ import frc.robot.commands.drive.rotate.HoldAngleWhileDriving;
 import frc.robot.commands.drive.rotate.RotateToTargetWhileDriving;
 import frc.robot.commands.indexer.ControlIndexer;
 import frc.robot.commands.indexer.IndexBall;
+import frc.robot.commands.pid.TargetPIDTuner;
 import frc.robot.subsystems.CPManipulator;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Indexer;
@@ -60,8 +63,8 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    //swerveDrive.setDefaultCommand(new HoldAngleWhileDriving());
-    swerveDrive.setDefaultCommand(new DriveSwerveWithXbox());
+    swerveDrive.setDefaultCommand(new HoldAngleWhileDriving());
+    //swerveDrive.setDefaultCommand(new TargetPIDTuner());
     indexer.setDefaultCommand(new ControlIndexer());
     //swerveDrive.setDefaultCommand(new PivotPIDTuner());
     pixy.init();
@@ -81,20 +84,20 @@ public class RobotContainer {
     calibrate.whenPressed(new CenterSwerveModules());
 
     JoystickButton rotateToTarget = new JoystickButton(xboxController, XboxController.Button.kY.value);
-    //rotateToTarget.whenHeld(new RotateToTargetWhileDriving());
+    rotateToTarget.whenHeld(new RotateToTargetWhileDriving());
 
-    // CustomButton turnAndDrive = new CustomButton( () -> Math.abs(xboxController.getX(Hand.kRight)) > 0.05 );
-    // turnAndDrive.whileHeld(() -> {
-    //   var xSpeed = -RobotContainer.xboxController.getY(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
-    //   var ySpeed = -RobotContainer.xboxController.getX(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
-    //   var rot = -RobotContainer.xboxController.getX(GenericHID.Hand.kRight) * SwerveDrive.kMaxAngularSpeed;
+    CustomButton turnAndDrive = new CustomButton( () -> Math.abs(xboxController.getX(Hand.kRight)) > 0.05 );
+    turnAndDrive.whileHeld(() -> {
+      var xSpeed = -RobotContainer.xboxController.getY(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
+      var ySpeed = -RobotContainer.xboxController.getX(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
+      var rot = -RobotContainer.xboxController.getX(GenericHID.Hand.kRight) * SwerveDrive.kMaxAngularSpeed;
 
-    //   if(Math.abs(xSpeed) > 0.05 || Math.abs(ySpeed) > 0.05 || Math.abs(rot) > 0.05) {
-    //     RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot, !RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft));
-    //   } else {
-    //     RobotContainer.swerveDrive.stop();
-    //   }
-    // }, swerveDrive);
+      if(Math.abs(xSpeed) > 0.05 || Math.abs(ySpeed) > 0.05 || Math.abs(rot) > 0.05) {
+        RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot, !RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft));
+      } else {
+        RobotContainer.swerveDrive.stop();
+      }
+    }, swerveDrive);
 
     CustomButton moveHood = new CustomButton(() -> switchbox.shooterOverride() && !switchbox.shoot());
     moveHood.whileHeld(() -> shooter.moveHood(switchbox.getHoodSpeed()), shooter);
@@ -133,7 +136,9 @@ public class RobotContainer {
 
     CustomButton intakeDown = new CustomButton(switchbox::intakeDown);
     intakeDown.whenPressed(intake::down, intake);
+    intakeDown.whenPressed(new WaitCommand(0.5).andThen(() -> intake.setOff()));
     intakeDown.whenReleased(intake::up, intake);
+    intakeDown.whenReleased(new WaitCommand(0.5).andThen(() -> intake.setOff()));
 
     CustomButton intaking = new CustomButton(switchbox::intake);
     intaking.whenPressed(() -> {
@@ -167,11 +172,14 @@ public class RobotContainer {
     CustomButton moveIndexer = new CustomButton(() -> (indexer.getSwitch1() && Math.abs(switchbox.getIndexSpeed()) < 0.05));
     moveIndexer.whenPressed(new IndexBall().withTimeout(2));
 
-    CustomButton decreaseBall = new CustomButton(() -> (indexer.getSwitch1() && (switchbox.getIndexSpeed() < 0.05)));
+    CustomButton decreaseBall = new CustomButton(() -> (indexer.getSwitch1() && (switchbox.getIndexSpeed() < -0.05)));
     decreaseBall.whenPressed(indexer::decrementBall);
 
     CustomButton zeroBalls = new CustomButton(() -> (!switchbox.engagePTO() && switchbox.climb()));
     zeroBalls.whenPressed(indexer::zeroBalls);
+
+    CustomButton unusedButton = new CustomButton(() -> switchbox.unusedSwitch());
+    //unusedButton.whileHeld(() -> swerveDrive.drive(2,0,0, false), swerveDrive);
   }
 
 
