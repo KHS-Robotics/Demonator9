@@ -23,6 +23,7 @@ import frc.robot.RobotMap;
 
 public class Indexer extends SubsystemBase {
   private final double MAX_VEL = 10000;
+  private int numBalls = 0;
   private CANSparkMax motor;
   private CANPIDController motorPid;
   private CANEncoder motorEnc;
@@ -107,5 +108,17 @@ public class Indexer extends SubsystemBase {
 
   public boolean atSetpoint(double setpoint) {
     return Math.abs(motorEnc.getPosition() - setpoint) < .5;
+  }
+
+  public void incrementBall() {
+    numBalls++;
+  }
+
+  public void decrementBall() {
+    numBalls--;
+  }
+
+  public int getNumBalls() {
+    return numBalls;
   }
 }

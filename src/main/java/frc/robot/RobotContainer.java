@@ -153,7 +153,7 @@ public class RobotContainer {
 
     CustomButton rotationControl = new CustomButton(() -> switchbox.rotationControl() && xboxController.getBButton());
     rotationControl.whenPressed(() -> {
-      CPManipulator.spinCPNumTimes(CPManipulator.getPosition() + (8 * 3.5));
+      CPManipulator.spinNumTimes(CPManipulator.getPosition() + (8 * 3.5));
     }, CPManipulator);
     //rotationControl.whenReleased(() -> CPManipulator.setPosition(false));
 
@@ -165,7 +165,10 @@ public class RobotContainer {
     //TODO: positionControl.whenHeld();
 
     CustomButton moveIndexer = new CustomButton(() -> (indexer.getSwitch1() && Math.abs(switchbox.getIndexSpeed()) < 0.05));
-    moveIndexer.whenPressed(new IndexBall().withTimeout(3));
+    moveIndexer.whenPressed(new IndexBall().withTimeout(2));
+
+    CustomButton decreaseBall = new CustomButton(() -> (indexer.getSwitch1() && (switchbox.getIndexSpeed() < 0.05)));
+    decreaseBall.whenPressed(indexer::decrementBall);
   }
 
 

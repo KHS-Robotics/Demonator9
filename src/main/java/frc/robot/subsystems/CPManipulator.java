@@ -171,7 +171,10 @@ public class CPManipulator extends SubsystemBase {
     this.speed = speed;
   }
 
-  public void spinCPNumTimes(double num) {
+  /**
+   * @param num - Number of times to spin manipulator (8 * wanted number of CP spins)
+   */
+  public void spinNumTimes(double num) {
     motorPid.setReference(num, ControlType.kSmartMotion);
   }
 

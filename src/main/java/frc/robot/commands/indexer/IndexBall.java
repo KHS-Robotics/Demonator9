@@ -28,6 +28,7 @@ public class IndexBall extends CommandBase {
     isDone = false;
     toggled = false;
     startTime = System.currentTimeMillis();
+    RobotContainer.indexer.incrementBall();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,7 +40,7 @@ public class IndexBall extends CommandBase {
         toggled = true;
       }
     } else {
-      if (!RobotContainer.indexer.getSwitch2()) {
+      if (!RobotContainer.indexer.getSwitch2() && RobotContainer.indexer.getNumBalls() < 4) {
         RobotContainer.indexer.setMotor(0.75);
       } else {
         isDone = true;
@@ -57,6 +58,6 @@ public class IndexBall extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isDone;
+    return isDone || RobotContainer.indexer.getNumBalls() <= 4;
   }
 }
