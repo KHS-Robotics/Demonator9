@@ -121,4 +121,8 @@ public class Indexer extends SubsystemBase {
   public int getNumBalls() {
     return numBalls;
   }
+
+  public void zeroBalls() {
+    numBalls = 0;
+  }
 }

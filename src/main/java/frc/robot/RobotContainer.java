@@ -114,7 +114,7 @@ public class RobotContainer {
     setPto.whenPressed(() -> climber.setPTO(true), climber);
     setPto.whenReleased(() -> climber.setPTO(false), climber);
 
-    CustomButton startClimb = new CustomButton(switchbox::climb);
+    CustomButton startClimb = new CustomButton(() -> (switchbox.climb() && switchbox.engagePTO()));
     startClimb.whenPressed(shooter::enableForClimb, shooter, climber);
     startClimb.whenReleased(shooter::disableForClimb, shooter, climber);
 
@@ -169,6 +169,9 @@ public class RobotContainer {
 
     CustomButton decreaseBall = new CustomButton(() -> (indexer.getSwitch1() && (switchbox.getIndexSpeed() < 0.05)));
     decreaseBall.whenPressed(indexer::decrementBall);
+
+    CustomButton zeroBalls = new CustomButton(() -> (!switchbox.engagePTO() && switchbox.climb()));
+    zeroBalls.whenPressed(indexer::zeroBalls);
   }
 
 

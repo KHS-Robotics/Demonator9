@@ -92,6 +92,7 @@ public class SwerveModule extends SubsystemBase {
     tab.addNumber("Angle (Deg)", this::getAngle);
     tab.addNumber("Setpoint (Deg)", pivotPID::getSetpoint);
     tab.addNumber("Error (Deg)", pivotPID::getPositionError);
+    tab.addNumber("Speed m/s", driveEncoder::getVelocity);
     tab.addBoolean("atSetpoint", pivotPID::atSetpoint);
     tab.addBoolean("isFlipped", () -> isFlipped);
     tab.addBoolean("isCenter", () -> !this.setDetection.get());

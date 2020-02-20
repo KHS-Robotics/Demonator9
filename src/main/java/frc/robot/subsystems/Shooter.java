@@ -136,4 +136,8 @@ public class Shooter extends SubsystemBase {
       hood.setIdleMode(IdleMode.kCoast);
     }
   }
+
+  public double getCurrent() {
+    return leader.getOutputCurrent();
+  }
 }

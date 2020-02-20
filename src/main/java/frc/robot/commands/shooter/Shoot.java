@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class Shoot extends CommandBase {
+  boolean drop = false;
+  final double THRESHOLD = 2000;
+
   /**
    * Creates a new shoot.
    */
@@ -36,6 +39,12 @@ public class Shoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(RobotContainer.shooter.getCurrent() > THRESHOLD && !drop) {
+      drop = true;
+      RobotContainer.indexer.decrementBall();
+    } else if(drop && RobotContainer.shooter.getCurrent() < THRESHOLD) {
+      drop = false;
+    }
   }
 
   // Called once the command ends or is interrupted.
