@@ -13,6 +13,7 @@ import frc.robot.Constants;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -141,7 +142,7 @@ public class SwerveModule extends SubsystemBase {
    */
   public void setDesiredState(SwerveModuleState state, boolean useShortestPath) {
     pivotMotor.set(MathUtil.clamp(pivotPID.calculate(getAngle(), useShortestPath ? calculateShortestPath(state.angle.getDegrees()) : state.angle.getDegrees()), -1, 1));
-    driveMotor.set(state.speedMetersPerSecond*(isInverted ? -1 : 1)*(isFlipped && useShortestPath ? -1 : 1)); 
+    drivePID.setReference(state.speedMetersPerSecond*(isInverted ? -1 : 1)*(isFlipped && useShortestPath ? -1 : 1), ControlType.kVelocity); 
     // TODO: speed control for driving
   }
 

@@ -25,7 +25,7 @@ import frc.robot.RobotMap;
  * Represents a swerve drive style drivetrain.
  */
 public class SwerveDrive extends SubsystemBase {
-  public static final double kMaxSpeed = 1.0; // 1 meters per second
+  public static final double kMaxSpeed = 3.5; // 3.5 meters per second
   public static final double kMaxAngularSpeed = 1; // 1 radian per second
 
   private PIDController targetPid;
