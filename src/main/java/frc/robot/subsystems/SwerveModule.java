@@ -199,7 +199,7 @@ public class SwerveModule extends SubsystemBase {
    * Stops the module.
    */
   public void stop() {
-    driveMotor.set(0);
+    drivePID.setReference(0, ControlType.kVelocity);
     pivotMotor.set(0);
     pivotPID.reset();
   }

@@ -29,12 +29,11 @@ public class RotateToTarget extends CommandBase {
     this.angle = -RobotContainer.navx.getYaw() - Limelight.getTx();
     
     RobotContainer.swerveDrive.stop();
-    RobotContainer.swerveDrive.rotateToAngleInPlace(angle);
-    //RobotContainer.swerveDrive.rotateToTargetInPlace();
   }
 
   @Override
   public void execute() {
+    RobotContainer.swerveDrive.rotateToAngleInPlace(angle);
   }
 
   @Override

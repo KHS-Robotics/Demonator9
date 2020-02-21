@@ -27,8 +27,8 @@ import frc.robot.RobotMap;
  */
 public class SwerveDrive extends SubsystemBase {
   public static final double kMaxSpeed = 3.5; // 3.5 meters per second
-  public static final double kMaxAngularSpeed = Math.PI; // 1 radian per second
-
+  public static final double kMaxAngularSpeed = Math.PI; // pi radians per second
+  public static double offset;
   private PIDController targetPid;
   private final Translation2d frontLeftLocation = new Translation2d(0.29845, 0.29845);
   private final Translation2d frontRightLocation = new Translation2d(0.29845, -0.29845);
@@ -121,7 +121,11 @@ public class SwerveDrive extends SubsystemBase {
    */
   public Rotation2d getAngle() {
     // Negating the angle because WPILib gyros are CW positive.
-    return Rotation2d.fromDegrees(-RobotContainer.navx.getAngle());
+    return Rotation2d.fromDegrees(-RobotContainer.navx.getAngle() + offset);
+  }
+
+  public void setOffset(double offset) {
+    SwerveDrive.offset = offset;
   }
 
   public double sensControl(double var) {
