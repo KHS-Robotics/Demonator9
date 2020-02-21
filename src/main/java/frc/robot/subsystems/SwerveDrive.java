@@ -121,7 +121,7 @@ public class SwerveDrive extends SubsystemBase {
    */
   public Rotation2d getAngle() {
     // Negating the angle because WPILib gyros are CW positive.
-    return Rotation2d.fromDegrees(-RobotContainer.navx.getAngle() + offset);
+    return Rotation2d.fromDegrees(-RobotContainer.navx.getAngle() - offset);
   }
 
   public void setOffset(double offset) {
