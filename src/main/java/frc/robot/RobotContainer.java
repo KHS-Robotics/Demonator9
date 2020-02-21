@@ -86,13 +86,13 @@ public class RobotContainer {
     JoystickButton rotateToTarget = new JoystickButton(xboxController, XboxController.Button.kY.value);
     rotateToTarget.whenHeld(new RotateToTargetWhileDriving());
 
-    CustomButton turnAndDrive = new CustomButton( () -> Math.abs(xboxController.getX(Hand.kRight)) > 0.05 );
+    CustomButton turnAndDrive = new CustomButton( () -> Math.abs(xboxController.getX(Hand.kRight)) > 0.02 );
     turnAndDrive.whileHeld(() -> {
       var xSpeed = -RobotContainer.xboxController.getY(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
       var ySpeed = -RobotContainer.xboxController.getX(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
       var rot = -RobotContainer.xboxController.getX(GenericHID.Hand.kRight) * SwerveDrive.kMaxAngularSpeed;
 
-      if(Math.abs(xSpeed) > 0.05 || Math.abs(ySpeed) > 0.05 || Math.abs(rot) > 0.05) {
+      if(Math.abs(xSpeed) > 0.02 || Math.abs(ySpeed) > 0.02 || Math.abs(rot) > 0.03) {
         RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot, !RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft));
       } else {
         RobotContainer.swerveDrive.stop();
