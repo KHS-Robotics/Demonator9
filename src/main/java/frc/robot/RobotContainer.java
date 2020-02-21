@@ -92,7 +92,7 @@ public class RobotContainer {
       var ySpeed = -RobotContainer.xboxController.getX(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
       var rot = -RobotContainer.xboxController.getX(GenericHID.Hand.kRight) * SwerveDrive.kMaxAngularSpeed;
 
-      if(Math.abs(xSpeed) > 0.02 || Math.abs(ySpeed) > 0.02 || Math.abs(rot) > 0.03) {
+      if(Math.abs(xSpeed) > 0.01 || Math.abs(ySpeed) > 0.01 || Math.abs(rot) > 0.02) {
         RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot, !RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft));
       } else {
         RobotContainer.swerveDrive.stop();
