@@ -40,6 +40,9 @@ public class RotateToTargetWhileDriving extends CommandBase {
     var xSpeed = -RobotContainer.xboxController.getY(Hand.kLeft) * SwerveDrive.kMaxSpeed;
 
     var ySpeed = -RobotContainer.xboxController.getX(Hand.kLeft) * SwerveDrive.kMaxSpeed;
+
+    xSpeed = RobotContainer.swerveDrive.sensControl(xSpeed);
+    ySpeed = RobotContainer.swerveDrive.sensControl(ySpeed);
     
     isFieldOriented = (!RobotContainer.xboxController.getBumper(Hand.kLeft));
 

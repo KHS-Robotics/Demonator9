@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    RobotContainer.shooter.hoodMode(false);
+    RobotContainer.hood.hoodMode(false);
   }
 
   @Override
@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    RobotContainer.shooter.hoodMode(true);
+    RobotContainer.hood.hoodMode(true);
   }
 
   @Override
@@ -49,14 +49,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    RobotContainer.shooter.hoodMode(true);
+    RobotContainer.hood.hoodMode(true);
   }
 
   @Override
   public void teleopPeriodic() {
-    if (RobotContainer.xboxController.getStartButton()) {
-      RobotContainer.swerveDrive.resetNavx();
-    }
   }
  
 }

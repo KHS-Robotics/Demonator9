@@ -178,7 +178,7 @@ public class SwerveModule extends SubsystemBase {
    * Gets the angle of the pivot module.
    * @return the angle of the pivot module ranging from [-180,180]
    */
-  private double getAngle() {
+  public double getAngle() {
     var angle = pivotEncoder.getPosition();
     if(angle > 0) {
       angle %= 360;

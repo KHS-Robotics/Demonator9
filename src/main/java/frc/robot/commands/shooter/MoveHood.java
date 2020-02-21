@@ -15,7 +15,7 @@ public class MoveHood extends CommandBase {
    * Creates a new MoveHood.
    */
   public MoveHood() {
-    addRequirements(RobotContainer.shooter);
+    addRequirements(RobotContainer.hood);
   }
 
   // Called when the command is initially scheduled.
@@ -26,7 +26,7 @@ public class MoveHood extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.shooter.setHood(RobotContainer.switchbox.getHoodSpeed());
+    RobotContainer.hood.setHood(RobotContainer.switchbox.getHoodSpeed());
   }
 
   // Called once the command ends or is interrupted.

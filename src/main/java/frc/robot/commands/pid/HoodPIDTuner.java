@@ -22,7 +22,7 @@ public class HoodPIDTuner extends CommandBase {
    * Creates a new HoodPIDTuner.
    */
   public HoodPIDTuner() {
-    addRequirements(RobotContainer.shooter);
+    addRequirements(RobotContainer.hood);
     tab = Shuffleboard.getTab("Shooter");
     pVal = tab.add("Hood P-Value", 0).getEntry();
     iVal = tab.add("Hood I-Value", 0).getEntry();
@@ -45,8 +45,8 @@ public class HoodPIDTuner extends CommandBase {
 
     setPoint = setPointEntry.getDouble(0.0);
 
-    RobotContainer.shooter.setHoodPid(p, i, d);
-    RobotContainer.shooter.setHood(setPoint);
+    RobotContainer.hood.setHoodPid(p, i, d);
+    RobotContainer.hood.setHood(setPoint);
   }
 
   // Called once the command ends or is interrupted.

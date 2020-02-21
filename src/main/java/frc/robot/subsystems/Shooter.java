@@ -23,26 +23,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Shooter extends SubsystemBase {
   private final double LIMELIGHT_ANGLE = 20.0; // 20 Degree Tilt
   
-  private CANSparkMax leader, follower, hood;
-  private CANPIDController shooterPid, hoodPid;
-  private CANEncoder leaderEnc, followerEnc, hoodEnc;
+  private CANSparkMax leader, follower;
+  private CANPIDController shooterPid;
+  private CANEncoder leaderEnc, followerEnc;
 
-  private double hoodPidSetpoint, shooterPidSetpoint;
+  private double shooterPidSetpoint;
   private boolean isClimbing;
 
   public Shooter() {
     leader = new CANSparkMax(RobotMap.SHOOTER1, MotorType.kBrushless);
     follower = new CANSparkMax(RobotMap.SHOOTER2, MotorType.kBrushless);
-    hood = new CANSparkMax(RobotMap.HOOD, MotorType.kBrushless);
 
     follower.follow(leader);
     shooterPid = leader.getPIDController();
-    hoodPid = hood.getPIDController();
+
     leaderEnc = leader.getEncoder();
     followerEnc = follower.getEncoder();
-    hoodEnc = hood.getEncoder();
 
-    setHoodPid(Constants.HOOD_P, Constants.HOOD_I, Constants.HOOD_D);
     setShooterPidF(Constants.SHOOTER_P, Constants.SHOOTER_I, Constants.SHOOTER_D, Constants.SHOOTER_FF);
 
     shooterPid.setIZone(500);
@@ -50,16 +47,10 @@ public class Shooter extends SubsystemBase {
 
     leader.setIdleMode(IdleMode.kCoast);
     follower.setIdleMode(IdleMode.kCoast);
-
-    hood.setIdleMode(IdleMode.kBrake);
-    // hoodEnc.setPositionConversionFactor(360.0 / (10.0 * 5.0 * (60.0/24.0))); //Should be tested
     
     var tab = Shuffleboard.getTab("Shooter");
     tab.addNumber("Leader Speed", leaderEnc::getVelocity);
     tab.addNumber("Follower Speed", followerEnc::getVelocity);
-    tab.addNumber("Hood Position", hoodEnc::getPosition);
-    tab.addNumber("Hood Setpoint", () -> hoodPidSetpoint);
-    tab.addNumber("Hood Error", () -> hoodPidSetpoint - hoodEnc.getPosition());
     tab.addNumber("Shooter Setpoint", () -> shooterPidSetpoint);
     tab.addNumber("Shooter Error", () -> shooterPidSetpoint - leaderEnc.getVelocity());
     tab.addBoolean("Is Climbing", () -> isClimbing);
@@ -79,13 +70,8 @@ public class Shooter extends SubsystemBase {
     leader.set(speed);
   }
 
-  public void moveHood(double speed) {
-    hood.set(speed);
-  }
-
   public void stop() {
     leader.set(0.0);
-    hood.set(0.0);
     isClimbing = false;
   }
 
@@ -93,26 +79,11 @@ public class Shooter extends SubsystemBase {
     leader.set(0.0);
   }
 
-  public void setHoodPid(double p, double i, double d) {
-    hoodPid.setP(p);
-    hoodPid.setI(i);
-    hoodPid.setD(d);
-  }
-
   public void setShooterPidF(double p, double i, double d, double ff) {
     shooterPid.setP(p);
     shooterPid.setI(i);
     shooterPid.setD(d);
     shooterPid.setFF(ff);
-  }
-
-  public void setHood(double angle) {
-    hoodPid.setReference(angle, ControlType.kPosition);
-    hoodPidSetpoint = angle;
-  }
-
-  public double getPosition() {
-    return hoodEnc.getPosition();
   }
 
   public void enableForClimb() {
@@ -127,14 +98,6 @@ public class Shooter extends SubsystemBase {
 
   public double getVertAngle() {
     return LIMELIGHT_ANGLE + Limelight.getTy();
-  }
-
-  public void hoodMode(boolean brake) {
-    if(brake) {
-      hood.setIdleMode(IdleMode.kBrake);
-    } else {
-      hood.setIdleMode(IdleMode.kCoast);
-    }
   }
 
   public double getCurrent() {

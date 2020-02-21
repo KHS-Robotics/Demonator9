@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -106,6 +107,7 @@ public class SwerveDrive extends SubsystemBase {
     tab.addNumber("Target Angle", targetPid::getSetpoint);
     tab.addNumber("Target Error", targetPid::getPositionError);
     tab.addNumber("Current Angle", () -> -RobotContainer.navx.getYaw());
+    tab.addNumber("Angle Graph", () -> -RobotContainer.navx.getYaw());
     tab.addNumber("Pose X", () -> this.getPose().getTranslation().getX());
     tab.addNumber("Pose Y", () -> this.getPose().getTranslation().getY());
     tab.addNumber("Pose Norm", () -> this.getPose().getTranslation().getNorm());
@@ -122,6 +124,10 @@ public class SwerveDrive extends SubsystemBase {
     return Rotation2d.fromDegrees(-RobotContainer.navx.getAngle());
   }
 
+  public double sensControl(double var) {
+    return Constants.SENS * Math.pow(var, 3) + (1 - Constants.SENS) * var;
+  }
+
   /**
    * Method to drive the robot using joystick info.
    *
@@ -132,15 +138,23 @@ public class SwerveDrive extends SubsystemBase {
    *                      field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    var swerveModuleStates = kinematics
+    if(Math.abs(rot) < 0.01 && Math.abs(xSpeed) < 0.01 && Math.abs(ySpeed) < 0.01) {
+      frontLeft.setDesiredState(new SwerveModuleState(0.0, Rotation2d.fromDegrees(frontLeft.getAngle())));
+      frontRight.setDesiredState(new SwerveModuleState(0.0, Rotation2d.fromDegrees(frontRight.getAngle())));
+      rearLeft.setDesiredState(new SwerveModuleState(0.0, Rotation2d.fromDegrees(rearLeft.getAngle())));
+      rearRight.setDesiredState(new SwerveModuleState(0.0, Rotation2d.fromDegrees(rearRight.getAngle())));
+    } else {
+      var swerveModuleStates = kinematics
         .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getAngle())
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, kMaxSpeed);
 
-    frontLeft.setDesiredState(swerveModuleStates[0]);
-    frontRight.setDesiredState(swerveModuleStates[1]);
-    rearLeft.setDesiredState(swerveModuleStates[2]);
-    rearRight.setDesiredState(swerveModuleStates[3]);
+      frontLeft.setDesiredState(swerveModuleStates[0]);
+      frontRight.setDesiredState(swerveModuleStates[1]);
+      rearLeft.setDesiredState(swerveModuleStates[2]);
+      rearRight.setDesiredState(swerveModuleStates[3]);
+    }
+
     // System.out.println("FR " + swerveModuleStates[0].angle.getDegrees());
     // System.out.println("FL " + swerveModuleStates[1].angle.getDegrees());
     // System.out.println("RL" + swerveModuleStates[2].angle.getDegrees());

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class CenterSwerveModules extends CommandBase {
+  private static boolean hasCalibrated = false;
   /**
    * Creates a new CenterSwerveModules.
    */
@@ -33,6 +34,11 @@ public class CenterSwerveModules extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     RobotContainer.swerveDrive.stop();
+    hasCalibrated = !interrupted;
+  }
+
+  public static boolean hasCalibrated() {
+    return hasCalibrated;
   }
 
   // Returns true when the command should end.

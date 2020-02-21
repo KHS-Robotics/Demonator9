@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.CenterSwerveModules;
@@ -26,6 +27,7 @@ import frc.robot.commands.indexer.IndexBall;
 import frc.robot.commands.pid.TargetPIDTuner;
 import frc.robot.subsystems.CPManipulator;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -54,6 +56,7 @@ public class RobotContainer {
   public static final Indexer indexer = new Indexer();
   public static final Climber climber = new Climber();
   public static final Shooter shooter = new Shooter();
+  public static final Hood hood = new Hood();
   public static final CPManipulator CPManipulator = new CPManipulator();
   public static final Solenoid guide = new Solenoid(RobotMap.GUIDE);
 
@@ -80,19 +83,26 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    Button autoCalibrate = new Button(() -> (!CenterSwerveModules.hasCalibrated() && (Math.abs(xboxController.getX(Hand.kRight)) > 0.01 || Math.abs(xboxController.getX(Hand.kLeft)) > 0.01 || Math.abs(xboxController.getY(Hand.kLeft)) > 0.01)));
+    autoCalibrate.whenPressed(new CenterSwerveModules());
+
     JoystickButton calibrate = new JoystickButton(xboxController, XboxController.Button.kBack.value);
     calibrate.whenPressed(new CenterSwerveModules());
 
     JoystickButton rotateToTarget = new JoystickButton(xboxController, XboxController.Button.kY.value);
     rotateToTarget.whenHeld(new RotateToTargetWhileDriving());
 
-    CustomButton turnAndDrive = new CustomButton( () -> Math.abs(xboxController.getX(Hand.kRight)) > 0.02 );
+    CustomButton turnAndDrive = new CustomButton( () -> Math.abs(xboxController.getX(Hand.kRight)) > 0.01 );
     turnAndDrive.whileHeld(() -> {
       var xSpeed = -RobotContainer.xboxController.getY(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
       var ySpeed = -RobotContainer.xboxController.getX(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
       var rot = -RobotContainer.xboxController.getX(GenericHID.Hand.kRight) * SwerveDrive.kMaxAngularSpeed;
 
-      if(Math.abs(xSpeed) > 0.01 || Math.abs(ySpeed) > 0.01 || Math.abs(rot) > 0.02) {
+      xSpeed = swerveDrive.sensControl(xSpeed);
+      ySpeed = swerveDrive.sensControl(ySpeed);
+      rot = swerveDrive.sensControl(rot);
+
+      if(Math.abs(xSpeed) > 0.01 || Math.abs(ySpeed) > 0.01 || Math.abs(rot) > 0.01) {
         RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot, !RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft));
       } else {
         RobotContainer.swerveDrive.stop();
@@ -100,8 +110,8 @@ public class RobotContainer {
     }, swerveDrive);
 
     CustomButton moveHood = new CustomButton(() -> switchbox.shooterOverride() && !switchbox.shoot());
-    moveHood.whileHeld(() -> shooter.moveHood(switchbox.getHoodSpeed()), shooter);
-    moveHood.whenReleased(() -> shooter.moveHood(0), shooter);
+    moveHood.whileHeld(() -> hood.moveHood(switchbox.getHoodSpeed()), hood);
+    moveHood.whenReleased(() -> hood.moveHood(0), hood);
 
     CustomButton controlPanel = new CustomButton(switchbox::controlPanelOverride);
   controlPanel.whileHeld(() -> {
@@ -129,8 +139,9 @@ public class RobotContainer {
     shoot.whenReleased(() -> {
       shooter.stop();
       indexer.stop();
-    }, shooter, indexer);
-    shoot.whenPressed(() -> shooter.setHood(shooter.getPosition()), shooter);
+      hood.stop();
+    }, shooter, indexer, hood);
+    shoot.whenPressed(() -> hood.setHood(hood.getPosition()), hood);
 
     CustomButton overrideHood = new CustomButton(() -> switchbox.shooterOverride());
 
@@ -140,7 +151,7 @@ public class RobotContainer {
     intakeDown.whenReleased(intake::up, intake);
     intakeDown.whenReleased(new WaitCommand(0.5).andThen(() -> intake.setOff()));
 
-    CustomButton intaking = new CustomButton(switchbox::intake);
+    CustomButton intaking = new CustomButton(() -> (switchbox.intake() && indexer.getNumBalls() < 5));
     intaking.whenPressed(() -> {
       intake.intake();
     }, intake);
@@ -158,7 +169,7 @@ public class RobotContainer {
 
     CustomButton rotationControl = new CustomButton(() -> switchbox.rotationControl() && xboxController.getBButton());
     rotationControl.whenPressed(() -> {
-      CPManipulator.spinNumTimes(CPManipulator.getPosition() + (8 * 3.5));
+      CPManipulator.spinNumTimes(CPManipulator.getPosition() + (8 * 4.8));
     }, CPManipulator);
     //rotationControl.whenReleased(() -> CPManipulator.setPosition(false));
 
@@ -179,7 +190,11 @@ public class RobotContainer {
     zeroBalls.whenPressed(indexer::zeroBalls);
 
     CustomButton unusedButton = new CustomButton(() -> switchbox.unusedSwitch());
-    //unusedButton.whileHeld(() -> swerveDrive.drive(2,0,0, false), swerveDrive);
+    //unusedButton.whileHeld(() -> swerveDrive.drive(2,0,0, false), swerveDrive);\
+
+    CustomButton resetNavx = new CustomButton(() -> (RobotContainer.xboxController.getStartButton()));
+    resetNavx.whenPressed(() -> RobotContainer.swerveDrive.resetNavx(), swerveDrive);
+    
   }
 
 

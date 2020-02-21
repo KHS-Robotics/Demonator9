@@ -39,6 +39,9 @@ public class HoldAngleWhileDriving extends CommandBase {
 
     isFieldOriented = (!RobotContainer.xboxController.getBumper(Hand.kLeft));
 
+    xSpeed = RobotContainer.swerveDrive.sensControl(xSpeed);
+    ySpeed = RobotContainer.swerveDrive.sensControl(ySpeed);
+
     RobotContainer.swerveDrive.holdAngleWhileDriving(xSpeed, ySpeed, angle, isFieldOriented);
   }
 

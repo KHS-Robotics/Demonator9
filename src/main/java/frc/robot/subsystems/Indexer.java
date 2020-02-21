@@ -113,10 +113,16 @@ public class Indexer extends SubsystemBase {
 
   public void incrementBall() {
     numBalls++;
+    if(numBalls > 5) {
+      numBalls = 5;
+    }
   }
 
   public void decrementBall() {
     numBalls--;
+    if(numBalls < 0) {
+      numBalls = 0;
+    }
   }
 
   public int getNumBalls() {
