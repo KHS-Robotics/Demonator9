@@ -10,6 +10,7 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -86,13 +87,16 @@ public class RobotContainer {
     Button autoCalibrate = new Button(() -> (!CenterSwerveModules.hasCalibrated() && (Math.abs(xboxController.getX(Hand.kRight)) > 0.01 || Math.abs(xboxController.getX(Hand.kLeft)) > 0.01 || Math.abs(xboxController.getY(Hand.kLeft)) > 0.01)));
     autoCalibrate.whenPressed(new CenterSwerveModules());
 
+    Button autoCal = new Button(() -> !CenterSwerveModules.hasCalibrated() && RobotState.isAutonomous() && RobotState.isEnabled());
+    autoCal.whenPressed(new CenterSwerveModules());
+
     JoystickButton calibrate = new JoystickButton(xboxController, XboxController.Button.kBack.value);
     calibrate.whenPressed(new CenterSwerveModules());
 
     JoystickButton rotateToTarget = new JoystickButton(xboxController, XboxController.Button.kY.value);
     rotateToTarget.whenHeld(new RotateToTargetWhileDriving());
 
-    CustomButton turnAndDrive = new CustomButton( () -> Math.abs(xboxController.getX(Hand.kRight)) > 0.01 );
+    Button turnAndDrive = new Button( () -> Math.abs(xboxController.getX(Hand.kRight)) > 0.01 );
     turnAndDrive.whileHeld(() -> {
       var xSpeed = -RobotContainer.xboxController.getY(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
       var ySpeed = -RobotContainer.xboxController.getX(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
@@ -109,11 +113,11 @@ public class RobotContainer {
       }
     }, swerveDrive);
 
-    CustomButton moveHood = new CustomButton(() -> switchbox.shooterOverride() && !switchbox.shoot());
+    Button moveHood = new Button(() -> switchbox.shooterOverride() && !switchbox.shoot());
     moveHood.whileHeld(() -> hood.moveHood(switchbox.getHoodSpeed()), hood);
     moveHood.whenReleased(() -> hood.moveHood(0), hood);
 
-    CustomButton controlPanel = new CustomButton(switchbox::controlPanelOverride);
+    Button controlPanel = new Button(switchbox::controlPanelOverride);
   controlPanel.whileHeld(() -> {
       CPManipulator.spin(switchbox.getControlPanel());
       CPManipulator.setPosition(true);
@@ -123,15 +127,15 @@ public class RobotContainer {
       CPManipulator.setPosition(false);
     }, CPManipulator);
 
-    CustomButton setPto = new CustomButton(switchbox::engagePTO);
+    Button setPto = new Button(switchbox::engagePTO);
     setPto.whenPressed(() -> climber.setPTO(true), climber);
     setPto.whenReleased(() -> climber.setPTO(false), climber);
 
-    CustomButton startClimb = new CustomButton(() -> (switchbox.climb() && switchbox.engagePTO()));
+    Button startClimb = new Button(() -> (switchbox.climb() && switchbox.engagePTO()));
     startClimb.whenPressed(shooter::enableForClimb, shooter, climber);
     startClimb.whenReleased(shooter::disableForClimb, shooter, climber);
 
-    CustomButton shoot = new CustomButton(() -> switchbox.shoot());
+    Button shoot = new Button(() -> switchbox.shoot());
     shoot.whileHeld(() -> {
       shooter.setShooter(-4500);
       indexer.setMotor(.6);
@@ -143,15 +147,15 @@ public class RobotContainer {
     }, shooter, indexer, hood);
     shoot.whenPressed(() -> hood.setHood(hood.getPosition()), hood);
 
-    CustomButton overrideHood = new CustomButton(() -> switchbox.shooterOverride());
+    Button overrideHood = new Button(() -> switchbox.shooterOverride());
 
-    CustomButton intakeDown = new CustomButton(switchbox::intakeDown);
+    Button intakeDown = new Button(switchbox::intakeDown);
     intakeDown.whenPressed(intake::down, intake);
     intakeDown.whenPressed(new WaitCommand(0.5).andThen(() -> intake.setOff()));
     intakeDown.whenReleased(intake::up, intake);
     intakeDown.whenReleased(new WaitCommand(0.5).andThen(() -> intake.setOff()));
 
-    CustomButton intaking = new CustomButton(() -> (switchbox.intake() && indexer.getNumBalls() < 5));
+    Button intaking = new Button(() -> (switchbox.intake() && indexer.getNumBalls() < 5));
     intaking.whenPressed(() -> {
       intake.intake();
     }, intake);
@@ -159,40 +163,40 @@ public class RobotContainer {
       intake.stop();
     }, intake);
 
-    CustomButton outtaking = new CustomButton(switchbox::outtake);
+    Button outtaking = new Button(switchbox::outtake);
     outtaking.whenPressed(intake::reverse, intake);
     outtaking.whenReleased(intake::stop, intake);
 
-    CustomButton guideButton = new CustomButton(switchbox::guide);
+    Button guideButton = new Button(switchbox::guide);
     guideButton.whenPressed(() -> guide.set(true));
     guideButton.whenReleased(() -> guide.set(false));
 
-    CustomButton rotationControl = new CustomButton(() -> switchbox.rotationControl() && xboxController.getBButton());
+    Button rotationControl = new Button(() -> switchbox.rotationControl() && xboxController.getBButton());
     rotationControl.whenPressed(() -> {
       CPManipulator.spinNumTimes(CPManipulator.getPosition() + (8 * 4.8));
     }, CPManipulator);
     //rotationControl.whenReleased(() -> CPManipulator.setPosition(false));
 
-    CustomButton controlPanelSwitch = new CustomButton(() -> switchbox.rotationControl() || switchbox.positionControl());
+    Button controlPanelSwitch = new Button(() -> switchbox.rotationControl() || switchbox.positionControl());
     controlPanelSwitch.whenPressed(() -> CPManipulator.setPosition(true), CPManipulator);
     controlPanelSwitch.whenReleased(() -> CPManipulator.setPosition(false), CPManipulator);    
 
-    CustomButton positionControl = new CustomButton(() -> switchbox.positionControl() && xboxController.getBButton());
+    Button positionControl = new Button(() -> switchbox.positionControl() && xboxController.getBButton());
     //TODO: positionControl.whenHeld();
 
-    CustomButton moveIndexer = new CustomButton(() -> (indexer.getSwitch1() && Math.abs(switchbox.getIndexSpeed()) < 0.05));
+    Button moveIndexer = new Button(() -> (indexer.getSwitch1() && Math.abs(switchbox.getIndexSpeed()) < 0.05));
     moveIndexer.whenPressed(new IndexBall().withTimeout(2));
 
-    CustomButton decreaseBall = new CustomButton(() -> (indexer.getSwitch1() && (switchbox.getIndexSpeed() < -0.05)));
+    Button decreaseBall = new Button(() -> (indexer.getSwitch1() && (switchbox.getIndexSpeed() < -0.05)));
     decreaseBall.whenPressed(indexer::decrementBall);
 
-    CustomButton zeroBalls = new CustomButton(() -> (!switchbox.engagePTO() && switchbox.climb()));
+    Button zeroBalls = new Button(() -> (!switchbox.engagePTO() && switchbox.climb()));
     zeroBalls.whenPressed(indexer::zeroBalls);
 
-    CustomButton unusedButton = new CustomButton(() -> switchbox.unusedSwitch());
+    Button unusedButton = new Button(() -> switchbox.unusedSwitch());
     //unusedButton.whileHeld(() -> swerveDrive.drive(2,0,0, false), swerveDrive);\
 
-    CustomButton resetNavx = new CustomButton(() -> (RobotContainer.xboxController.getStartButton()));
+    Button resetNavx = new Button(() -> (RobotContainer.xboxController.getStartButton()));
     resetNavx.whenPressed(() -> RobotContainer.swerveDrive.resetNavx(), swerveDrive);
     
   }
