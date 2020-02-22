@@ -43,7 +43,7 @@ public class Intake extends SubsystemBase {
     tab.addBoolean("Releasing", () -> releasing);
     //tab.addBoolean("Down", () -> solenoid.get());
 
-    up();
+    setOff();
   }
 
   @Override
