@@ -25,7 +25,6 @@ public class Intake extends SubsystemBase {
   private CANEncoder motorEnc;
   private DoubleSolenoid solenoid;
   private double speed = 0.35; //Probably Changing ~0.4
-  private boolean intaking, releasing;
 
   public Intake() {
     motor = new CANSparkMax(RobotMap.INTAKE, MotorType.kBrushless);
@@ -39,8 +38,6 @@ public class Intake extends SubsystemBase {
 
     var tab = Shuffleboard.getTab("Intake");
     tab.addNumber("Velocity", motorEnc::getVelocity);
-    tab.addBoolean("Intaking", () -> intaking);
-    tab.addBoolean("Releasing", () -> releasing);
     //tab.addBoolean("Down", () -> solenoid.get());
 
     setOff();
@@ -52,26 +49,18 @@ public class Intake extends SubsystemBase {
   }
 
   public void stop() {
-    intaking = false;
-    releasing = false;
 		motor.set(0.0);
 	}
 	
-	public void intake() {
-    if (intaking) 
-      return;
-    
-    intaking = true;
-    releasing = false;
-		motor.set(speed); // TODO: might want to use velocity pid
-	}
+	public void intake() {    
+		motor.set(speed);
+  }
+  
+  public void intake(double speed) {
+    motor.set(speed);
+  }
 
 	public void reverse() {
-    if (releasing) 
-      return;
-    
-    intaking = false;
-    releasing = true;
 		motor.set(-speed);
 	}
 

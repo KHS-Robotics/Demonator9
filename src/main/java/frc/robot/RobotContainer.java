@@ -39,6 +39,7 @@ import frc.robot.commands.drive.rotate.RotateToTargetWhileDriving;
 import frc.robot.commands.indexer.ControlIndexer;
 import frc.robot.commands.indexer.IndexBall;
 import frc.robot.commands.indexer.SetIndexer;
+import frc.robot.commands.intake.IntakeBall;
 import frc.robot.commands.pid.TargetPIDTuner;
 import frc.robot.commands.shooter.HoldHoodAngle;
 import frc.robot.commands.shooter.RampShooter;
@@ -166,10 +167,8 @@ public class RobotContainer {
     intakeDown.whenReleased(intake::up, intake);
     intakeDown.whenReleased(new WaitCommand(0.5).andThen(() -> intake.setOff()));
 
-    Button intaking = new Button(() -> (switchbox.intake() && indexer.getNumBalls() < 5));
-    intaking.whenPressed(() -> {
-      intake.intake();
-    }, intake);
+    Button intaking = new Button(() -> (switchbox.intake() && indexer.getNumBalls() < 5)); //&& !intake.indexingBall));
+    intaking.whenHeld(() -> {intake.intake();}, intake);
     intaking.whenReleased(() -> {
       intake.stop();
     }, intake);
@@ -200,10 +199,10 @@ public class RobotContainer {
     Button positionControl = new Button(() -> switchbox.positionControl() && xboxController.getBButton());
 
     Button moveIndexer = new Button(() -> (indexer.getSwitch1() && Math.abs(switchbox.getIndexSpeed()) < 0.05));
-    moveIndexer.whenPressed(new IndexBall().withTimeout(1));
+    moveIndexer.whenPressed(new IndexBall().withTimeout(1).alongWith(new IntakeBall(.175)));
 
     Button moveHoodForBall = new Button(() -> indexer.getNumBalls() >= 4);
-    moveHoodForBall.whenPressed(() -> hood.setHood(-10), hood);
+    moveHoodForBall.whenPressed(() -> hood.setHood(25), hood);
 
     Button decreaseBall = new Button(() -> (indexer.getSwitch1() && (switchbox.getIndexSpeed() < -0.05)));
     decreaseBall.whenPressed(indexer::decrementBall);
