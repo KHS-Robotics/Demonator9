@@ -102,14 +102,14 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    Button autoCalibrate = new Button(() -> (!CenterSwerveModules.hasCalibrated()));
-    autoCalibrate.whenPressed(new CenterSwerveModules());
+    Button autoCalibrateTeleop = new Button(() -> (!CenterSwerveModules.hasCalibrated() && RobotState.isOperatorControl() && RobotState.isEnabled()));
+    autoCalibrateTeleop.whenPressed(new CenterSwerveModules());
 
-    //Button autoCal = new Button(() -> !CenterSwerveModules.hasCalibrated() && RobotState.isAutonomous() && RobotState.isEnabled());
-    //autoCal.whenPressed(new CenterSwerveModules());
+    JoystickButton forceCalibrate = new JoystickButton(xboxController, XboxController.Button.kBack.value);
+    forceCalibrate.whenPressed(new CenterSwerveModules());
 
-    JoystickButton calibrate = new JoystickButton(xboxController, XboxController.Button.kBack.value);
-    calibrate.whenPressed(new CenterSwerveModules());
+    Button unusedButton = new Button(() -> switchbox.unusedSwitch());
+    unusedButton.whileHeld(() -> swerveDrive.stop(), swerveDrive);
 
     JoystickButton rotateToTarget = new JoystickButton(xboxController, XboxController.Button.kY.value);
     rotateToTarget.whenHeld(new RotateToTargetWhileDriving());
@@ -207,9 +207,6 @@ public class RobotContainer {
 
     Button zeroBalls = new Button(() -> (!switchbox.engagePTO() && switchbox.climb()));
     //zeroBalls.whenPressed(indexer::zeroBalls);
-
-    Button unusedButton = new Button(() -> switchbox.unusedSwitch());
-    unusedButton.whileHeld(() -> swerveDrive.stop(), swerveDrive);
 
     Button resetNavx = new Button(() -> (RobotContainer.xboxController.getStartButton()));
     resetNavx.whenPressed(() -> RobotContainer.swerveDrive.resetNavx(), swerveDrive);
