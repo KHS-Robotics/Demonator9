@@ -38,8 +38,8 @@ public class Climber extends SubsystemBase {
     telescopeEnc.setVelocityConversionFactor(1.0 / 7.0);
 
     var tab = Shuffleboard.getTab("Climber");
-    tab.addNumber("Raise Speed", () -> telescopeEnc.getVelocity());
-    tab.addNumber("Position", () -> telescopeEnc.getPosition());
+    // tab.addNumber("Raise Speed", () -> telescopeEnc.getVelocity());
+    // tab.addNumber("Position", () -> telescopeEnc.getPosition());
     tab.addBoolean("PTO Engaged", pto::get);
   }
 

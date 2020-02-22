@@ -27,6 +27,7 @@ import frc.robot.commands.drive.rotate.RotateToTargetWhileDriving;
 import frc.robot.commands.indexer.ControlIndexer;
 import frc.robot.commands.indexer.IndexBall;
 import frc.robot.commands.pid.TargetPIDTuner;
+import frc.robot.commands.shooter.RampShooter;
 import frc.robot.commands.shooter.Shoot;
 import frc.robot.subsystems.CPManipulator;
 import frc.robot.subsystems.Climber;
@@ -90,8 +91,8 @@ public class RobotContainer {
     Button autoCalibrate = new Button(() -> (!CenterSwerveModules.hasCalibrated() && (Math.abs(xboxController.getX(Hand.kRight)) > 0.01 || Math.abs(xboxController.getX(Hand.kLeft)) > 0.01 || Math.abs(xboxController.getY(Hand.kLeft)) > 0.01)));
     autoCalibrate.whenPressed(new CenterSwerveModules());
 
-    Button autoCal = new Button(() -> !CenterSwerveModules.hasCalibrated() && RobotState.isAutonomous() && RobotState.isEnabled());
-    autoCal.whenPressed(new CenterSwerveModules());
+    //Button autoCal = new Button(() -> !CenterSwerveModules.hasCalibrated() && RobotState.isAutonomous() && RobotState.isEnabled());
+    //autoCal.whenPressed(new CenterSwerveModules());
 
     JoystickButton calibrate = new JoystickButton(xboxController, XboxController.Button.kBack.value);
     calibrate.whenPressed(new CenterSwerveModules());
@@ -101,13 +102,9 @@ public class RobotContainer {
 
     Button turnAndDrive = new Button( () -> Math.abs(xboxController.getX(Hand.kRight)) > 0.01 );
     turnAndDrive.whileHeld(() -> {
-      var xSpeed = -RobotContainer.xboxController.getY(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
-      var ySpeed = -RobotContainer.xboxController.getX(GenericHID.Hand.kLeft) * SwerveDrive.kMaxSpeed;
-      var rot = -RobotContainer.xboxController.getX(GenericHID.Hand.kRight) * SwerveDrive.kMaxAngularSpeed;
-
-      xSpeed = swerveDrive.sensControl(xSpeed);
-      ySpeed = swerveDrive.sensControl(ySpeed);
-      rot = swerveDrive.sensControl(rot);
+      var xSpeed = swerveDrive.sensControl(-RobotContainer.xboxController.getY(GenericHID.Hand.kLeft)) * SwerveDrive.kMaxSpeed;
+      var ySpeed = swerveDrive.sensControl(-RobotContainer.xboxController.getX(GenericHID.Hand.kLeft)) * SwerveDrive.kMaxSpeed;
+      var rot = swerveDrive.sensControl(-RobotContainer.xboxController.getX(GenericHID.Hand.kRight)) * SwerveDrive.kMaxAngularSpeed;
 
       if(Math.abs(xSpeed) > 0.01 || Math.abs(ySpeed) > 0.01 || Math.abs(rot) > 0.01) {
         RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot, !RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft));
@@ -139,11 +136,12 @@ public class RobotContainer {
     startClimb.whenReleased(shooter::disableForClimb, shooter, climber);
 
     Button shoot = new Button(() -> switchbox.shoot());
-    shoot.whileHeld(new Shoot(-4500));
+    shoot.whileHeld(new RampShooter(-4500).andThen( new Shoot(-4500)));//.alongWith(() -> {indexer.setMotor(0.6);} );
     shoot.whenReleased(() -> {
       shooter.stop();
       hood.stop();
-    }, shooter, hood);
+      indexer.stop();
+    }, shooter, hood, indexer);
     shoot.whenPressed(() -> hood.setHood(hood.getPosition()), hood);
 
     Button overrideHood = new Button(() -> switchbox.shooterOverride());

@@ -121,7 +121,7 @@ public class SwerveDrive extends SubsystemBase {
    */
   public Rotation2d getAngle() {
     // Negating the angle because WPILib gyros are CW positive.
-    return Rotation2d.fromDegrees(-RobotContainer.navx.getAngle() - offset);
+    return Rotation2d.fromDegrees(-RobotContainer.navx.getAngle() + offset);
   }
 
   public void setOffset(double offset) {
@@ -135,9 +135,9 @@ public class SwerveDrive extends SubsystemBase {
   /**
    * Method to drive the robot using joystick info.
    *
-   * @param xSpeed        Speed of the robot in the x direction (forward).
-   * @param ySpeed        Speed of the robot in the y direction (sideways).
-   * @param rot           Angular rate of the robot.
+   * @param xSpeed        Speed of the robot in the x direction (forward) in m/s.
+   * @param ySpeed        Speed of the robot in the y direction (sideways) in m/s.
+   * @param rot           Angular rate of the robot in rad/sec.
    * @param fieldRelative Whether the provided x and y speeds are relative to the
    *                      field.
    */

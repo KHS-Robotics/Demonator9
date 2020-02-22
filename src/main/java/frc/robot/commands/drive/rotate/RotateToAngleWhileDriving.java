@@ -32,14 +32,11 @@ public class RotateToAngleWhileDriving extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    var xSpeed = -RobotContainer.xboxController.getY(Hand.kLeft) * SwerveDrive.kMaxSpeed;
+    var xSpeed = RobotContainer.swerveDrive.sensControl(-RobotContainer.xboxController.getY(Hand.kLeft)) * SwerveDrive.kMaxSpeed;
 
-    var ySpeed = -RobotContainer.xboxController.getX(Hand.kLeft) * SwerveDrive.kMaxSpeed;
+    var ySpeed = RobotContainer.swerveDrive.sensControl(-RobotContainer.xboxController.getX(Hand.kLeft)) * SwerveDrive.kMaxSpeed;
 
     isFieldOriented = (!RobotContainer.xboxController.getBumper(Hand.kLeft));
-
-    xSpeed = RobotContainer.swerveDrive.sensControl(xSpeed);
-    ySpeed = RobotContainer.swerveDrive.sensControl(ySpeed);
 
     RobotContainer.swerveDrive.holdAngleWhileDriving(xSpeed, ySpeed, angle, isFieldOriented);
   }

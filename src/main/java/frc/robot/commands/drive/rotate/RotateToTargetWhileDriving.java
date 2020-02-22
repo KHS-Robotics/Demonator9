@@ -35,14 +35,15 @@ public class RotateToTargetWhileDriving extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    angle = -RobotContainer.navx.getYaw() - Limelight.getTx();
+    if(Limelight.isTarget()) {
+      angle = -RobotContainer.navx.getYaw() - Limelight.getTx();
+    } else {
+      angle = 0;
+    }
 
-    var xSpeed = -RobotContainer.xboxController.getY(Hand.kLeft) * SwerveDrive.kMaxSpeed;
+    var xSpeed = RobotContainer.swerveDrive.sensControl(-RobotContainer.xboxController.getY(Hand.kLeft)) * SwerveDrive.kMaxSpeed;
 
-    var ySpeed = -RobotContainer.xboxController.getX(Hand.kLeft) * SwerveDrive.kMaxSpeed;
-
-    xSpeed = RobotContainer.swerveDrive.sensControl(xSpeed);
-    ySpeed = RobotContainer.swerveDrive.sensControl(ySpeed);
+    var ySpeed = RobotContainer.swerveDrive.sensControl(-RobotContainer.xboxController.getX(Hand.kLeft)) * SwerveDrive.kMaxSpeed;
     
     isFieldOriented = (!RobotContainer.xboxController.getBumper(Hand.kLeft));
 
