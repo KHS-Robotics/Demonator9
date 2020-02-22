@@ -200,13 +200,16 @@ public class RobotContainer {
     Button positionControl = new Button(() -> switchbox.positionControl() && xboxController.getBButton());
 
     Button moveIndexer = new Button(() -> (indexer.getSwitch1() && Math.abs(switchbox.getIndexSpeed()) < 0.05));
-    //moveIndexer.whenPressed(new IndexBall().withTimeout(1));
+    moveIndexer.whenPressed(new IndexBall().withTimeout(1));
+
+    Button moveHoodForBall = new Button(() -> indexer.getNumBalls() >= 4);
+    moveHoodForBall.whenPressed(() -> hood.setHood(-10));
 
     Button decreaseBall = new Button(() -> (indexer.getSwitch1() && (switchbox.getIndexSpeed() < -0.05)));
-    //decreaseBall.whenPressed(indexer::decrementBall);
+    decreaseBall.whenPressed(indexer::decrementBall);
 
     Button zeroBalls = new Button(() -> (!switchbox.engagePTO() && switchbox.climb()));
-    //zeroBalls.whenPressed(indexer::zeroBalls);
+    zeroBalls.whenPressed(indexer::zeroBalls);
 
     Button resetNavx = new Button(() -> (RobotContainer.xboxController.getStartButton()));
     resetNavx.whenPressed(() -> RobotContainer.swerveDrive.resetNavx(), swerveDrive);
