@@ -85,7 +85,7 @@ public class SwerveModule extends SubsystemBase {
 
     pivotPID = new PIDController(pivotP, pivotI, pivotD);
     pivotPID.enableContinuousInput(-180, 180);
-    pivotPID.setTolerance(2);
+    pivotPID.setTolerance(1);
 
     setDetection = new DigitalInput(digitalInputPort);
 

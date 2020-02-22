@@ -15,7 +15,6 @@ import frc.robot.vision.PixyCam;
 
 import java.util.ArrayList;
 
-import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
@@ -42,9 +41,9 @@ public class CPManipulator extends SubsystemBase {
   private ColorBlock currentBlock;
 
   private int currentColorSignature, initialColor;
-  private double curPos, curRPM, speed;
   private final double WHEEL_RADIUS = 2.0, CP_RADIUS = 16.0, MAX_ALLOWABLE_RPM = 55.0;
   private final double MAX_RPM = (CP_RADIUS / WHEEL_RADIUS) * MAX_ALLOWABLE_RPM;
+  private char gameColor;
 
 
   public CPManipulator() {
@@ -68,13 +67,13 @@ public class CPManipulator extends SubsystemBase {
     setPosition(false);
 
     var tab = Shuffleboard.getTab("CP Manipulator");
-    tab.addNumber("Speed", this::getSpeed);
+    tab.addNumber("Velocity", this::getSpeed);
     tab.addBoolean("Piston Up", solenoid::get);
 
     tab.addNumber("Current Color", () -> currentColorSignature);
     tab.addNumber("Dist", this::distToCenter);
     tab.addNumber("Position", this::getPosition);
-    //tab.addNumber("Dist to Green", () -> distToColor('G'));
+    tab.addNumber("Dist to Game Color", () -> distToColor(gameColor));
     tab.addNumber("X Dist", this::xDist);
     tab.addNumber("X coord", this::centerX);
     tab.addNumber("Y coord", this::centerY);
@@ -88,10 +87,13 @@ public class CPManipulator extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //currentBlock = getCurBlock();
-    //currentColorSignature = getCurColor();
-    //curPos = motorEnc.getPosition();
-    //curRPM = motorEnc.getVelocity();
+    
+  }
+
+  public void update() {
+    currentBlock = getCurBlock();
+    currentColorSignature = getCurColor();
+    gameColor = getGameColor();
   }
 
   public double distToColor(char toColor) {
@@ -99,7 +101,11 @@ public class CPManipulator extends SubsystemBase {
     double dist;
 
     curIndex = currentColorSignature;
-    toIndex = ColorWheel.toColor(toColor).signature;
+    if(toColor != ' ') {
+      toIndex = ColorWheel.toColor(toColor).signature;
+    } else {
+      return 0;
+    }
 
     dist = toIndex - curIndex;
     dist %= 4;
@@ -168,7 +174,6 @@ public class CPManipulator extends SubsystemBase {
   public void spin(double speed) {
     //motorPid.setReference(speed, ControlType.kSmartMotion);
     motorPid.setReference(((Math.abs(speed) > 0.05) ? speed : 0) * MAX_RPM, ControlType.kVelocity);
-    this.speed = speed;
   }
 
   /**
@@ -227,7 +232,7 @@ public class CPManipulator extends SubsystemBase {
   }
 
   public double getSpeed() {
-    return speed;
+    return motorEnc.getVelocity();
   }
 
   public void setPosition(boolean up) {

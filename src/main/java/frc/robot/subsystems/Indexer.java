@@ -65,7 +65,7 @@ public class Indexer extends SubsystemBase {
 
     var tab = Shuffleboard.getTab("Indexer");
     tab.addNumber("Motor Speed", motorEnc::getVelocity);
-    tab.addNumber("Position", motorEnc::getPosition);
+    //tab.addNumber("Position", motorEnc::getPosition);
     tab.addNumber("Num Balls", () -> numBalls);
     tab.addBoolean("Beam Break 1", input1::get);
     tab.addBoolean("Beam Break 2", input2::get);
@@ -80,11 +80,11 @@ public class Indexer extends SubsystemBase {
   }
 
   public void setMotor(double speed) {
-    if(speed > 0) {
-      motorPid.setReference(speed * MAX_VEL, ControlType.kVelocity);
-    } else {
+    //if(speed > 0) {
+    //  motorPid.setReference(speed * MAX_VEL, ControlType.kVelocity);
+    //} else {
       motor.set(speed);
-   }
+   //}
   }
 
   public void stop() {

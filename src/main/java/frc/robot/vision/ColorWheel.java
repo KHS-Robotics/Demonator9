@@ -36,7 +36,7 @@ public enum ColorWheel {
             case 4:
                 return BLUE;
             default:
-                throw new IllegalArgumentException();
+                return CORRUPT;
         }
     }
 
@@ -53,7 +53,7 @@ public enum ColorWheel {
             case 'C':
                 return CORRUPT;
             default:
-                throw new IllegalArgumentException();
+                return CORRUPT;
         }
     }
     

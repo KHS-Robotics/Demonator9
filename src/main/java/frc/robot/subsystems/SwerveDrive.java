@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
+import frc.robot.commands.CenterSwerveModules;
 
 /**
  * Represents a swerve drive style drivetrain.
@@ -101,7 +102,7 @@ public class SwerveDrive extends SubsystemBase {
   public SwerveDrive() {
     targetPid = new PIDController(Constants.TARGET_P, Constants.TARGET_I, Constants.TARGET_D);
     targetPid.enableContinuousInput(-180.0, 180.0);
-    targetPid.setTolerance(2);
+    targetPid.setTolerance(1);
 
     var tab = Shuffleboard.getTab("Swervedrive");
     tab.addNumber("Target Angle", targetPid::getSetpoint);
@@ -112,6 +113,7 @@ public class SwerveDrive extends SubsystemBase {
     tab.addNumber("Pose Y", () -> this.getPose().getTranslation().getY());
     tab.addNumber("Pose Norm", () -> this.getPose().getTranslation().getNorm());
     tab.addNumber("Pose Rotation", () -> this.getPose().getRotation().getDegrees());
+    tab.addBoolean("Calibrated", CenterSwerveModules::hasCalibrated);
   }
 
   /**
@@ -164,6 +166,15 @@ public class SwerveDrive extends SubsystemBase {
     // System.out.println("RL" + swerveModuleStates[2].angle.getDegrees());
     // System.out.println("RR " + swerveModuleStates[3].angle.getDegrees());
   }
+
+  public void setModuleStates(SwerveModuleState[] desiredStates) {
+    SwerveDriveKinematics.normalizeWheelSpeeds(desiredStates, kMaxSpeed);
+    frontLeft.setDesiredState(desiredStates[0], false);
+    frontRight.setDesiredState(desiredStates[1], false);
+    rearLeft.setDesiredState(desiredStates[2], false);
+    rearRight.setDesiredState(desiredStates[3], false);
+  }
+
 
   @Override
   public void periodic() {
