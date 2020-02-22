@@ -26,6 +26,7 @@ import frc.robot.commands.drive.rotate.HoldAngleWhileDriving;
 import frc.robot.commands.drive.rotate.RotateToTargetWhileDriving;
 import frc.robot.commands.indexer.ControlIndexer;
 import frc.robot.commands.indexer.IndexBall;
+import frc.robot.commands.indexer.SetIndexer;
 import frc.robot.commands.pid.TargetPIDTuner;
 import frc.robot.commands.shooter.RampShooter;
 import frc.robot.commands.shooter.Shoot;
@@ -136,7 +137,7 @@ public class RobotContainer {
     startClimb.whenReleased(shooter::disableForClimb, shooter, climber);
 
     Button shoot = new Button(() -> switchbox.shoot());
-    shoot.whileHeld(new RampShooter(-4500).andThen( new Shoot(-4500)));//.alongWith(() -> {indexer.setMotor(0.6);} );
+    shoot.whileHeld(new RampShooter(-4500).andThen(new Shoot(-4500)).alongWith(new SetIndexer(0.6)));
     shoot.whenReleased(() -> {
       shooter.stop();
       hood.stop();
