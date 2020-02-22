@@ -203,7 +203,7 @@ public class RobotContainer {
     moveIndexer.whenPressed(new IndexBall().withTimeout(1));
 
     Button moveHoodForBall = new Button(() -> indexer.getNumBalls() >= 4);
-    moveHoodForBall.whenPressed(() -> hood.setHood(-10));
+    moveHoodForBall.whenPressed(() -> hood.setHood(-10), hood);
 
     Button decreaseBall = new Button(() -> (indexer.getSwitch1() && (switchbox.getIndexSpeed() < -0.05)));
     decreaseBall.whenPressed(indexer::decrementBall);
