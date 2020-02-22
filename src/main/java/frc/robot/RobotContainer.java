@@ -10,6 +10,7 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.XboxController;
@@ -26,6 +27,7 @@ import frc.robot.commands.drive.rotate.RotateToTargetWhileDriving;
 import frc.robot.commands.indexer.ControlIndexer;
 import frc.robot.commands.indexer.IndexBall;
 import frc.robot.commands.pid.TargetPIDTuner;
+import frc.robot.commands.shooter.Shoot;
 import frc.robot.subsystems.CPManipulator;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Hood;
@@ -60,6 +62,7 @@ public class RobotContainer {
   public static final Hood hood = new Hood();
   public static final CPManipulator CPManipulator = new CPManipulator();
   public static final Solenoid guide = new Solenoid(RobotMap.GUIDE);
+  public static final PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   public static final XboxController xboxController = new XboxController(RobotMap.XBOX_PORT);
   public static final SwitchBox switchbox = new SwitchBox(RobotMap.SWITCHBOX_PORT);
@@ -136,15 +139,11 @@ public class RobotContainer {
     startClimb.whenReleased(shooter::disableForClimb, shooter, climber);
 
     Button shoot = new Button(() -> switchbox.shoot());
-    shoot.whileHeld(() -> {
-      shooter.setShooter(-4500);
-      indexer.setMotor(.6);
-    }, shooter, indexer);
+    shoot.whileHeld(new Shoot(-4500));
     shoot.whenReleased(() -> {
       shooter.stop();
-      indexer.stop();
       hood.stop();
-    }, shooter, indexer, hood);
+    }, shooter, hood);
     shoot.whenPressed(() -> hood.setHood(hood.getPosition()), hood);
 
     Button overrideHood = new Button(() -> switchbox.shooterOverride());

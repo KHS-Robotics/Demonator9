@@ -12,7 +12,8 @@ import frc.robot.RobotContainer;
 
 public class Shoot extends CommandBase {
   boolean drop = false;
-  final double THRESHOLD = 2000;
+  int ramp = 0;
+  final double THRESHOLD = 23;
 
   /**
    * Creates a new shoot.
@@ -39,10 +40,16 @@ public class Shoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(RobotContainer.shooter.getCurrent() > THRESHOLD && !drop) {
+    if(RobotContainer.shooter.getCurrent() > 50 && ramp == 0) {
+      ramp = 1;
+    } else if (RobotContainer.shooter.getCurrent() < 20 && ramp == 1) {
+      ramp = -1;
+    }
+
+    if(RobotContainer.shooter.getCurrent() > THRESHOLD && !drop && ramp == -1) {
       drop = true;
       RobotContainer.indexer.decrementBall();
-    } else if(drop && RobotContainer.shooter.getCurrent() < THRESHOLD) {
+    } else if(drop && RobotContainer.shooter.getCurrent() < THRESHOLD && ramp == -1) {
       drop = false;
     }
   }

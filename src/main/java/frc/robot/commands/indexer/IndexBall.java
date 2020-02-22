@@ -40,7 +40,7 @@ public class IndexBall extends CommandBase {
         toggled = true;
       }
     } else {
-      if (!RobotContainer.indexer.getSwitch2() && RobotContainer.indexer.getNumBalls() < 4) {
+      if (!RobotContainer.indexer.getSwitch2() && RobotContainer.indexer.getNumBalls() <= 4) {
         RobotContainer.indexer.setMotor(0.75);
       } else {
         isDone = true;

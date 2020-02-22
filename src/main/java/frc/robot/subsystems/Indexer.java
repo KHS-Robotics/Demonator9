@@ -67,11 +67,11 @@ public class Indexer extends SubsystemBase {
     tab.addNumber("Motor Speed", motorEnc::getVelocity);
     tab.addNumber("Position", motorEnc::getPosition);
     tab.addNumber("Num Balls", () -> numBalls);
-    tab.addBoolean("Limit Switch 1", input1::get);
-    tab.addBoolean("Limit Switch 2", input2::get);
-    tab.addBoolean("Limit Switch 3", input3::get);
-    tab.addBoolean("Limit Switch 4", input4::get);
-    tab.addBoolean("Limit Switch 5", input5::get);
+    tab.addBoolean("Beam Break 1", input1::get);
+    tab.addBoolean("Beam Break 2", input2::get);
+    tab.addBoolean("Beam Break 3", input3::get);
+    tab.addBoolean("Beam Break 4", input4::get);
+    tab.addBoolean("Beam Break 5", input5::get);
   }
 
   @Override

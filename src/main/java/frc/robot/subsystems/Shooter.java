@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import frc.robot.vision.Limelight;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 
 import com.revrobotics.CANEncoder;
@@ -17,6 +18,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -54,6 +57,7 @@ public class Shooter extends SubsystemBase {
     tab.addNumber("Shooter Setpoint", () -> shooterPidSetpoint);
     tab.addNumber("Shooter Error", () -> shooterPidSetpoint - leaderEnc.getVelocity());
     tab.addBoolean("Is Climbing", () -> isClimbing);
+    tab.addNumber("Current", () -> getCurrent());
   }
 
   @Override
@@ -101,6 +105,10 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getCurrent() {
-    return leader.getOutputCurrent();
+    return RobotContainer.pdp.getCurrent(12);
+  }
+
+  public boolean atSetpoint() {
+    return Math.abs(shooterPidSetpoint - leaderEnc.getVelocity()) < 200;
   }
 }
