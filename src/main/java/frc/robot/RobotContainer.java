@@ -168,7 +168,9 @@ public class RobotContainer {
     intakeDown.whenReleased(new WaitCommand(0.5).andThen(() -> intake.setOff()));
 
     Button intaking = new Button(() -> (switchbox.intake() && indexer.getNumBalls() < 5)); //&& !intake.indexingBall));
-    intaking.whenHeld(() -> intake.intake(), intake);
+    intaking.whenPressed(() -> {
+      intake.intake();
+    }, intake);
     intaking.whenReleased(() -> {
       intake.stop();
     }, intake);
