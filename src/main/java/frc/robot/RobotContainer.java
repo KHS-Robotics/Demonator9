@@ -220,6 +220,21 @@ public class RobotContainer {
     Button resetNavx = new Button(() -> (RobotContainer.xboxController.getStartButton()));
     resetNavx.whenPressed(() -> RobotContainer.swerveDrive.resetNavx(), swerveDrive);
 
+    Button slowSwerve = new Button(() -> xboxController.getTriggerAxis(Hand.kLeft) > 0.65 && RobotState.isOperatorControl() && RobotState.isEnabled());
+    slowSwerve.whenPressed(() -> {
+      SwerveDrive.kMaxSpeed = 1;
+      SwerveDrive.kMaxAngularSpeed = Math.PI / 2;
+    });
+    slowSwerve.whenReleased(() -> {
+      SwerveDrive.kMaxSpeed = 3.5;
+      SwerveDrive.kMaxAngularSpeed = Math.PI;
+    });
+
+    Button telescope = new Button(() -> switchbox.engagePTO() && !switchbox.climb());
+    telescope.whileHeld(() -> {
+      climber.setTelescope(switchbox.getTelescopeSpeed());
+    }, climber);
+    telescope.whenReleased(() -> climber.setTelescope(0), climber);
   }
 
   /**

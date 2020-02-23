@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.vision.Limelight.LightMode;
 import frc.robot.commands.CenterSwerveModules;
+import frc.robot.subsystems.SwerveDrive;
 import frc.robot.vision.Limelight;
 
 
@@ -25,6 +26,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     robotContainer = new RobotContainer();
     Limelight.setLedMode(LightMode.eOff);
+    RobotContainer.pixy.setLamp((byte) 0, (byte) 0);
   }
 
   @Override
@@ -35,6 +37,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     RobotContainer.hood.hoodMode(false);
+    SwerveDrive.kMaxSpeed = 3.5;
+    SwerveDrive.kMaxAngularSpeed = Math.PI;
   }
 
   @Override

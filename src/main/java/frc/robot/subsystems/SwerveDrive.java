@@ -27,8 +27,8 @@ import frc.robot.commands.CenterSwerveModules;
  * Represents a swerve drive style drivetrain.
  */
 public class SwerveDrive extends SubsystemBase {
-  public static final double kMaxSpeed = 3.5; // 3.5 meters per second
-  public static final double kMaxAngularSpeed = Math.PI; // pi radians per second
+  public static double kMaxSpeed = 3.5; // 3.5 meters per second
+  public static double kMaxAngularSpeed = Math.PI; // pi radians per second
   public static double offset;
   private PIDController targetPid;
   private final Translation2d frontLeftLocation = new Translation2d(0.29845, 0.29845);
