@@ -8,12 +8,11 @@
 package frc.robot.commands.indexer;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
 import frc.robot.RobotContainer;
 
 public class IndexBall extends CommandBase {
-  double position, startTime;
-  boolean isDone = false, toggled = false;
-  //firstBall = false
+  private static boolean isDone = true, toggled = false;
 
   /**
    * Creates a new IndexBall.
@@ -27,7 +26,6 @@ public class IndexBall extends CommandBase {
   public void initialize() {
     isDone = false;
     toggled = false;
-    startTime = System.currentTimeMillis();
     RobotContainer.indexer.incrementBall();
   }
 
@@ -46,18 +44,22 @@ public class IndexBall extends CommandBase {
         isDone = true;
       }
     }
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     RobotContainer.indexer.stop();
+    isDone = true;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return isDone || RobotContainer.indexer.getNumBalls() > 4;
+  }
+
+  public static boolean isIndexing() {
+    return !isDone;
   }
 }

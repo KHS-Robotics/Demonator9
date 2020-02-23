@@ -58,10 +58,11 @@ import io.github.pseudoresonance.pixy2api.Pixy2;
 import io.github.pseudoresonance.pixy2api.links.SPILink;
 
 /**
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a "declarative" paradigm, very little robot logic should
+ * actually be handled in the {@link Robot} periodic methods (other than the
+ * scheduler calls). Instead, the structure of the robot (including subsystems,
+ * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
@@ -82,14 +83,15 @@ public class RobotContainer {
 
   public static final XboxController xboxController = new XboxController(RobotMap.XBOX_PORT);
   public static final SwitchBox switchbox = new SwitchBox(RobotMap.SWITCHBOX_PORT);
+
   /**
-   * The container for the robot.  Contains subsystems, OI devices, and commands.
+   * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     swerveDrive.setDefaultCommand(new HoldAngleWhileDriving());
-    //swerveDrive.setDefaultCommand(new TargetPIDTuner());
+    // swerveDrive.setDefaultCommand(new TargetPIDTuner());
     indexer.setDefaultCommand(new ControlIndexer());
-    //swerveDrive.setDefaultCommand(new PivotPIDTuner());
+    // swerveDrive.setDefaultCommand(new PivotPIDTuner());
     pixy.init();
     guide.set(false);
     // Configure the button bindings
@@ -97,13 +99,14 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your button->command mappings.  Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
-   * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    Button autoCalibrateTeleop = new Button(() -> (!CenterSwerveModules.hasCalibrated() && RobotState.isOperatorControl() && RobotState.isEnabled()));
+    Button autoCalibrateTeleop = new Button(
+        () -> (!CenterSwerveModules.hasCalibrated() && RobotState.isOperatorControl() && RobotState.isEnabled()));
     autoCalibrateTeleop.whenPressed(new CenterSwerveModules());
 
     JoystickButton forceCalibrate = new JoystickButton(xboxController, XboxController.Button.kBack.value);
@@ -115,14 +118,19 @@ public class RobotContainer {
     JoystickButton rotateToTarget = new JoystickButton(xboxController, XboxController.Button.kY.value);
     rotateToTarget.whenHeld(new RotateToTargetWhileDriving());
 
-    Button turnAndDrive = new Button( () -> Math.abs(xboxController.getX(Hand.kRight)) > 0.01 && CenterSwerveModules.hasCalibrated() && !switchbox.unusedSwitch());
-    turnAndDrive.whileHeld(() -> { 
-      var xSpeed = swerveDrive.sensControl(-RobotContainer.xboxController.getY(GenericHID.Hand.kLeft)) * SwerveDrive.kMaxSpeed;
-      var ySpeed = swerveDrive.sensControl(-RobotContainer.xboxController.getX(GenericHID.Hand.kLeft)) * SwerveDrive.kMaxSpeed;
-      var rot = swerveDrive.sensControl(-RobotContainer.xboxController.getX(GenericHID.Hand.kRight)) * SwerveDrive.kMaxAngularSpeed;
+    Button turnAndDrive = new Button(() -> Math.abs(xboxController.getX(Hand.kRight)) > 0.01
+        && CenterSwerveModules.hasCalibrated() && !switchbox.unusedSwitch());
+    turnAndDrive.whileHeld(() -> {
+      var xSpeed = swerveDrive.sensControl(-RobotContainer.xboxController.getY(GenericHID.Hand.kLeft))
+          * SwerveDrive.kMaxSpeed;
+      var ySpeed = swerveDrive.sensControl(-RobotContainer.xboxController.getX(GenericHID.Hand.kLeft))
+          * SwerveDrive.kMaxSpeed;
+      var rot = swerveDrive.sensControl(-RobotContainer.xboxController.getX(GenericHID.Hand.kRight))
+          * SwerveDrive.kMaxAngularSpeed;
 
-      if(Math.abs(xSpeed) > 0.01 || Math.abs(ySpeed) > 0.01 || Math.abs(rot) > 0.01) {
-        RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot, !RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft));
+      if (Math.abs(xSpeed) > 0.01 || Math.abs(ySpeed) > 0.01 || Math.abs(rot) > 0.01) {
+        RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot,
+            !RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft));
       } else {
         RobotContainer.swerveDrive.stop();
       }
@@ -136,7 +144,7 @@ public class RobotContainer {
     controlPanel.whileHeld(() -> {
       CPManipulator.spin(switchbox.getControlPanel());
       CPManipulator.setPosition(true);
-    }, CPManipulator);  
+    }, CPManipulator);
     controlPanel.whenReleased(() -> {
       CPManipulator.spin(0);
       CPManipulator.setPosition(false);
@@ -151,7 +159,8 @@ public class RobotContainer {
     startClimb.whenReleased(shooter::disableForClimb, shooter, climber);
 
     Button shoot = new Button(() -> switchbox.shoot());
-    shoot.whileHeld(new RampShooter(-4500).andThen(new Shoot(-4500)).alongWith(new SetIndexer(0.6)).alongWith(new HoldHoodAngle()));
+    shoot.whileHeld(
+        new RampShooter(-4500).andThen(new Shoot(-4500)).alongWith(new SetIndexer(0.6)).alongWith(new HoldHoodAngle()));
     shoot.whenReleased(() -> {
       shooter.stop();
       hood.stop();
@@ -167,9 +176,13 @@ public class RobotContainer {
     intakeDown.whenReleased(intake::up, intake);
     intakeDown.whenReleased(new WaitCommand(0.5).andThen(() -> intake.setOff()));
 
-    Button intaking = new Button(() -> (switchbox.intake() && indexer.getNumBalls() < 5)); //&& !intake.indexingBall));
-    intaking.whenPressed(() -> {
-      intake.intake();
+    Button intaking = new Button(() -> (switchbox.intake() && indexer.getNumBalls() < 5)); // && !intake.indexingBall));
+    intaking.whileHeld(() -> {
+      if (IndexBall.isIndexing()) {
+        intake.intake(0.175);
+      } else {
+        intake.intake();
+      }
     }, intake);
     intaking.whenReleased(() -> {
       intake.stop();
@@ -187,11 +200,11 @@ public class RobotContainer {
     rotationControl.whenPressed(() -> {
       CPManipulator.spinNumTimes(CPManipulator.getPosition() + (8 * 4.8));
     }, CPManipulator);
-    //rotationControl.whenReleased(() -> CPManipulator.setPosition(false));
+    // rotationControl.whenReleased(() -> CPManipulator.setPosition(false));
 
     Button controlPanelSwitch = new Button(() -> switchbox.rotationControl() || switchbox.positionControl());
     controlPanelSwitch.whenPressed(() -> CPManipulator.setPosition(true), CPManipulator);
-    controlPanelSwitch.whenReleased(() -> CPManipulator.setPosition(false), CPManipulator);    
+    controlPanelSwitch.whenReleased(() -> CPManipulator.setPosition(false), CPManipulator);
 
     Button lampOn = new Button(() -> switchbox.positionControl());
     lampOn.whenPressed(() -> pixy.setLamp((byte) 1, (byte) 1));
@@ -214,9 +227,8 @@ public class RobotContainer {
 
     Button resetNavx = new Button(() -> (RobotContainer.xboxController.getStartButton()));
     resetNavx.whenPressed(() -> RobotContainer.swerveDrive.resetNavx(), swerveDrive);
-    
-  }
 
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -225,34 +237,26 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // Create config for trajectory
-    TrajectoryConfig config =
-        new TrajectoryConfig(1, 1)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(swerveDrive.kinematics);
+    TrajectoryConfig config = new TrajectoryConfig(1, 1)
+        // Add kinematics to ensure max speed is actually obeyed
+        .setKinematics(swerveDrive.kinematics);
 
-    // An example trajectory to follow.  All units in meters.
+    // An example trajectory to follow. All units in meters.
     Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
         // Start at the origin facing the +X direction
         new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
-        List.of(
-            new Translation2d(1, 1),
-            new Translation2d(2, -1)
-        ),
+        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
-        config
-    );
+        new Pose2d(3, 0, new Rotation2d(0)), config);
 
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        swerveDrive::getPose, //Functional interface to feed supplier
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(exampleTrajectory,
+        swerveDrive::getPose, // Functional interface to feed supplier
         swerveDrive.kinematics,
 
-        //Position controllers
-        new PIDController(.25, 0, 0),
-        new PIDController(.25, 0, 0),
-        new ProfiledPIDController(.25, 0, 0, new TrapezoidProfile.Constraints(1,1)),
+        // Position controllers
+        new PIDController(.25, 0, 0), new PIDController(.25, 0, 0),
+        new ProfiledPIDController(.25, 0, 0, new TrapezoidProfile.Constraints(1, 1)),
 
         swerveDrive::setModuleStates,
 
