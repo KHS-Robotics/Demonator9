@@ -39,7 +39,6 @@ import frc.robot.commands.drive.rotate.RotateToTargetWhileDriving;
 import frc.robot.commands.indexer.ControlIndexer;
 import frc.robot.commands.indexer.IndexBall;
 import frc.robot.commands.indexer.SetIndexer;
-import frc.robot.commands.intake.IntakeBall;
 import frc.robot.commands.pid.TargetPIDTuner;
 import frc.robot.commands.shooter.HoldHoodAngle;
 import frc.robot.commands.shooter.RampShooter;
@@ -209,7 +208,7 @@ public class RobotContainer {
     Button positionControl = new Button(() -> switchbox.positionControl() && xboxController.getBButton());
 
     Button moveIndexer = new Button(() -> (indexer.getSwitch1() && Math.abs(switchbox.getIndexSpeed()) < 0.05));
-    moveIndexer.whenPressed(new IndexBall().withTimeout(1).alongWith(new IntakeBall(.175)));
+    moveIndexer.whenPressed(new IndexBall().withTimeout(1));
 
     Button moveHoodForBall = new Button(() -> indexer.getNumBalls() >= 4);
     moveHoodForBall.whenPressed(() -> hood.setHood(25), hood);
