@@ -44,6 +44,6 @@ public class RampShooter extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.shooter.atSetpoint();
+    return RobotContainer.shooter.atSetpoint(speed);
   }
 }

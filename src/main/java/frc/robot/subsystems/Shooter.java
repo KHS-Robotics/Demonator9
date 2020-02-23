@@ -19,7 +19,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -56,6 +55,7 @@ public class Shooter extends SubsystemBase {
     tab.addNumber("Follower Speed", followerEnc::getVelocity);
     tab.addNumber("Shooter Setpoint", () -> shooterPidSetpoint);
     tab.addNumber("Shooter Error", () -> shooterPidSetpoint - leaderEnc.getVelocity());
+    tab.addBoolean("At Setpoint", () -> atSetpoint(-4500));
     tab.addBoolean("Is Climbing", () -> isClimbing);
     tab.addNumber("Current", () -> getCurrent());
   }
@@ -108,7 +108,7 @@ public class Shooter extends SubsystemBase {
     return RobotContainer.pdp.getCurrent(12);
   }
 
-  public boolean atSetpoint() {
-    return Math.abs(shooterPidSetpoint - leaderEnc.getVelocity()) < 200;
+  public boolean atSetpoint(double speed) {
+    return Math.abs(speed - leaderEnc.getVelocity()) < 200;
   }
 }

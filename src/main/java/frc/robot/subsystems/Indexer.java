@@ -80,11 +80,11 @@ public class Indexer extends SubsystemBase {
   }
 
   public void setMotor(double speed) {
-    //if(speed > 0) {
-    //  motorPid.setReference(speed * MAX_VEL, ControlType.kVelocity);
-    //} else {
+    if(speed > 0) {
+      motorPid.setReference(speed * MAX_VEL, ControlType.kVelocity);
+    } else {
       motor.set(speed);
-   //}
+    }
   }
 
   public void stop() {

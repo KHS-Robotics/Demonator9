@@ -153,8 +153,8 @@ public class RobotContainer {
     startClimb.whenReleased(shooter::disableForClimb, shooter, climber);
 
     Button shoot = new Button(() -> switchbox.shoot());
-    shoot.whileHeld(
-        new RampShooter(-4500).andThen(new Shoot(-4500)).alongWith(new SetIndexer(0.6)).alongWith(new HoldHoodAngle()));
+    shoot.whenPressed(
+        new RampShooter(-4500).andThen(new Shoot(-4500).alongWith(new SetIndexer(0.45))));
     shoot.whenReleased(() -> {
       shooter.stop();
       hood.stop();
