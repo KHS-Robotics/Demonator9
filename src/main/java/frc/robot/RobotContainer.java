@@ -162,8 +162,6 @@ public class RobotContainer {
     }, shooter, hood, indexer);
     shoot.whenPressed(() -> hood.setHood(hood.getPosition()), hood);
 
-    Button overrideHood = new Button(() -> switchbox.shooterOverride());
-
     Button intakeDown = new Button(switchbox::intakeDown);
     intakeDown.whenPressed(intake::down, intake);
     intakeDown.whenPressed(new WaitCommand(0.5).andThen(() -> intake.setOff()));
