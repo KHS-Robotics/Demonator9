@@ -128,12 +128,7 @@ public class RobotContainer {
       var rot = swerveDrive.sensControl(-RobotContainer.xboxController.getX(GenericHID.Hand.kRight))
           * SwerveDrive.kMaxAngularSpeed;
 
-      if (Math.abs(xSpeed) > 0.01 || Math.abs(ySpeed) > 0.01 || Math.abs(rot) > 0.01) {
-        RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot,
-            !RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft));
-      } else {
-        RobotContainer.swerveDrive.stop();
-      }
+        RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot, !RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft));
     }, swerveDrive);
 
     Button moveHood = new Button(() -> switchbox.shooterOverride() && !switchbox.shoot());
