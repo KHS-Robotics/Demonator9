@@ -17,12 +17,13 @@ public class SetIndexer extends CommandBase {
    */
   public SetIndexer(double speed) {
     addRequirements(RobotContainer.indexer);
+    this.speed = speed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.indexer.setMotor(0.6);
+    RobotContainer.indexer.setMotor(speed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
