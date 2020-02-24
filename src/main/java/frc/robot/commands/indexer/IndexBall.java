@@ -32,7 +32,7 @@ public class IndexBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = (RobotContainer.indexer.getNumBalls() < 3) ? .75 : .4;
+    double speed = (RobotContainer.indexer.getNumBalls() < 3) ? .65 : .35;
     if (!toggled) {
       RobotContainer.indexer.setMotor(speed);
       if (!RobotContainer.indexer.getSwitch1()) {
