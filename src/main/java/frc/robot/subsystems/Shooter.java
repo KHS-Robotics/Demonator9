@@ -92,7 +92,7 @@ public class Shooter extends SubsystemBase {
 
   public void enableForClimb() {
     isClimbing = true;
-    leader.set(0.15);
+    leader.set(0.5);
   }
 
   public void disableForClimb() {

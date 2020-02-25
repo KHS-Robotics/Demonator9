@@ -87,7 +87,7 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    swerveDrive.setDefaultCommand(new HoldAngleWhileDriving());
+    swerveDrive.setDefaultCommand(new DriveSwerveWithXbox());
     // swerveDrive.setDefaultCommand(new TargetPIDTuner());
     indexer.setDefaultCommand(new ControlIndexer());
     // swerveDrive.setDefaultCommand(new PivotPIDTuner());
@@ -117,7 +117,7 @@ public class RobotContainer {
     JoystickButton rotateToTarget = new JoystickButton(xboxController, XboxController.Button.kY.value);
     rotateToTarget.whenHeld(new RotateToTargetWhileDriving());
 
-    Button turnAndDrive = new Button(() -> Math.abs(xboxController.getX(Hand.kRight)) > 0.01
+    /*Button turnAndDrive = new Button(() -> Math.abs(xboxController.getX(Hand.kRight)) > 0.01
         && CenterSwerveModules.hasCalibrated() && !switchbox.unusedSwitch());
     turnAndDrive.whileHeld(() -> {
       var xSpeed = swerveDrive.sensControl(-RobotContainer.xboxController.getY(GenericHID.Hand.kLeft))
@@ -129,6 +129,10 @@ public class RobotContainer {
 
         RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot, !RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft));
     }, swerveDrive);
+    */
+
+    Button holdAngle = new Button(() -> xboxController.getAButton());
+    holdAngle.whileHeld(new HoldAngleWhileDriving());
 
     Button moveHood = new Button(() -> switchbox.shooterOverride() && !switchbox.shoot());
     moveHood.whileHeld(() -> hood.moveHood(switchbox.getHoodSpeed()), hood);
@@ -152,7 +156,7 @@ public class RobotContainer {
     startClimb.whenPressed(shooter::enableForClimb, shooter, climber);
     startClimb.whenReleased(shooter::disableForClimb, shooter, climber);
 
-    Button shoot = new Button(() -> switchbox.shoot());
+    Button shoot = new Button(() -> switchbox.shoot());// && !switchbox.guide());
     shoot.whenPressed(
         new RampShooter(-4500).andThen(new Shoot(-4500).alongWith(new SetIndexer(0.45))));
     shoot.whenReleased(() -> {
@@ -161,6 +165,16 @@ public class RobotContainer {
       indexer.stop();
     }, shooter, hood, indexer);
     shoot.whenPressed(() -> hood.setHood(hood.getPosition()), hood);
+
+    // Button trenchShoot = new Button(() -> switchbox.shoot() && switchbox.guide());
+    // trenchShoot.whenPressed(
+        // new RampShooter(-4500).andThen(new Shoot(-4500).alongWith(new SetIndexer(0.45))));
+        // trenchShoot.whenReleased(() -> {
+      // shooter.stop();
+      // hood.stop();
+      // indexer.stop();
+    // }, shooter, hood, indexer);
+    // trenchShoot.whenPressed(() -> hood.setHood(22.7), hood);
 
     Button intakeDown = new Button(switchbox::intakeDown);
     intakeDown.whenPressed(intake::down, intake);

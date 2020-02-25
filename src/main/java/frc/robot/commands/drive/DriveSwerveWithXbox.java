@@ -44,11 +44,7 @@ public class DriveSwerveWithXbox extends CommandBase {
     var rot = RobotContainer.swerveDrive.sensControl(-RobotContainer.xboxController.getX(GenericHID.Hand.kRight)) * SwerveDrive.kMaxAngularSpeed;
 
     fieldRelative = (!RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft));
-    if(Math.abs(xSpeed) > 0.05 || Math.abs(ySpeed) > 0.05 || Math.abs(rot) > 0.05) {
-      RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot, fieldRelative);
-    } else {
-      RobotContainer.swerveDrive.stop();
-    }
+    RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot, fieldRelative);
 
     /*
      * if (Math.abs(x) + Math.abs(y) + Math.abs(z) > 0.35) {
