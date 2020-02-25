@@ -30,8 +30,8 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {
-    Limelight.setLedMode(LightMode.eOff);
+  public void robotPeriodic() {
+    CommandScheduler.getInstance().run();
   }
 
   @Override
@@ -42,8 +42,8 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
+  public void disabledPeriodic() {
+    Limelight.setLedMode(LightMode.eOff);
   }
 
   @Override
@@ -77,10 +77,24 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     RobotContainer.hood.hoodMode(true);
+
+    if(autonCommand != null) {
+      autonCommand.cancel();
+    }
   }
 
   @Override
   public void teleopPeriodic() {
+
   }
- 
+
+  @Override
+  public void testInit() {
+    CommandScheduler.getInstance().cancelAll();
+  }
+
+  @Override
+  public void testPeriodic() {
+    
+  }
 }

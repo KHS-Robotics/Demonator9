@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.Servo;
 
 import frc.robot.commands.CenterSwerveModules;
 import frc.robot.commands.drive.DriveSwerveWithXbox;
@@ -78,6 +79,7 @@ public class RobotContainer {
   public static final Hood hood = new Hood();
   public static final CPManipulator CPManipulator = new CPManipulator();
   public static final Solenoid guide = new Solenoid(RobotMap.GUIDE);
+  public static final Servo servo = new Servo(RobotMap.CAMERA_SERVO);
   public static final PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   public static final XboxController xboxController = new XboxController(RobotMap.XBOX_PORT);
@@ -93,6 +95,7 @@ public class RobotContainer {
     // swerveDrive.setDefaultCommand(new PivotPIDTuner());
     pixy.init();
     guide.set(false);
+    servo.set(.225);
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -149,8 +152,14 @@ public class RobotContainer {
     }, CPManipulator);
 
     Button setPto = new Button(switchbox::engagePTO);
-    setPto.whenPressed(() -> climber.setPTO(true), climber);
-    setPto.whenReleased(() -> climber.setPTO(false), climber);
+    setPto.whenPressed(() -> {
+      climber.setPTO(true);
+      servo.set(0.8);
+    }, climber);
+    setPto.whenReleased(() -> {
+      climber.setPTO(false);
+      servo.set(0.225);
+    }, climber);
 
     Button startClimb = new Button(() -> (switchbox.climb() && switchbox.engagePTO()));
     startClimb.whenPressed(shooter::enableForClimb, shooter, climber);

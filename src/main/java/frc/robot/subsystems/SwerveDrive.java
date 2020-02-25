@@ -219,6 +219,13 @@ public class SwerveDrive extends SubsystemBase {
   public void resetNavx() {
     targetPid.reset();
     RobotContainer.navx.reset();
+    odometry.resetPosition(getPose(), getAngle());
+  }
+
+  public void resetNavx(Pose2d currentPose) {
+    targetPid.reset();
+    odometry.resetPosition(currentPose, getAngle()); // do this before resetting navx, odometry handles gyro offset
+    RobotContainer.navx.reset();
   }
 
   public void resetPid() {
