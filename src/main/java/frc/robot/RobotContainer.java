@@ -197,6 +197,9 @@ public class RobotContainer {
     }, shooter, hood, indexer);
     trenchShoot.whenPressed(new SetHoodAngle(25).andThen(new InstantCommand(() -> hood.moveHood(0.02), hood).withTimeout(0.75)));
 
+    Button collapseAll = new Button (() -> xboxController.getXButton());
+    collapseAll.whenPressed(new SetHoodAngle(0).alongWith(new InstantCommand(() -> CPManipulator.setPosition(false), CPManipulator)));
+
     Button intakeDown = new Button(switchbox::intakeDown);
     intakeDown.whenPressed(intake::down, intake);
     intakeDown.whenPressed(new WaitCommand(0.5).andThen(() -> intake.setOff()));
