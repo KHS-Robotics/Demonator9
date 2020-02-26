@@ -27,7 +27,7 @@ public class HoldAngleWhileDriving extends CommandBase {
   @Override
   public void initialize() {
     RobotContainer.swerveDrive.resetPid();
-    angle = -RobotContainer.navx.getYaw();
+    angle = RobotContainer.swerveDrive.getYaw();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

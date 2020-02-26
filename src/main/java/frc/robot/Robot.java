@@ -10,7 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+//import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.vision.Limelight.LightMode;
 import frc.robot.commands.CenterSwerveModules;
 import frc.robot.subsystems.SwerveDrive;
@@ -51,10 +51,6 @@ public class Robot extends TimedRobot {
     RobotContainer.hood.hoodMode(true);
 
     RobotContainer.swerveDrive.resetNavx();
-
-    if(autonCommand != null && autonCommand.isScheduled()) {
-      autonCommand.cancel();
-    }
 
     Command desiredAuton = robotContainer.getAutonomousCommand();
 

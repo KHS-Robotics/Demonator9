@@ -90,7 +90,7 @@ public class PixyCam {
 		for (int sig = 1; sig <= 4; sig++) {
 			currentIdxs.clear();
 			for (int i = 0; i < sigs.size(); i++) {
-				if (sigs.get(i) == sig && blocks.get(i).getX() > 50 && blocks.get(i).getX() < 375 && blocks.get(i).getY() > 30 && blocks.get(i).getY() < 170) {
+				if (sigs.get(i) == sig && blocks.get(i).getX() > 50 && blocks.get(i).getX() < 275 && blocks.get(i).getY() > 30 && blocks.get(i).getY() < 170) {
 					currentIdxs.add(i);
 				}
 				if (currentIdxs.size() > 0) {

@@ -107,8 +107,8 @@ public class SwerveDrive extends SubsystemBase {
     var tab = Shuffleboard.getTab("Swervedrive");
     tab.addNumber("Target Angle", targetPid::getSetpoint);
     tab.addNumber("Target Error", targetPid::getPositionError);
-    tab.addNumber("Current Angle", () -> -RobotContainer.navx.getYaw());
-    tab.addNumber("Angle Graph", () -> -RobotContainer.navx.getYaw());
+    tab.addNumber("Current Angle", () -> getYaw());
+    tab.addNumber("Angle Graph", () -> getYaw());
     tab.addNumber("Pose X", () -> this.getPose().getTranslation().getX());
     tab.addNumber("Pose Y", () -> this.getPose().getTranslation().getY());
     tab.addNumber("Pose Norm", () -> this.getPose().getTranslation().getNorm());
@@ -124,6 +124,10 @@ public class SwerveDrive extends SubsystemBase {
   public Rotation2d getAngle() {
     // Negating the angle because WPILib gyros are CW positive.
     return Rotation2d.fromDegrees(-RobotContainer.navx.getAngle() + offset);
+  }
+
+  public double getYaw() {
+    return normalizeAngle(-RobotContainer.navx.getYaw() + offset);
   }
 
   public void setOffset(double offset) {
@@ -190,7 +194,7 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void holdAngleWhileDriving(double x, double y, double setAngle, boolean fod) {
-    var rotateOutput = MathUtil.clamp(targetPid.calculate(-RobotContainer.navx.getYaw(), normalizeAngle(setAngle)), -1, 1) * kMaxAngularSpeed;
+    var rotateOutput = MathUtil.clamp(targetPid.calculate(getYaw(), normalizeAngle(setAngle)), -1, 1) * kMaxAngularSpeed;
     this.drive(x, y, rotateOutput, fod);
   }
 
@@ -217,15 +221,13 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void resetNavx() {
-    targetPid.reset();
-    RobotContainer.navx.reset();
-    odometry.resetPosition(getPose(), getAngle());
+    resetNavx(getPose());
   }
 
   public void resetNavx(Pose2d currentPose) {
     targetPid.reset();
-    odometry.resetPosition(currentPose, getAngle()); // do this before resetting navx, odometry handles gyro offset
     RobotContainer.navx.reset();
+    odometry.resetPosition(currentPose, getAngle()); 
   }
 
   public void resetPid() {

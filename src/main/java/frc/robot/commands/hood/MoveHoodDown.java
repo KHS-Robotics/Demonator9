@@ -5,43 +5,42 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drive.rotate;
+package frc.robot.commands.hood;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.vision.Limelight;
 import frc.robot.RobotContainer;
 
-public class RotateToTarget extends CommandBase {
-  double angle;
+public class MoveHoodDown extends CommandBase {
   /**
-   * Creates a new RotateToAngle.
+   * Creates a new MoveHood.
    */
-  public RotateToTarget() {
-    addRequirements(RobotContainer.swerveDrive);
+  public MoveHoodDown() {
+    addRequirements(RobotContainer.hood);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.swerveDrive.resetPid();
-
-    
-    if(Limelight.isTarget()) {
-      angle = RobotContainer.swerveDrive.getYaw() - Limelight.getTx();
+    if(RobotContainer.indexer.getNumBalls() <= 3) {
+      RobotContainer.hood.setHood(0);
     } else {
-      angle = 0;
+      RobotContainer.hood.setHood(10);
     }
-    
-    RobotContainer.swerveDrive.stop();
   }
 
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.swerveDrive.rotateToAngleInPlace(angle);
   }
 
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+  }
+
+  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.swerveDrive.atSetpoint();
+    return RobotContainer.hood.atSetpoint();
   }
 }
