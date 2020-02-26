@@ -200,6 +200,9 @@ public class RobotContainer {
     Button collapseAll = new Button (() -> xboxController.getXButton());
     collapseAll.whenPressed(new SetHoodAngle(0).alongWith(new InstantCommand(() -> CPManipulator.setPosition(false), CPManipulator)));
 
+    Button raiseCPM = new Button(() -> xboxController.getBumper(Hand.kRight));
+    raiseCPM.whenPressed(() -> CPManipulator.setPosition(true), CPManipulator);
+
     Button intakeDown = new Button(switchbox::intakeDown);
     intakeDown.whenPressed(intake::down, intake);
     intakeDown.whenPressed(new WaitCommand(0.5).andThen(() -> intake.setOff()));
@@ -232,9 +235,9 @@ public class RobotContainer {
     }, CPManipulator);
     // rotationControl.whenReleased(() -> CPManipulator.setPosition(false));
 
-    Button controlPanelSwitch = new Button(() -> switchbox.rotationControl() || switchbox.positionControl());
-    controlPanelSwitch.whenPressed(() -> CPManipulator.setPosition(true), CPManipulator);
-    controlPanelSwitch.whenReleased(() -> CPManipulator.setPosition(false), CPManipulator);
+    // Button controlPanelSwitch = new Button(() -> switchbox.rotationControl() || switchbox.positionControl());
+    // controlPanelSwitch.whenPressed(() -> CPManipulator.setPosition(true), CPManipulator);
+    // controlPanelSwitch.whenReleased(() -> CPManipulator.setPosition(false), CPManipulator);
 
     Button lampOn = new Button(() -> switchbox.positionControl());
     lampOn.whenPressed(() -> pixy.setLamp((byte) 1, (byte) 1));
