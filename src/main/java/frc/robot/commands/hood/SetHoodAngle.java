@@ -10,22 +10,20 @@ package frc.robot.commands.hood;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
-public class MoveHoodDown extends CommandBase {
+public class SetHoodAngle extends CommandBase {
+  double angle;
   /**
-   * Creates a new MoveHood.
+   * Creates a new SetHoodAngle.
    */
-  public MoveHoodDown() {
+  public SetHoodAngle(double angle) {
     addRequirements(RobotContainer.hood);
+    this.angle = angle;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(RobotContainer.indexer.getNumBalls() <= 3) {
-      RobotContainer.hood.setHood(0);
-    } else {
-      RobotContainer.hood.setHood(25);
-    }
+    RobotContainer.hood.setHood(angle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

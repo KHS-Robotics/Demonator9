@@ -24,7 +24,7 @@ public class Intake extends SubsystemBase {
   private CANSparkMax motor;
   private CANEncoder motorEnc;
   private DoubleSolenoid solenoid;
-  private double speed = 0.35; //Probably Changing ~0.4
+  private double speed = 0.6; //.7 made belt slip off
 
   public Intake() {
     motor = new CANSparkMax(RobotMap.INTAKE, MotorType.kBrushless);

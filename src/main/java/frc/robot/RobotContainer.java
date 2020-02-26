@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
@@ -43,7 +43,9 @@ import frc.robot.commands.indexer.IndexBall;
 import frc.robot.commands.indexer.SetIndexer;
 import frc.robot.commands.pid.TargetPIDTuner;
 import frc.robot.commands.hood.HoldHoodAngle;
+import frc.robot.commands.hood.MoveHood;
 import frc.robot.commands.hood.MoveHoodDown;
+import frc.robot.commands.hood.SetHoodAngle;
 import frc.robot.commands.shooter.RampShooter;
 import frc.robot.commands.shooter.Shoot;
 import frc.robot.subsystems.CPManipulator;
@@ -173,13 +175,13 @@ public class RobotContainer {
     Button rampShooterWithGuide = new Button(() -> switchbox.rampShooter() && switchbox.guide());
     rampShooterWithGuide.whenPressed(new RampShooter(-4500));
     
-    Button releaseShooter = new Button(() -> ! switchbox.rampShooter());
+    Button releaseShooter = new Button(() -> !switchbox.rampShooter());
     releaseShooter.whenPressed(() -> shooter.stop(), shooter);
 
     Button manualShoot = new Button(() -> switchbox.shoot() && !switchbox.guide());
     manualShoot.whenPressed(
         new RampShooter(-4500).andThen(new Shoot(-4500).alongWith(new SetIndexer(0.45))));
-    manualShoot.whenReleased(new MoveHoodDown().alongWith(new RunCommand(() -> {
+    manualShoot.whenReleased(new MoveHoodDown().alongWith(new InstantCommand(() -> {
       shooter.stop();
       indexer.stop();
     }, shooter, indexer)));
@@ -193,7 +195,7 @@ public class RobotContainer {
       hood.stop();
       indexer.stop();
     }, shooter, hood, indexer);
-    trenchShoot.whenPressed(new RunCommand(() -> hood.setHood(22.7),  hood).andThen(new RunCommand(() -> hood.setHood(0.02), hood).withTimeout(0.75)));
+    trenchShoot.whenPressed(new SetHoodAngle(25).andThen(new InstantCommand(() -> hood.moveHood(0.02), hood).withTimeout(0.75)));
 
     Button intakeDown = new Button(switchbox::intakeDown);
     intakeDown.whenPressed(intake::down, intake);

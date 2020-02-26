@@ -45,6 +45,7 @@ public class Hood extends SubsystemBase {
   }
 
   public void setHoodPid(double p, double i, double d) {
+    hoodPid.setOutputRange(-0.4, 0.5);
     hoodPid.setP(p);
     hoodPid.setI(i);
     hoodPid.setD(d);
