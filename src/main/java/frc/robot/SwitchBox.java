@@ -29,7 +29,7 @@ public class SwitchBox extends Joystick {
 		return this.getRawButton(2);
 	}
 
-	public boolean unusedSwitch() {
+	public boolean rampShooter() {
 		return !this.getRawButton(4);
 	}
 

@@ -116,8 +116,8 @@ public class RobotContainer {
     JoystickButton forceCalibrate = new JoystickButton(xboxController, XboxController.Button.kBack.value);
     forceCalibrate.whenPressed(new CenterSwerveModules());
 
-    Button unusedButton = new Button(() -> switchbox.unusedSwitch());
-    unusedButton.whileHeld(() -> swerveDrive.stop(), swerveDrive);
+    //Button unusedButton = new Button(() -> switchbox.unusedSwitch());
+    //unusedButton.whileHeld(() -> swerveDrive.stop(), swerveDrive);
 
     JoystickButton rotateToTarget = new JoystickButton(xboxController, XboxController.Button.kY.value);
     rotateToTarget.whenHeld(new RotateToTargetWhileDriving());
@@ -167,6 +167,15 @@ public class RobotContainer {
     startClimb.whenPressed(shooter::enableForClimb, shooter, climber);
     startClimb.whenReleased(shooter::disableForClimb, shooter, climber);
 
+    Button rampShooterWithoutGuide = new Button(() -> switchbox.rampShooter() && !switchbox.guide());
+    rampShooterWithoutGuide.whenPressed(new RampShooter(-3000));
+
+    Button rampShooterWithGuide = new Button(() -> switchbox.rampShooter() && switchbox.guide());
+    rampShooterWithGuide.whenPressed(new RampShooter(-4500));
+    
+    Button releaseShooter = new Button(() -> ! switchbox.rampShooter());
+    releaseShooter.whenPressed(() -> shooter.stop(), shooter);
+
     Button manualShoot = new Button(() -> switchbox.shoot() && !switchbox.guide());
     manualShoot.whenPressed(
         new RampShooter(-4500).andThen(new Shoot(-4500).alongWith(new SetIndexer(0.45))));
@@ -192,7 +201,7 @@ public class RobotContainer {
     intakeDown.whenReleased(intake::up, intake);
     intakeDown.whenReleased(new WaitCommand(0.5).andThen(() -> intake.setOff()));
 
-    Button intaking = new Button(() -> (switchbox.intake() && indexer.getNumBalls() < 5)); // && !intake.indexingBall));
+    Button intaking = new Button(() -> (switchbox.intake() && indexer.getNumBalls() < 5));
     intaking.whileHeld(() -> {
       if (IndexBall.isIndexing()) {
         intake.intake(0.175);
