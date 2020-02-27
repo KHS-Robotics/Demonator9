@@ -8,6 +8,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 //import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -51,7 +53,7 @@ public class Robot extends TimedRobot {
     Limelight.setLedMode(LightMode.eOn);
     RobotContainer.hood.hoodMode(true);
 
-    RobotContainer.swerveDrive.resetNavx();
+    RobotContainer.swerveDrive.resetNavx(new Pose2d(0,0,Rotation2d.fromDegrees(0)));
 
     Command desiredAuton = robotContainer.getAutonomousCommand();
 
@@ -62,7 +64,7 @@ public class Robot extends TimedRobot {
     }
 
     if(autonCommand != null) {
-      //autonCommand.schedule();
+      autonCommand.schedule();
     }
   }
 

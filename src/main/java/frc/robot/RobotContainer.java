@@ -7,10 +7,14 @@
 
 package frc.robot;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotState;
@@ -25,6 +29,7 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -180,7 +185,7 @@ public class RobotContainer {
 
     Button manualShoot = new Button(() -> switchbox.shoot() && !switchbox.guide());
     manualShoot.whenPressed(
-        new RampShooter(-4500).andThen(new Shoot(-4500).alongWith(new SetIndexer(0.45))));
+        new RampShooter(-3000).andThen(new Shoot(-3000).alongWith(new SetIndexer(0.45))));
     manualShoot.whenReleased(new InstantCommand(() -> {
       shooter.stop();
       indexer.stop();
@@ -189,7 +194,10 @@ public class RobotContainer {
 
     Button trenchShoot = new Button(() -> switchbox.shoot() && switchbox.guide());
     trenchShoot.whenPressed(
-        new RampShooter(-4500).andThen(new Shoot(-4500).alongWith(new SetIndexer(0.45))));
+        new RampShooter(-4500)
+          .andThen(new Shoot(-4500)
+          .alongWith(new SetIndexer(0.45)))
+        );
         trenchShoot.whenReleased(() -> {
       shooter.stop();
       hood.stop();
@@ -288,7 +296,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(1, 1)
+    TrajectoryConfig config = new TrajectoryConfig(1.5, 1.5)
         // Add kinematics to ensure max speed is actually obeyed
         .setKinematics(swerveDrive.kinematics);
 
@@ -297,17 +305,30 @@ public class RobotContainer {
         // Start at the origin facing the +X direction
         new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+        List.of(
+          new Translation2d(1, 1), 
+          new Translation2d(2, -1)
+        ),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)), config);
+        new Pose2d(3, 0, new Rotation2d(Math.PI)), config);
+        
+
+    String trajectoryJSON = "output/TestingPathWeaver.wpilib.json";
+    Trajectory trajectory = null;
+    try {
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+    } catch (IOException ex) {
+      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+    }
 
     SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(exampleTrajectory,
         swerveDrive::getPose, // Functional interface to feed supplier
         swerveDrive.kinematics,
 
         // Position controllers
-        new PIDController(.25, 0, 0), new PIDController(.25, 0, 0),
-        new ProfiledPIDController(.25, 0, 0, new TrapezoidProfile.Constraints(1, 1)),
+        new PIDController(.5, 0, 0), new PIDController(.5, 0, 0),
+        new ProfiledPIDController(.5, 0, 0, new TrapezoidProfile.Constraints(Math.PI, Math.PI)),
 
         swerveDrive::setModuleStates,
 

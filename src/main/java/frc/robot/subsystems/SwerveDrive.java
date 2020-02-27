@@ -221,7 +221,7 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void resetNavx() {
-    resetNavx(getPose());
+    resetNavx(new Pose2d(0,0,Rotation2d.fromDegrees(0)));
   }
 
   public void resetNavx(Pose2d currentPose) {
