@@ -48,6 +48,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    Limelight.setLedMode(LightMode.eOn);
     RobotContainer.hood.hoodMode(true);
 
     RobotContainer.swerveDrive.resetNavx();
@@ -72,6 +73,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    Limelight.setLedMode(LightMode.eOff);
     RobotContainer.hood.hoodMode(true);
 
     if(autonCommand != null) {

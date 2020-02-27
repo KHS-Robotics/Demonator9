@@ -30,12 +30,9 @@ public class Climber extends SubsystemBase {
     telescope = new CANSparkMax(RobotMap.TELESCOPE, MotorType.kBrushless);
     telescopeEnc = telescope.getEncoder();
     pto = new Solenoid(RobotMap.PTO);
-    setPTO(false); // TODO: Might be inverted
+    setPTO(false);
 
     telescope.setIdleMode(IdleMode.kBrake);
-
-    telescopeEnc.setPositionConversionFactor(1.0 / 7.0);
-    telescopeEnc.setVelocityConversionFactor(1.0 / 7.0);
 
     var tab = Shuffleboard.getTab("Climber");
     // tab.addNumber("Raise Speed", () -> telescopeEnc.getVelocity());
@@ -53,7 +50,6 @@ public class Climber extends SubsystemBase {
   }
 
   public void setPTO(boolean climbing) {
-    //TODO: Inverted?
     pto.set(climbing);
   }
 }

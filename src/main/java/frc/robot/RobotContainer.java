@@ -148,11 +148,11 @@ public class RobotContainer {
     Button controlPanel = new Button(switchbox::controlPanelOverride);
     controlPanel.whileHeld(() -> {
       CPManipulator.spin(switchbox.getControlPanel());
-      CPManipulator.setPosition(true);
+      //CPManipulator.setPosition(true);
     }, CPManipulator);
     controlPanel.whenReleased(() -> {
       CPManipulator.spin(0);
-      CPManipulator.setPosition(false);
+      //CPManipulator.setPosition(false);
     }, CPManipulator);
 
     Button setPto = new Button(switchbox::engagePTO);
@@ -181,10 +181,10 @@ public class RobotContainer {
     Button manualShoot = new Button(() -> switchbox.shoot() && !switchbox.guide());
     manualShoot.whenPressed(
         new RampShooter(-4500).andThen(new Shoot(-4500).alongWith(new SetIndexer(0.45))));
-    manualShoot.whenReleased(new MoveHoodDown().alongWith(new InstantCommand(() -> {
+    manualShoot.whenReleased(new InstantCommand(() -> {
       shooter.stop();
       indexer.stop();
-    }, shooter, indexer)));
+    }, shooter, indexer));
     manualShoot.whenPressed(() -> hood.setHood(hood.getPosition()), hood);
 
     Button trenchShoot = new Button(() -> switchbox.shoot() && switchbox.guide());
@@ -195,7 +195,10 @@ public class RobotContainer {
       hood.stop();
       indexer.stop();
     }, shooter, hood, indexer);
-    trenchShoot.whenPressed(new SetHoodAngle(25).andThen(new InstantCommand(() -> hood.moveHood(0.02), hood).withTimeout(0.75)));
+    trenchShoot.whenPressed(new SetHoodAngle(25).andThen(
+      new InstantCommand(() -> hood.moveHood(0.02), hood).withTimeout(0.75).andThen(
+      new HoldHoodAngle()))
+    );
 
     Button collapseAll = new Button (() -> xboxController.getXButton());
     collapseAll.whenPressed(new SetHoodAngle(0).alongWith(new InstantCommand(() -> CPManipulator.setPosition(false), CPManipulator)));

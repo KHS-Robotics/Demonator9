@@ -9,10 +9,10 @@ package frc.robot.commands.drive.rotate;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.vision.Limelight;
+import frc.robot.vision.Limelight.LightMode;
 import frc.robot.RobotContainer;
 
 public class RotateToTarget extends CommandBase {
-  double angle;
   /**
    * Creates a new RotateToAngle.
    */
@@ -23,21 +23,15 @@ public class RotateToTarget extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.swerveDrive.resetPid();
+    Limelight.setLedMode(LightMode.eOn);
 
-    
-    if(Limelight.isTarget()) {
-      angle = RobotContainer.swerveDrive.getYaw() - Limelight.getTx();
-    } else {
-      angle = 0;
-    }
-    
+    RobotContainer.swerveDrive.resetPid();
     RobotContainer.swerveDrive.stop();
   }
 
   @Override
   public void execute() {
-    RobotContainer.swerveDrive.rotateToAngleInPlace(angle);
+    RobotContainer.swerveDrive.rotateToAngleInPlace(RobotContainer.swerveDrive.getYaw() - Limelight.getTx());
   }
 
   @Override
