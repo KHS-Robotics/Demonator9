@@ -51,6 +51,10 @@ public class Hood extends SubsystemBase {
     hoodPid.setD(d);
   }
 
+  public void resetEnc() {
+    hoodEnc.setPosition(0);
+  }
+
   public void stop() {
     hood.set(0.0);
   }

@@ -220,7 +220,7 @@ public class RobotContainer {
     intakeDown.whenReleased(intake::up, intake);
     intakeDown.whenReleased(new WaitCommand(0.5).andThen(() -> intake.setOff()));
 
-    Button intaking = new Button(() -> (switchbox.intake() && indexer.getNumBalls() < 5));
+    Button intaking = new Button(() -> (switchbox.intake() && !(indexer.getNumBalls() >= 4 && !indexer.getSwitch5())));
     intaking.whileHeld(() -> {
       if (IndexBall.isIndexing()) {
         intake.intake(0.175);
@@ -282,6 +282,9 @@ public class RobotContainer {
       SwerveDrive.kMaxAngularSpeed = Math.PI;
     });
 
+    Button resetHood = new Button(() -> xboxController.getBButton() && xboxController.getAButton() && xboxController.getBumper(Hand.kLeft));
+    resetHood.whenPressed(() -> hood.resetEnc());
+    
     Button telescope = new Button(() -> switchbox.engagePTO() && !switchbox.climb());
     telescope.whileHeld(() -> {
       climber.setTelescope(switchbox.getTelescopeSpeed());
@@ -333,7 +336,6 @@ public class RobotContainer {
         swerveDrive::setModuleStates,
 
         swerveDrive
-
     );
 
     // Run path following command, then stop at the end.
