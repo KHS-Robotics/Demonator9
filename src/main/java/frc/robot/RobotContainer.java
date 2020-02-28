@@ -170,7 +170,13 @@ public class RobotContainer {
       servo.set(0.225);
     }, climber);
 
-    Button startClimb = new Button(() -> (switchbox.climb() && switchbox.engagePTO()));
+    Button telescope = new Button(() -> switchbox.engagePTO());
+    telescope.whileHeld(() -> {
+      climber.setTelescope(switchbox.getTelescopeSpeed());
+    }, climber);
+    telescope.whenReleased(() -> climber.setTelescope(0), climber);
+
+    Button startClimb = new Button(() -> (switchbox.engagePTO() && switchbox.climb()));
     startClimb.whenPressed(shooter::enableForClimb, shooter, climber);
     startClimb.whenReleased(shooter::disableForClimb, shooter, climber);
 
@@ -284,12 +290,6 @@ public class RobotContainer {
 
     Button resetHood = new Button(() -> xboxController.getBButton() && xboxController.getAButton() && xboxController.getBumper(Hand.kLeft));
     resetHood.whenPressed(() -> hood.resetEnc());
-    
-    Button telescope = new Button(() -> switchbox.engagePTO() && !switchbox.climb());
-    telescope.whileHeld(() -> {
-      climber.setTelescope(switchbox.getTelescopeSpeed());
-    }, climber);
-    telescope.whenReleased(() -> climber.setTelescope(0), climber);
   }
 
   /**

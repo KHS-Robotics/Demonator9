@@ -97,7 +97,7 @@ public class Shooter extends SubsystemBase {
 
   public void enableForClimb() {
     isClimbing = true;
-    leader.set(0.5);
+    leader.set(1);
     leader.setIdleMode(IdleMode.kBrake);
     follower.setIdleMode(IdleMode.kBrake);
     coastMode = false;
