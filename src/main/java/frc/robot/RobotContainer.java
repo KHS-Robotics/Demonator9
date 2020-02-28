@@ -172,7 +172,8 @@ public class RobotContainer {
 
     Button telescope = new Button(() -> switchbox.engagePTO());
     telescope.whileHeld(() -> {
-      climber.setTelescope(switchbox.getTelescopeSpeed());
+      var speed = switchbox.getTelescopeSpeed();
+      climber.setTelescope(Math.abs(speed) > 0.03 ? speed : 0.0);
     }, climber);
     telescope.whenReleased(() -> climber.setTelescope(0), climber);
 
