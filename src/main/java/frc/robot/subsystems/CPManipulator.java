@@ -67,7 +67,7 @@ public class CPManipulator extends SubsystemBase {
     setPosition(false);
 
     var tab = Shuffleboard.getTab("CP Manipulator");
-    tab.addNumber("Velocity", this::getSpeed);
+    //tab.addNumber("Velocity", this::getSpeed);
     tab.addBoolean("Piston Up", solenoid::get);
 
     tab.addNumber("Current Color", () -> currentColorSignature);
@@ -87,7 +87,10 @@ public class CPManipulator extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
+  }
+
+  public void brakeMode(boolean brake) {
+    motor.setIdleMode(brake ? IdleMode.kBrake : IdleMode.kCoast);
   }
 
   public void update() {

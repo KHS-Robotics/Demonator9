@@ -27,7 +27,7 @@ public class Indexer extends SubsystemBase {
   private CANSparkMax motor;
   private CANPIDController motorPid;
   private CANEncoder motorEnc;
-  private DigitalInput input1, input2, input3, input4, input5;
+  private DigitalInput input1, input2, input3;
   /**
    * Creates a new Indexer.
    */
@@ -60,8 +60,6 @@ public class Indexer extends SubsystemBase {
     input1 = new DigitalInput(RobotMap.LIMIT_PORT_1);
     input2 = new DigitalInput(RobotMap.LIMIT_PORT_2);
     input3 = new DigitalInput(RobotMap.LIMIT_PORT_3);
-    input4 = new DigitalInput(RobotMap.LIMIT_PORT_4);
-    input5 = new DigitalInput(RobotMap.LIMIT_PORT_5);
 
     var tab = Shuffleboard.getTab("Indexer");
     tab.addNumber("Motor Speed", motorEnc::getVelocity);
@@ -70,8 +68,8 @@ public class Indexer extends SubsystemBase {
     tab.addBoolean("Beam Break 1", input1::get);
     tab.addBoolean("Beam Break 2", input2::get);
     tab.addBoolean("Beam Break 3", input3::get);
-    tab.addBoolean("Beam Break 4", input4::get);
-    tab.addBoolean("Beam Break 5", input5::get);
+    //tab.addBoolean("Beam Break 4", input4::get);
+    //tab.addBoolean("Beam Break 5", input5::get);
   }
 
   @Override

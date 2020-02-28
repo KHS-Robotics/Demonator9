@@ -30,7 +30,7 @@ public class Shooter extends SubsystemBase {
   private CANEncoder leaderEnc, followerEnc;
 
   private double shooterPidSetpoint;
-  private boolean isClimbing;
+  private boolean isClimbing, coastMode;
 
   public Shooter() {
     leader = new CANSparkMax(RobotMap.SHOOTER1, MotorType.kBrushless);
@@ -66,6 +66,11 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShooter(double speed) {
+    if(!coastMode) {
+      leader.setIdleMode(IdleMode.kCoast);
+      follower.setIdleMode(IdleMode.kCoast);
+      coastMode = true;
+    }
     shooterPid.setReference(speed, ControlType.kVelocity);
     shooterPidSetpoint = speed;
   }
@@ -93,6 +98,9 @@ public class Shooter extends SubsystemBase {
   public void enableForClimb() {
     isClimbing = true;
     leader.set(0.5);
+    leader.setIdleMode(IdleMode.kBrake);
+    follower.setIdleMode(IdleMode.kBrake);
+    coastMode = false;
   }
 
   public void disableForClimb() {

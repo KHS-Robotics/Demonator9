@@ -24,15 +24,11 @@ public class Shoot extends CommandBase {
     this.speed = speed;
   }
 
-  public Shoot() {
-    this(.25);
-  }
-
-
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     RobotContainer.shooter.setShooter(speed);
+    drop = false;
     //RobotContainer.indexer.setMotor(.6);
   }
 

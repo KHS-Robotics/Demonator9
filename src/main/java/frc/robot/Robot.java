@@ -27,8 +27,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robotContainer = new RobotContainer();
-    Limelight.setLedMode(LightMode.eOff);
-    RobotContainer.pixy.setLamp((byte) 0, (byte) 0);
   }
 
   @Override
@@ -39,6 +37,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     RobotContainer.hood.hoodMode(false);
+    RobotContainer.CPManipulator.brakeMode(false);
     SwerveDrive.kMaxSpeed = 3.5;
     SwerveDrive.kMaxAngularSpeed = Math.PI;
   }
@@ -52,6 +51,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     Limelight.setLedMode(LightMode.eOn);
     RobotContainer.hood.hoodMode(true);
+    RobotContainer.CPManipulator.brakeMode(true);
 
     RobotContainer.swerveDrive.resetNavx(new Pose2d(0,0,Rotation2d.fromDegrees(0)));
 
@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
     }
 
     if(autonCommand != null) {
-      autonCommand.schedule();
+      //autonCommand.schedule();
     }
   }
 
@@ -77,6 +77,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     Limelight.setLedMode(LightMode.eOff);
     RobotContainer.hood.hoodMode(true);
+    RobotContainer.CPManipulator.brakeMode(true);
 
     if(autonCommand != null) {
       autonCommand.cancel();

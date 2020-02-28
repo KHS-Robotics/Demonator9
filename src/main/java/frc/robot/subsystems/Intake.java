@@ -37,7 +37,7 @@ public class Intake extends SubsystemBase {
     motorEnc.setVelocityConversionFactor(1.0 / 2.0);
 
     var tab = Shuffleboard.getTab("Intake");
-    tab.addNumber("Velocity", motorEnc::getVelocity);
+    //tab.addNumber("Velocity", motorEnc::getVelocity);
     //tab.addBoolean("Down", () -> solenoid.get());
 
     setOff();

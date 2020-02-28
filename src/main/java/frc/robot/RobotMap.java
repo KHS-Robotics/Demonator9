@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.SPI;
-
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -18,9 +16,6 @@ import edu.wpi.first.wpilibj.SPI;
 public class RobotMap {
   public static final int XBOX_PORT = 0;
   public static final int SWITCHBOX_PORT = 1;
-
-  public static final int JOYSTICK_XY = 1;
-  public static final int JOYSTICK_Z = 2;
 
   public static final int FRONT_LEFT_PIVOT = 6;
   public static final int FRONT_RIGHT_PIVOT = 5;
@@ -36,9 +31,6 @@ public class RobotMap {
   public static final int FRONT_RIGHT_DIGITAL_INPUT = 2;
   public static final int REAR_LEFT_DIGITAL_INPUT = 0;
   public static final int REAR_RIGHT_DIGITAL_INPUT = 3;
-  
-  public static final SPI.Port NAVX_PORT = SPI.Port.kMXP;
-  public static final byte NAVX_UPDATE_RATE_HZ = (byte) 50;
 
   public static final int INTAKE = 15;
   public static final int INTAKE_SOLENOID_1 = 3;
@@ -57,9 +49,7 @@ public class RobotMap {
   public static final int INDEX_MOTOR = 9;
   public static final int LIMIT_PORT_1 = 9;
   public static final int LIMIT_PORT_2 = 8;
-  public static final int LIMIT_PORT_3 = 7;
-  public static final int LIMIT_PORT_4 = 6;
-  public static final int LIMIT_PORT_5 = 10;  
+  public static final int LIMIT_PORT_3 = 7; 
 
   public static final int GUIDE = 2;
   public static final int CAMERA_SERVO = 9;
