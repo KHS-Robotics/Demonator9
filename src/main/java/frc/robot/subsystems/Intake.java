@@ -15,9 +15,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
@@ -33,10 +31,10 @@ public class Intake extends SubsystemBase {
 
     motor.setIdleMode(IdleMode.kBrake);
 
-    motorEnc.setPositionConversionFactor(1.0 / 2.0);
+    //motorEnc.setPositionConversionFactor(1.0 / 2.0);
     motorEnc.setVelocityConversionFactor(1.0 / 2.0);
 
-    var tab = Shuffleboard.getTab("Intake");
+    //var tab = Shuffleboard.getTab("Intake");
     //tab.addNumber("Velocity", motorEnc::getVelocity);
     //tab.addBoolean("Down", () -> solenoid.get());
 

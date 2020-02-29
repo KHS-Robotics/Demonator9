@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -60,8 +61,6 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
-
-//import frc.robot.commands.PivotPIDTuner;
 
 import io.github.pseudoresonance.pixy2api.Pixy2;
 import io.github.pseudoresonance.pixy2api.links.SPILink;
@@ -123,25 +122,28 @@ public class RobotContainer {
     JoystickButton forceCalibrate = new JoystickButton(xboxController, XboxController.Button.kBack.value);
     forceCalibrate.whenPressed(new CenterSwerveModules());
 
-    //Button unusedButton = new Button(() -> switchbox.unusedSwitch());
-    //unusedButton.whileHeld(() -> swerveDrive.stop(), swerveDrive);
+    // Button unusedButton = new Button(() -> switchbox.unusedSwitch());
+    // unusedButton.whileHeld(() -> swerveDrive.stop(), swerveDrive);
 
     JoystickButton rotateToTarget = new JoystickButton(xboxController, XboxController.Button.kY.value);
     rotateToTarget.whenHeld(new RotateToTargetWhileDriving());
 
-    /*Button turnAndDrive = new Button(() -> Math.abs(xboxController.getX(Hand.kRight)) > 0.01
-        && CenterSwerveModules.hasCalibrated() && !switchbox.unusedSwitch());
-    turnAndDrive.whileHeld(() -> {
-      var xSpeed = swerveDrive.sensControl(-RobotContainer.xboxController.getY(GenericHID.Hand.kLeft))
-          * SwerveDrive.kMaxSpeed;
-      var ySpeed = swerveDrive.sensControl(-RobotContainer.xboxController.getX(GenericHID.Hand.kLeft))
-          * SwerveDrive.kMaxSpeed;
-      var rot = swerveDrive.sensControl(-RobotContainer.xboxController.getX(GenericHID.Hand.kRight))
-          * SwerveDrive.kMaxAngularSpeed;
-
-        RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot, !RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft));
-    }, swerveDrive);
-    */
+    /*
+     * Button turnAndDrive = new Button(() ->
+     * Math.abs(xboxController.getX(Hand.kRight)) > 0.01 &&
+     * CenterSwerveModules.hasCalibrated() && !switchbox.unusedSwitch());
+     * turnAndDrive.whileHeld(() -> { var xSpeed =
+     * swerveDrive.sensControl(-RobotContainer.xboxController.getY(GenericHID.Hand.
+     * kLeft)) SwerveDrive.kMaxSpeed; var ySpeed =
+     * swerveDrive.sensControl(-RobotContainer.xboxController.getX(GenericHID.Hand.
+     * kLeft)) SwerveDrive.kMaxSpeed; var rot =
+     * swerveDrive.sensControl(-RobotContainer.xboxController.getX(GenericHID.Hand.
+     * kRight)) SwerveDrive.kMaxAngularSpeed;
+     * 
+     * RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot,
+     * !RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft)); },
+     * swerveDrive);
+     */
 
     Button holdAngle = new Button(() -> xboxController.getAButton());
     holdAngle.whenHeld(new HoldAngleWhileDriving());
@@ -153,11 +155,11 @@ public class RobotContainer {
     Button controlPanel = new Button(switchbox::controlPanelOverride);
     controlPanel.whileHeld(() -> {
       CPManipulator.spin(switchbox.getControlPanel());
-      //CPManipulator.setPosition(true);
+      // CPManipulator.setPosition(true);
     }, CPManipulator);
     controlPanel.whenReleased(() -> {
       CPManipulator.spin(0);
-      //CPManipulator.setPosition(false);
+      // CPManipulator.setPosition(false);
     }, CPManipulator);
 
     Button setPto = new Button(switchbox::engagePTO);
@@ -186,26 +188,34 @@ public class RobotContainer {
 
     Button rampShooterWithGuide = new Button(() -> switchbox.rampShooter() && switchbox.guide());
     rampShooterWithGuide.whenPressed(new RampShooter(-4500));
-    
+
     Button releaseShooter = new Button(() -> !switchbox.rampShooter());
     releaseShooter.whenPressed(() -> shooter.stop(), shooter);
 
     Button manualShoot = new Button(() -> switchbox.shoot() && !switchbox.guide());
-    manualShoot.whenPressed(
-        new RampShooter(-3000).andThen(new Shoot(-3000).alongWith(new SetIndexer(0.45))));
-    manualShoot.whenReleased(new InstantCommand(() -> {
+    manualShoot.whenPressed(new RampShooter(-3000).alongWith(new HoldHoodAngle())
+        .andThen(new Shoot(-3000).alongWith(new SetIndexer(0.45, -3000))));
+    manualShoot.whenReleased(() -> {
       shooter.stop();
+      hood.stop();
       indexer.stop();
-    }, shooter, indexer));
-    manualShoot.whenPressed(() -> hood.setHood(hood.getPosition()), hood);
+    }, shooter, hood, indexer);
 
+    /*
+     * Button shootWithVisionClose = new Button(() -> !switchbox.guide() &&
+     * !switchbox.shooterOverride() && switchbox.shoot());
+     * shootWithVisionClose.whenPressed( new AngleHoodToTarget() .alongWith(new
+     * RampShooter(-3000)) .andThen(new Shoot(-3000).alongWith(new
+     * SetIndexer(0.45))) ); shootWithVisionClose.whenReleased(() -> {
+     * shooter.stop(); hood.stop(); indexer.stop(); }, shooter, hood, indexer);
+     */
     Button trenchShoot = new Button(() -> switchbox.shoot() && switchbox.guide());
     trenchShoot.whenPressed(
         new RampShooter(-4500)
-          .andThen(new Shoot(-4500)
-          .alongWith(new SetIndexer(0.45)))
-        );
-        trenchShoot.whenReleased(() -> {
+          .andThen(new Shoot(-4500))
+          .alongWith(new SetIndexer(0.45, -4500))
+          );
+    trenchShoot.whenReleased(() -> {
       shooter.stop();
       hood.stop();
       indexer.stop();
@@ -215,8 +225,9 @@ public class RobotContainer {
       new HoldHoodAngle()))
     );
 
-    Button collapseAll = new Button (() -> xboxController.getXButton());
-    collapseAll.whenPressed(new SetHoodAngle(0).alongWith(new InstantCommand(() -> CPManipulator.setPosition(false), CPManipulator)));
+    Button collapseAll = new Button(() -> xboxController.getXButton());
+    collapseAll.whenPressed(
+        new SetHoodAngle(0).alongWith(new InstantCommand(() -> CPManipulator.setPosition(false), CPManipulator)));
 
     Button raiseCPM = new Button(() -> xboxController.getBumper(Hand.kRight));
     raiseCPM.whenPressed(() -> CPManipulator.setPosition(true), CPManipulator);
@@ -227,7 +238,7 @@ public class RobotContainer {
     intakeDown.whenReleased(intake::up, intake);
     intakeDown.whenReleased(new WaitCommand(0.5).andThen(() -> intake.setOff()));
 
-    Button intaking = new Button(() -> (switchbox.intake() && !(indexer.getNumBalls() >= 4 && !indexer.getSwitch5())));
+    Button intaking = new Button(() -> (switchbox.intake() && !(indexer.getNumBalls() > 4 && indexer.getSwitch5())));
     intaking.whileHeld(() -> {
       if (IndexBall.isIndexing()) {
         intake.intake(0.175);
@@ -253,9 +264,12 @@ public class RobotContainer {
     }, CPManipulator);
     // rotationControl.whenReleased(() -> CPManipulator.setPosition(false));
 
-    // Button controlPanelSwitch = new Button(() -> switchbox.rotationControl() || switchbox.positionControl());
-    // controlPanelSwitch.whenPressed(() -> CPManipulator.setPosition(true), CPManipulator);
-    // controlPanelSwitch.whenReleased(() -> CPManipulator.setPosition(false), CPManipulator);
+    // Button controlPanelSwitch = new Button(() -> switchbox.rotationControl() ||
+    // switchbox.positionControl());
+    // controlPanelSwitch.whenPressed(() -> CPManipulator.setPosition(true),
+    // CPManipulator);
+    // controlPanelSwitch.whenReleased(() -> CPManipulator.setPosition(false),
+    // CPManipulator);
 
     Button lampOn = new Button(() -> switchbox.positionControl());
     lampOn.whenPressed(() -> pixy.setLamp((byte) 1, (byte) 1));
@@ -264,13 +278,16 @@ public class RobotContainer {
 
     Button positionControl = new Button(() -> switchbox.positionControl() && xboxController.getBButton());
 
-    Button moveIndexer = new Button(() -> (indexer.getSwitch1() && Math.abs(switchbox.getIndexSpeed()) < 0.05));
+    Button moveIndexer = new Button(() -> (indexer.getSwitch1() && Math.abs(switchbox.getIndexSpeed()) < 0.05 && !switchbox.shoot()));
     moveIndexer.whenPressed(new IndexBall().withTimeout(1));
 
+    Button incrementBall = new Button(() -> indexer.getSwitch5() && Math.abs(switchbox.getIndexSpeed()) < 0.05 && !switchbox.shoot());
+    incrementBall.whenPressed(() -> RobotContainer.indexer.incrementBall());
+ 
     Button moveHoodForBall = new Button(() -> indexer.getNumBalls() >= 4);
     moveHoodForBall.whenPressed(() -> hood.setHood(25), hood);
 
-    Button decreaseBall = new Button(() -> (indexer.getSwitch1() && (switchbox.getIndexSpeed() < -0.05)));
+    Button decreaseBall = new Button(() -> (indexer.getSwitch5() && (switchbox.getIndexSpeed() < -0.05)));
     decreaseBall.whenPressed(indexer::decrementBall);
 
     Button zeroBalls = new Button(() -> (!switchbox.engagePTO() && switchbox.climb()));
@@ -279,7 +296,8 @@ public class RobotContainer {
     Button resetNavx = new Button(() -> (RobotContainer.xboxController.getStartButton()));
     resetNavx.whenPressed(() -> RobotContainer.swerveDrive.resetNavx(), swerveDrive);
 
-    Button slowSwerve = new Button(() -> xboxController.getTriggerAxis(Hand.kLeft) > 0.65 && RobotState.isOperatorControl() && RobotState.isEnabled());
+    Button slowSwerve = new Button(() -> xboxController.getTriggerAxis(Hand.kLeft) > 0.65
+        && RobotState.isOperatorControl() && RobotState.isEnabled());
     slowSwerve.whenPressed(() -> {
       SwerveDrive.kMaxSpeed = 1;
       SwerveDrive.kMaxAngularSpeed = Math.PI / 2;
@@ -289,7 +307,8 @@ public class RobotContainer {
       SwerveDrive.kMaxAngularSpeed = Math.PI;
     });
 
-    Button resetHood = new Button(() -> xboxController.getBButton() && xboxController.getAButton() && xboxController.getBumper(Hand.kLeft));
+    Button resetHood = new Button(
+        () -> xboxController.getBButton() && xboxController.getAButton() && xboxController.getBumper(Hand.kLeft));
     resetHood.whenPressed(() -> hood.resetEnc());
   }
 
@@ -299,25 +318,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(1.5, 1.5)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(swerveDrive.kinematics);
-
-    // An example trajectory to follow. All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(
-          new Translation2d(1, 1), 
-          new Translation2d(2, -1)
-        ),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(Math.PI)), config);
-        
-
-    String trajectoryJSON = "output/TestingPathWeaver.wpilib.json";
+    String trajectoryJSON = "output/TestCurve.wpilib.json";
     Trajectory trajectory = null;
     try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
@@ -326,20 +327,17 @@ public class RobotContainer {
       DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
     }
 
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(exampleTrajectory,
-        swerveDrive::getPose, // Functional interface to feed supplier
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory,
+        swerveDrive::getPose,
         swerveDrive.kinematics,
-
         // Position controllers
-        new PIDController(.5, 0, 0), new PIDController(.5, 0, 0),
-        new ProfiledPIDController(.5, 0, 0, new TrapezoidProfile.Constraints(Math.PI, Math.PI)),
-
+        new PIDController(0.85, 0.001, 0.20), // x (forward/backwards)
+        new PIDController(0.85, 0.001, 0.20), // y (side to side)
+        new ProfiledPIDController(1.75, 0.001, 0.20, new TrapezoidProfile.Constraints(Math.PI, Math.PI)), // theta (rotation)
         swerveDrive::setModuleStates,
-
         swerveDrive
     );
 
-    // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> swerveDrive.stop());
   }
 }

@@ -23,12 +23,11 @@ public class Climber extends SubsystemBase {
    */
 
   private CANSparkMax telescope;
-  private CANEncoder telescopeEnc;
+  //private CANEncoder telescopeEnc;
   private Solenoid pto;
   
   public Climber() {
     telescope = new CANSparkMax(RobotMap.TELESCOPE, MotorType.kBrushless);
-    telescopeEnc = telescope.getEncoder();
     pto = new Solenoid(RobotMap.PTO);
     setPTO(false);
 

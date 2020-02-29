@@ -72,7 +72,7 @@ public class CPManipulator extends SubsystemBase {
 
     tab.addNumber("Current Color", () -> currentColorSignature);
     tab.addNumber("Dist", this::distToCenter);
-    tab.addNumber("Position", this::getPosition);
+    //tab.addNumber("Position", this::getPosition);
     tab.addNumber("Dist to Game Color", () -> distToColor(gameColor));
     tab.addNumber("X Dist", this::xDist);
     tab.addNumber("X coord", this::centerX);

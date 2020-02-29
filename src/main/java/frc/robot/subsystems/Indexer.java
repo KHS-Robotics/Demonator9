@@ -120,8 +120,8 @@ public class Indexer extends SubsystemBase {
 
   public void incrementBall() {
     numBalls++;
-    if(numBalls > 4) {
-      numBalls = 4;
+    if(numBalls > 5) {
+      numBalls = 5;
     }
   }
 

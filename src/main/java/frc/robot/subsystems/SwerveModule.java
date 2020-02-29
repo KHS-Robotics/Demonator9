@@ -90,10 +90,10 @@ public class SwerveModule extends SubsystemBase {
     setDetection = new DigitalInput(digitalInputPort);
 
     var tab = Shuffleboard.getTab(name + " Module");
-    tab.addNumber("Angle (Deg)", this::getAngle);
+    //tab.addNumber("Angle (Deg)", this::getAngle);
     tab.addNumber("Setpoint (Deg)", pivotPID::getSetpoint);
     tab.addNumber("Error (Deg)", pivotPID::getPositionError);
-    tab.addNumber("Speed mps", driveEncoder::getVelocity);
+    //tab.addNumber("Speed mps", driveEncoder::getVelocity);
     tab.addBoolean("atSetpoint", pivotPID::atSetpoint);
     tab.addBoolean("isFlipped", () -> isFlipped);
     tab.addBoolean("isCenter", () -> !this.setDetection.get());

@@ -61,11 +61,11 @@ public class Constants {
   public static final double TARGET_I = 0.001;
   public static final double TARGET_D = 0.0001;
 
-  public static final double HOOD_P = 0.1; 
+  public static final double HOOD_P = 0.1;
   public static final double HOOD_I = 0.0;
   public static final double HOOD_D = 0.0; 
 
-  public static final double SHOOTER_P = 0.00035;
+  public static final double SHOOTER_P = 0.00045;
   public static final double SHOOTER_I = 0.000001;
   public static final double SHOOTER_D = 0.01;
   public static final double SHOOTER_FF = 1.0 / 6000.0;

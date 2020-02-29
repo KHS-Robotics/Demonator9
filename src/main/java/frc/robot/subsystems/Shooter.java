@@ -27,7 +27,7 @@ public class Shooter extends SubsystemBase {
   
   private CANSparkMax leader, follower;
   private CANPIDController shooterPid;
-  private CANEncoder leaderEnc, followerEnc;
+  private CANEncoder leaderEnc;
 
   private double shooterPidSetpoint;
   private boolean isClimbing, coastMode;
@@ -40,7 +40,6 @@ public class Shooter extends SubsystemBase {
     shooterPid = leader.getPIDController();
 
     leaderEnc = leader.getEncoder();
-    followerEnc = follower.getEncoder();
 
     setShooterPidF(Constants.SHOOTER_P, Constants.SHOOTER_I, Constants.SHOOTER_D, Constants.SHOOTER_FF);
 
@@ -49,13 +48,13 @@ public class Shooter extends SubsystemBase {
 
     leader.setIdleMode(IdleMode.kCoast);
     follower.setIdleMode(IdleMode.kCoast);
+    coastMode = true;
     
     var tab = Shuffleboard.getTab("Shooter");
     tab.addNumber("Leader Speed", leaderEnc::getVelocity);
-    tab.addNumber("Follower Speed", followerEnc::getVelocity);
     tab.addNumber("Shooter Setpoint", () -> shooterPidSetpoint);
     tab.addNumber("Shooter Error", () -> shooterPidSetpoint - leaderEnc.getVelocity());
-    tab.addBoolean("At Setpoint", () -> atSetpoint(-4500));
+    //tab.addBoolean("At Setpoint", () -> atSetpoint(-4500));
     tab.addBoolean("Is Climbing", () -> isClimbing);
     tab.addNumber("Current", () -> getCurrent());
   }
