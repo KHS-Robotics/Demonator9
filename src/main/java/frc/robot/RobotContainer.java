@@ -193,8 +193,14 @@ public class RobotContainer {
     releaseShooter.whenPressed(() -> shooter.stop(), shooter);
 
     Button manualShoot = new Button(() -> switchbox.shoot() && !switchbox.guide());
-    manualShoot.whenPressed(new RampShooter(-3000).alongWith(new HoldHoodAngle())
-        .andThen(new Shoot(-3000).alongWith(new SetIndexer(0.45, -3000))));
+    manualShoot.whenPressed(
+      new RampShooter(-3000)
+      .alongWith(new HoldHoodAngle())
+      .andThen(
+        new Shoot(-3000)
+        .alongWith(new SetIndexer(0.45, -3000))
+      )
+    );
     manualShoot.whenReleased(() -> {
       shooter.stop();
       hood.stop();
@@ -206,15 +212,14 @@ public class RobotContainer {
      * !switchbox.shooterOverride() && switchbox.shoot());
      * shootWithVisionClose.whenPressed( new AngleHoodToTarget() .alongWith(new
      * RampShooter(-3000)) .andThen(new Shoot(-3000).alongWith(new
-     * SetIndexer(0.45))) ); shootWithVisionClose.whenReleased(() -> {
+     * SetIndexer(0.45, -3000))) ); shootWithVisionClose.whenReleased(() -> {
      * shooter.stop(); hood.stop(); indexer.stop(); }, shooter, hood, indexer);
      */
     Button trenchShoot = new Button(() -> switchbox.shoot() && switchbox.guide());
     trenchShoot.whenPressed(
-        new RampShooter(-4500)
-          .andThen(new Shoot(-4500))
-          .alongWith(new SetIndexer(0.45, -4500))
-          );
+      new RampShooter(-4500)
+      .andThen(new Shoot(-4500).alongWith(new SetIndexer(0.45, -4500)))
+    );
     trenchShoot.whenReleased(() -> {
       shooter.stop();
       hood.stop();
