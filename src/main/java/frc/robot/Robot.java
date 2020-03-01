@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    Limelight.setLedMode(LightMode.eOn);
+    Limelight.setLedMode(LightMode.eOff);
   }
 
   @Override
@@ -75,7 +75,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    //Limelight.setLedMode(LightMode.eOff);
+    Limelight.setLedMode(LightMode.eOff);
     RobotContainer.hood.hoodMode(true);
     RobotContainer.CPManipulator.brakeMode(true);
 

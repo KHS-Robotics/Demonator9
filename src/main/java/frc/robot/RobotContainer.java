@@ -210,9 +210,6 @@ public class RobotContainer {
       hood.stop();
       indexer.stop();
     }, shooter, hood, indexer);
-
-    Button limelightOn = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot());
-    limelightOn.whenReleased(() -> Limelight.setLedMode(LightMode.eOff));
     
     Button shootWithVisionClose = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() < -0.5);
     shootWithVisionClose.whenPressed(
