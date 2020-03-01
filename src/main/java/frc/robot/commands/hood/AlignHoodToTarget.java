@@ -10,6 +10,7 @@ package frc.robot.commands.hood;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.vision.Limelight;
+import frc.robot.vision.Limelight.LightMode;
 import frc.robot.vision.table.InterpolatingDouble;
 import frc.robot.vision.table.InterpolatingTreeMap;
 
@@ -43,8 +44,9 @@ public class AlignHoodToTarget extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    Limelight.setLedMode(LightMode.eOn);
     ty = Limelight.getTy();
-    
+
     if (ty < -0.5) {
       InterpolatingDouble result = lowHoodAngleTable.getInterpolated(new InterpolatingDouble(ty));
       if (result != null) {

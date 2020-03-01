@@ -65,6 +65,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.vision.Limelight;
+import frc.robot.vision.Limelight.LightMode;
 import io.github.pseudoresonance.pixy2api.Pixy2;
 import io.github.pseudoresonance.pixy2api.links.SPILink;
 
@@ -210,6 +211,8 @@ public class RobotContainer {
       indexer.stop();
     }, shooter, hood, indexer);
 
+    Button limelightOn = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot());
+    limelightOn.whenReleased(() -> Limelight.setLedMode(LightMode.eOff));
     
     Button shootWithVisionClose = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() < -0.5);
     shootWithVisionClose.whenPressed(
