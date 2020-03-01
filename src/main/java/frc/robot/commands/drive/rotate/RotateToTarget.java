@@ -31,7 +31,7 @@ public class RotateToTarget extends CommandBase {
 
   @Override
   public void execute() {
-    RobotContainer.swerveDrive.rotateToAngleInPlace(RobotContainer.swerveDrive.getYaw() - Limelight.getTx());
+    RobotContainer.swerveDrive.rotateToAngleInPlace(RobotContainer.swerveDrive.getYaw() - Limelight.getTx() - 1);
   }
 
   @Override

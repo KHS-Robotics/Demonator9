@@ -41,8 +41,13 @@ public class DriveSwerveWithXbox extends CommandBase {
     // positive value when we pull to the left (remember, CCW is positive in
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.
-    var rot = RobotContainer.swerveDrive.sensControl(-RobotContainer.xboxController.getX(GenericHID.Hand.kRight)) * SwerveDrive.kMaxAngularSpeed;
 
+    //Deadband on new controller
+    double rot = 0;
+    if(Math.abs(RobotContainer.xboxController.getX(GenericHID.Hand.kRight)) > 0.05) {
+      rot = RobotContainer.swerveDrive.sensControl(-RobotContainer.xboxController.getX(GenericHID.Hand.kRight)) * SwerveDrive.kMaxAngularSpeed;
+    }
+    
     fieldRelative = (!RobotContainer.xboxController.getBumper(GenericHID.Hand.kLeft));
     RobotContainer.swerveDrive.drive(xSpeed, ySpeed, rot, fieldRelative);
 

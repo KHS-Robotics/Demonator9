@@ -36,7 +36,7 @@ public class RotateToTargetWhileDriving extends CommandBase {
   @Override
   public void execute() {
     if(Limelight.isTarget()) {
-      angle = RobotContainer.swerveDrive.getYaw() - Limelight.getTx();
+      angle = RobotContainer.swerveDrive.getYaw() - Limelight.getTx() - 1;
     } else {
       angle = 0;
     }

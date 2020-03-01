@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -34,6 +35,7 @@ import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
@@ -149,7 +151,7 @@ public class RobotContainer {
     holdAngle.whenHeld(new HoldAngleWhileDriving());
 
     Button moveHood = new Button(() -> switchbox.shooterOverride() && !switchbox.shoot());
-    moveHood.whileHeld(() -> hood.moveHood(switchbox.getHoodSpeed()), hood);
+    moveHood.whileHeld(() -> hood.setHood(SmartDashboard.getNumber("Hood Angle", 0)), hood);
     moveHood.whenReleased(() -> hood.moveHood(0), hood);
 
     Button controlPanel = new Button(switchbox::controlPanelOverride);
@@ -226,7 +228,7 @@ public class RobotContainer {
       indexer.stop();
     }, shooter, hood, indexer);
     trenchShoot.whenPressed(new SetHoodAngle(25).andThen(
-      new InstantCommand(() -> hood.moveHood(0.02), hood).withTimeout(0.75).andThen(
+      new RunCommand(() -> hood.moveHood(0.02), hood).withTimeout(0.75).andThen(
       new HoldHoodAngle()))
     );
 

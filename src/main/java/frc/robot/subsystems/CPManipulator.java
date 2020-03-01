@@ -51,7 +51,7 @@ public class CPManipulator extends SubsystemBase {
     motor = new CANSparkMax(RobotMap.MANIPULATOR, MotorType.kBrushless);
     motorEnc = motor.getEncoder();
     motorPid = motor.getPIDController();
-
+    
     motorPid.setP(Constants.CP_MANIPULATOR_P);
     motorPid.setI(Constants.CP_MANIPULATOR_I);
     motorPid.setD(Constants.CP_MANIPULATOR_D);
