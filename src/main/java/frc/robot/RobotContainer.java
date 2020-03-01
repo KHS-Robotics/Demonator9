@@ -50,6 +50,7 @@ import frc.robot.commands.indexer.ControlIndexer;
 import frc.robot.commands.indexer.IndexBall;
 import frc.robot.commands.indexer.SetIndexer;
 import frc.robot.commands.pid.TargetPIDTuner;
+import frc.robot.commands.hood.AlignHoodToTarget;
 import frc.robot.commands.hood.HoldHoodAngle;
 import frc.robot.commands.hood.MoveHood;
 import frc.robot.commands.hood.MoveHoodDown;
@@ -63,7 +64,7 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
-
+import frc.robot.vision.Limelight;
 import io.github.pseudoresonance.pixy2api.Pixy2;
 import io.github.pseudoresonance.pixy2api.links.SPILink;
 
@@ -194,7 +195,7 @@ public class RobotContainer {
     Button releaseShooter = new Button(() -> !switchbox.rampShooter());
     releaseShooter.whenPressed(() -> shooter.stop(), shooter);
 
-    Button manualShoot = new Button(() -> switchbox.shoot() && !switchbox.guide());
+    Button manualShoot = new Button(() -> switchbox.shoot() && !switchbox.guide() && switchbox.shooterOverride());
     manualShoot.whenPressed(
       new RampShooter(-3000)
       .alongWith(new HoldHoodAngle())
@@ -209,14 +210,40 @@ public class RobotContainer {
       indexer.stop();
     }, shooter, hood, indexer);
 
-    /*
-     * Button shootWithVisionClose = new Button(() -> !switchbox.guide() &&
-     * !switchbox.shooterOverride() && switchbox.shoot());
-     * shootWithVisionClose.whenPressed( new AngleHoodToTarget() .alongWith(new
-     * RampShooter(-3000)) .andThen(new Shoot(-3000).alongWith(new
-     * SetIndexer(0.45, -3000))) ); shootWithVisionClose.whenReleased(() -> {
-     * shooter.stop(); hood.stop(); indexer.stop(); }, shooter, hood, indexer);
-     */
+    
+    Button shootWithVisionClose = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() < -0.5);
+    shootWithVisionClose.whenPressed(
+      new AlignHoodToTarget().alongWith(new RampShooter(-2800))
+      .andThen(new Shoot(-2800).alongWith(new SetIndexer(0.45, -2800)))
+    ); 
+    shootWithVisionClose.whenReleased(() -> {
+     shooter.stop(); 
+     hood.stop(); 
+     indexer.stop(); 
+    }, shooter, hood, indexer);
+
+    Button shootWithVisionMedium = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && (Limelight.getTy() <= 12.2 || Limelight.getTy() >= -0.5));
+    shootWithVisionMedium.whenPressed(
+      new AlignHoodToTarget().alongWith(new RampShooter(-3000))
+      .andThen(new Shoot(-3000).alongWith(new SetIndexer(0.45, -3000)))
+    ); 
+    shootWithVisionMedium.whenReleased(() -> {
+     shooter.stop(); 
+     hood.stop(); 
+     indexer.stop(); 
+    }, shooter, hood, indexer);
+
+    Button shootWithVisionFar = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() > 12.2);
+    shootWithVisionFar.whenPressed(
+      new AlignHoodToTarget().alongWith(new RampShooter(-3300))
+      .andThen(new Shoot(-3300).alongWith(new SetIndexer(0.45, -3300)))
+    ); 
+    shootWithVisionFar.whenReleased(() -> {
+     shooter.stop(); 
+     hood.stop(); 
+     indexer.stop(); 
+    }, shooter, hood, indexer);
+
     Button trenchShoot = new Button(() -> switchbox.shoot() && switchbox.guide());
     trenchShoot.whenPressed(
       new RampShooter(-3800)

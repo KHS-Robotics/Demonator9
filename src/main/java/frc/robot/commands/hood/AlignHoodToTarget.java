@@ -9,6 +9,7 @@ package frc.robot.commands.hood;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.vision.Limelight;
 import frc.robot.vision.table.InterpolatingDouble;
 import frc.robot.vision.table.InterpolatingTreeMap;
 
@@ -23,10 +24,10 @@ public class AlignHoodToTarget extends CommandBase {
     hoodAngleTable.put(new InterpolatingDouble(3.5), new InterpolatingDouble(20.5));
     hoodAngleTable.put(new InterpolatingDouble(0.5), new InterpolatingDouble(21.33));
 
-    //Low
+    // Low
     lowHoodAngleTable.put(new InterpolatingDouble(12.6), new InterpolatingDouble(19.4));
 
-    //High
+    // High
     highHoodAngleTable.put(new InterpolatingDouble(-3.3), new InterpolatingDouble(21.9));
   }
 
@@ -35,19 +36,36 @@ public class AlignHoodToTarget extends CommandBase {
   /**
    * Creates a new AlignHoodToTarget.
    */
-  public AlignHoodToTarget(double key) {
+  public AlignHoodToTarget() {
     addRequirements(RobotContainer.hood);
-    ty = key;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    InterpolatingDouble result = hoodAngleTable.getInterpolated(new InterpolatingDouble(ty));
-    if (result != null) {
-      RobotContainer.hood.setHood(result.value);
+    ty = Limelight.getTy();
+    
+    if (ty < -0.5) {
+      InterpolatingDouble result = lowHoodAngleTable.getInterpolated(new InterpolatingDouble(ty));
+      if (result != null) {
+        RobotContainer.hood.setHood(result.value);
+      } else {
+        RobotContainer.hood.setHood(RobotContainer.hood.getPosition());
+      }
+    } else if (ty > 12.2) {
+      InterpolatingDouble result = highHoodAngleTable.getInterpolated(new InterpolatingDouble(ty));
+      if (result != null) {
+        RobotContainer.hood.setHood(result.value);
+      } else {
+        RobotContainer.hood.setHood(RobotContainer.hood.getPosition());
+      }
     } else {
-      RobotContainer.hood.setHood(0);
+      InterpolatingDouble result = hoodAngleTable.getInterpolated(new InterpolatingDouble(ty));
+      if (result != null) {
+        RobotContainer.hood.setHood(result.value);
+      } else {
+        RobotContainer.hood.setHood(RobotContainer.hood.getPosition());
+      }
     }
   }
 
