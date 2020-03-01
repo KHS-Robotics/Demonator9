@@ -187,7 +187,7 @@ public class RobotContainer {
     rampShooterWithoutGuide.whenPressed(new RampShooter(-3000));
 
     Button rampShooterWithGuide = new Button(() -> switchbox.rampShooter() && switchbox.guide());
-    rampShooterWithGuide.whenPressed(new RampShooter(-4500));
+    rampShooterWithGuide.whenPressed(new RampShooter(-3800));
 
     Button releaseShooter = new Button(() -> !switchbox.rampShooter());
     releaseShooter.whenPressed(() -> shooter.stop(), shooter);
@@ -217,8 +217,8 @@ public class RobotContainer {
      */
     Button trenchShoot = new Button(() -> switchbox.shoot() && switchbox.guide());
     trenchShoot.whenPressed(
-      new RampShooter(-4500)
-      .andThen(new Shoot(-4500).alongWith(new SetIndexer(0.45, -4500)))
+      new RampShooter(-3800)
+      .andThen(new Shoot(-3800).alongWith(new SetIndexer(0.45, -3800)))
     );
     trenchShoot.whenReleased(() -> {
       shooter.stop();
