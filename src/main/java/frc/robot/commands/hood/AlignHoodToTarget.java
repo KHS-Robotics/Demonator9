@@ -48,14 +48,14 @@ public class AlignHoodToTarget extends CommandBase {
     ty = Limelight.getTy();
 
     if (ty < -0.5) {
-      InterpolatingDouble result = lowHoodAngleTable.getInterpolated(new InterpolatingDouble(ty));
+      InterpolatingDouble result = highHoodAngleTable.getInterpolated(new InterpolatingDouble(ty));
       if (result != null) {
         RobotContainer.hood.setHood(result.value);
       } else {
         RobotContainer.hood.setHood(RobotContainer.hood.getPosition());
       }
     } else if (ty > 12.2) {
-      InterpolatingDouble result = highHoodAngleTable.getInterpolated(new InterpolatingDouble(ty));
+      InterpolatingDouble result = lowHoodAngleTable.getInterpolated(new InterpolatingDouble(ty));
       if (result != null) {
         RobotContainer.hood.setHood(result.value);
       } else {
