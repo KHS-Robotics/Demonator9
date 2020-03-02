@@ -211,10 +211,10 @@ public class RobotContainer {
       indexer.stop();
     }, shooter, hood, indexer);
     
-    Button shootWithVisionClose = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() < -0.5);
+    Button shootWithVisionClose = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() > 12.2);
     shootWithVisionClose.whenPressed(
       new AlignHoodToTarget().alongWith(new RampShooter(-2800))
-      .andThen(new Shoot(-2800).alongWith(new SetIndexer(0.45, -2800)))
+      .andThen(new Shoot(-2800).andThen(new HoldHoodAngle().alongWith(new SetIndexer(0.45, -2800))))
     ); 
     shootWithVisionClose.whenReleased(() -> {
      shooter.stop(); 
@@ -225,7 +225,7 @@ public class RobotContainer {
     Button shootWithVisionMedium = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && (Limelight.getTy() <= 12.2 || Limelight.getTy() >= -0.5));
     shootWithVisionMedium.whenPressed(
       new AlignHoodToTarget().alongWith(new RampShooter(-3000))
-      .andThen(new Shoot(-3000).alongWith(new SetIndexer(0.45, -3000)))
+      .andThen(new Shoot(-3000).alongWith(new HoldHoodAngle().alongWith(new SetIndexer(0.45, -3000))))
     ); 
     shootWithVisionMedium.whenReleased(() -> {
      shooter.stop(); 
@@ -233,10 +233,10 @@ public class RobotContainer {
      indexer.stop(); 
     }, shooter, hood, indexer);
 
-    Button shootWithVisionFar = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() > 12.2);
+    Button shootWithVisionFar = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() < -0.5);
     shootWithVisionFar.whenPressed(
       new AlignHoodToTarget().alongWith(new RampShooter(-3300))
-      .andThen(new Shoot(-3300).alongWith(new SetIndexer(0.45, -3300)))
+      .andThen(new Shoot(-3300).alongWith(new HoldHoodAngle().alongWith(new SetIndexer(0.45, -3300))))
     ); 
     shootWithVisionFar.whenReleased(() -> {
      shooter.stop(); 

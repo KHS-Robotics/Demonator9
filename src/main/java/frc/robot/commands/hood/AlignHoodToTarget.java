@@ -21,9 +21,10 @@ public class AlignHoodToTarget extends CommandBase {
 
   static {
     hoodAngleTable.put(new InterpolatingDouble(0.07), new InterpolatingDouble(20.3));
+    hoodAngleTable.put(new InterpolatingDouble(0.5), new InterpolatingDouble(21.33));
     hoodAngleTable.put(new InterpolatingDouble(2.0), new InterpolatingDouble(20.5));
     hoodAngleTable.put(new InterpolatingDouble(3.5), new InterpolatingDouble(20.5));
-    hoodAngleTable.put(new InterpolatingDouble(0.5), new InterpolatingDouble(21.33));
+    hoodAngleTable.put(new InterpolatingDouble(10.9), new InterpolatingDouble(19.1));
 
     // Low
     lowHoodAngleTable.put(new InterpolatingDouble(12.6), new InterpolatingDouble(19.4));
