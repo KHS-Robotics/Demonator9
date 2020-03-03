@@ -198,62 +198,45 @@ public class RobotContainer {
 
     Button manualShoot = new Button(() -> switchbox.shoot() && !switchbox.guide() && switchbox.shooterOverride());
     manualShoot.whenPressed(
-      new RampShooter(-3000)
+      new RampShooter(-2800)
       .alongWith(new HoldHoodAngle())
       .andThen(
-        new Shoot(-3000)
-        .alongWith(new SetIndexer(0.45, -3000))
+        new Shoot(-2800)
+        .alongWith(new SetIndexer(0.45, -2800))
       )
     );
-    manualShoot.whenReleased(() -> {
-      shooter.stop();
-      hood.stop();
-      indexer.stop();
-    }, shooter, hood, indexer);
     
     Button shootWithVisionClose = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() > 12.2);
     shootWithVisionClose.whenPressed(
       new AlignHoodToTarget().alongWith(new RampShooter(-2800))
-      .andThen(new Shoot(-2800).andThen(new HoldHoodAngle().alongWith(new SetIndexer(0.45, -2800))))
+      .andThen(new Shoot(-2800).alongWith(new HoldHoodAngle().alongWith(new SetIndexer(0.45, -2800))))
     ); 
-    shootWithVisionClose.whenReleased(() -> {
-     shooter.stop(); 
-     hood.stop(); 
-     indexer.stop(); 
-    }, shooter, hood, indexer);
+    
+    Button shooterStop = new Button(() -> switchbox.shoot());
+    shooterStop.whenReleased(() -> {
+      intake.stop();
+      shooter.stop(); 
+      hood.stop(); 
+      indexer.stop(); 
+    }, shooter, hood, indexer, intake);
 
-    Button shootWithVisionMedium = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && (Limelight.getTy() <= 12.2 || Limelight.getTy() >= -0.5));
+    Button shootWithVisionMedium = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && (Limelight.getTy() <= 12.2 && Limelight.getTy() >= -0.5));
     shootWithVisionMedium.whenPressed(
       new AlignHoodToTarget().alongWith(new RampShooter(-3000))
       .andThen(new Shoot(-3000).alongWith(new HoldHoodAngle().alongWith(new SetIndexer(0.45, -3000))))
-    ); 
-    shootWithVisionMedium.whenReleased(() -> {
-     shooter.stop(); 
-     hood.stop(); 
-     indexer.stop(); 
-    }, shooter, hood, indexer);
+    );
 
     Button shootWithVisionFar = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() < -0.5);
     shootWithVisionFar.whenPressed(
       new AlignHoodToTarget().alongWith(new RampShooter(-3300))
       .andThen(new Shoot(-3300).alongWith(new HoldHoodAngle().alongWith(new SetIndexer(0.45, -3300))))
-    ); 
-    shootWithVisionFar.whenReleased(() -> {
-     shooter.stop(); 
-     hood.stop(); 
-     indexer.stop(); 
-    }, shooter, hood, indexer);
+    );
 
     Button trenchShoot = new Button(() -> switchbox.shoot() && switchbox.guide());
     trenchShoot.whenPressed(
       new RampShooter(-3800)
       .andThen(new Shoot(-3800).alongWith(new SetIndexer(0.45, -3800)))
     );
-    trenchShoot.whenReleased(() -> {
-      shooter.stop();
-      hood.stop();
-      indexer.stop();
-    }, shooter, hood, indexer);
     trenchShoot.whenPressed(new SetHoodAngle(25).andThen(
       new RunCommand(() -> hood.moveHood(0.02), hood).withTimeout(0.75).andThen(
       new HoldHoodAngle()))
@@ -261,7 +244,7 @@ public class RobotContainer {
 
     Button collapseAll = new Button(() -> xboxController.getXButton());
     collapseAll.whenPressed(
-        new SetHoodAngle(0).alongWith(new InstantCommand(() -> CPManipulator.setPosition(false), CPManipulator)));
+        new SetHoodAngle(1.2).alongWith(new InstantCommand(() -> CPManipulator.setPosition(false), CPManipulator)));
 
     Button raiseCPM = new Button(() -> xboxController.getBumper(Hand.kRight));
     raiseCPM.whenPressed(() -> CPManipulator.setPosition(true), CPManipulator);
@@ -340,10 +323,6 @@ public class RobotContainer {
       SwerveDrive.kMaxSpeed = 3.5;
       SwerveDrive.kMaxAngularSpeed = Math.PI;
     });
-
-    Button resetHood = new Button(
-        () -> xboxController.getBButton() && xboxController.getAButton() && xboxController.getBumper(Hand.kLeft));
-    resetHood.whenPressed(() -> hood.resetEnc());
   }
 
   /**

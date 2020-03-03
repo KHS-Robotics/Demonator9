@@ -47,7 +47,7 @@ public class Hood extends SubsystemBase {
   }
 
   public void setHoodPid(double p, double i, double d) {
-    hoodPid.setOutputRange(-0.4, 0.5);
+    hoodPid.setOutputRange(-0.35, 0.6);
     hoodPid.setP(p);
     hoodPid.setI(i);
     hoodPid.setD(d);
@@ -83,7 +83,7 @@ public class Hood extends SubsystemBase {
   }
 
   public boolean atSetpoint() {
-    return Math.abs(hoodPidSetpoint - getPosition()) < 0.5;
+    return Math.abs(hoodPidSetpoint - getPosition()) < 0.05;
   }
 
   @Override

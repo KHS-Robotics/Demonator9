@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,6 +46,11 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     Limelight.setLedMode(LightMode.eOff);
+    
+    if(RobotContainer.xboxController.getBButton() && RobotContainer.xboxController.getAButton() && RobotContainer.xboxController.getBumper(Hand.kLeft)) {
+      RobotContainer.hood.resetEnc();
+      RobotContainer.hood.stop();
+    }
   }
 
   @Override
