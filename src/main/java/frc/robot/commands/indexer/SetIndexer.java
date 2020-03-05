@@ -35,7 +35,7 @@ public class SetIndexer extends CommandBase {
       RobotContainer.indexer.stop();
     }
 
-    if(RobotContainer.indexer.getNumBalls() < 4) {
+    if(RobotContainer.indexer.getNumBalls() < 3) {
       RobotContainer.intake.intake();
     } else {
       RobotContainer.intake.stop();

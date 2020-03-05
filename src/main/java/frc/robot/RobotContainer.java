@@ -196,6 +196,16 @@ public class RobotContainer {
     Button releaseShooter = new Button(() -> !switchbox.rampShooter());
     releaseShooter.whenPressed(() -> shooter.stop(), shooter);
 
+    Button targetZoneShot = new Button(() -> switchbox.shoot() && false);
+    targetZoneShot.whenPressed(
+      new SetHoodAngle(7.5)
+      .alongWith(new Shoot(-2800))
+      .andThen(new HoldHoodAngle())
+        .alongWith(new Shoot(-2800)
+        .alongWith(new SetIndexer(0.45, -2800))
+      )
+    );
+
     Button manualShoot = new Button(() -> switchbox.shoot() && !switchbox.guide() && switchbox.shooterOverride());
     manualShoot.whenPressed(
       new RampShooter(-2800)
@@ -237,7 +247,7 @@ public class RobotContainer {
       new RampShooter(-3800)
       .andThen(new Shoot(-3800).alongWith(new SetIndexer(0.45, -3800)))
     );
-    trenchShoot.whenPressed(new SetHoodAngle(25).andThen(
+    trenchShoot.whenPressed(new SetHoodAngle(23).andThen(
       new RunCommand(() -> hood.moveHood(0.02), hood).withTimeout(0.75).andThen(
       new HoldHoodAngle()))
     );
@@ -296,13 +306,13 @@ public class RobotContainer {
     Button positionControl = new Button(() -> switchbox.positionControl() && xboxController.getBButton());
 
     Button moveIndexer = new Button(() -> (indexer.getSwitch1() && Math.abs(switchbox.getIndexSpeed()) < 0.05 && !switchbox.shoot()));
-    moveIndexer.whenPressed(new IndexBall().withTimeout(1));
+    moveIndexer.whenPressed(new IndexBall().withTimeout(2));
 
     Button incrementBall = new Button(() -> indexer.getSwitch5() && Math.abs(switchbox.getIndexSpeed()) < 0.05 && !switchbox.shoot());
     incrementBall.whenPressed(() -> RobotContainer.indexer.incrementBall());
  
     Button moveHoodForBall = new Button(() -> indexer.getNumBalls() >= 4);
-    moveHoodForBall.whenPressed(() -> hood.setHood(25), hood);
+    moveHoodForBall.whenPressed(() -> hood.setHood(22), hood);
 
     Button decreaseBall = new Button(() -> (indexer.getSwitch5() && (switchbox.getIndexSpeed() < -0.05)));
     decreaseBall.whenPressed(indexer::decrementBall);
