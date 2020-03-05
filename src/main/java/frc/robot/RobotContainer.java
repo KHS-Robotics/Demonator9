@@ -9,7 +9,6 @@ package frc.robot;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -23,17 +22,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -198,10 +191,10 @@ public class RobotContainer {
 
     Button targetZoneShot = new Button(() -> switchbox.shoot() && false);
     targetZoneShot.whenPressed(
-      new SetHoodAngle(7.5)
-      .alongWith(new Shoot(-2800))
-      .andThen(new HoldHoodAngle())
-        .alongWith(new Shoot(-2800)
+      new RampShooter(-2800)
+      .alongWith(new SetHoodAngle(7.5))
+      .andThen(
+        new Shoot(-2800)
         .alongWith(new SetIndexer(0.45, -2800))
       )
     );
@@ -219,7 +212,7 @@ public class RobotContainer {
     Button shootWithVisionClose = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() > 12.2);
     shootWithVisionClose.whenPressed(
       new AlignHoodToTarget().alongWith(new RampShooter(-2800))
-      .andThen(new Shoot(-2800).alongWith(new HoldHoodAngle().alongWith(new SetIndexer(0.45, -2800))))
+      .andThen(new Shoot(-2800).alongWith(new SetIndexer(0.45, -2800)))
     ); 
     
     Button shooterStop = new Button(() -> switchbox.shoot());
@@ -233,13 +226,13 @@ public class RobotContainer {
     Button shootWithVisionMedium = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && (Limelight.getTy() <= 12.2 && Limelight.getTy() >= -0.5));
     shootWithVisionMedium.whenPressed(
       new AlignHoodToTarget().alongWith(new RampShooter(-3000))
-      .andThen(new Shoot(-3000).alongWith(new HoldHoodAngle().alongWith(new SetIndexer(0.45, -3000))))
+      .andThen(new Shoot(-3000).alongWith(new SetIndexer(0.45, -3000)))
     );
 
     Button shootWithVisionFar = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() < -0.5);
     shootWithVisionFar.whenPressed(
       new AlignHoodToTarget().alongWith(new RampShooter(-3300))
-      .andThen(new Shoot(-3300).alongWith(new HoldHoodAngle().alongWith(new SetIndexer(0.45, -3300))))
+      .andThen(new Shoot(-3300).alongWith(new SetIndexer(0.45, -3300)))
     );
 
     Button trenchShoot = new Button(() -> switchbox.shoot() && switchbox.guide());
@@ -259,13 +252,13 @@ public class RobotContainer {
     Button raiseCPM = new Button(() -> xboxController.getBumper(Hand.kRight));
     raiseCPM.whenPressed(() -> CPManipulator.setPosition(true), CPManipulator);
 
-    Button intakeDown = new Button(switchbox::intakeDown);
+    Button intakeDown = new Button(() -> switchbox.intakeDown() && RobotState.isOperatorControl());
     intakeDown.whenPressed(intake::down, intake);
     intakeDown.whenPressed(new WaitCommand(0.5).andThen(() -> intake.setOff()));
     intakeDown.whenReleased(intake::up, intake);
     intakeDown.whenReleased(new WaitCommand(0.5).andThen(() -> intake.setOff()));
 
-    Button intaking = new Button(() -> (switchbox.intake() && !(indexer.getNumBalls() > 4 && indexer.getSwitch5())));
+    Button intaking = new Button(() -> (switchbox.intake() && !switchbox.shoot() && !(indexer.getNumBalls() > 4 && indexer.getSwitch5())));
     intaking.whileHeld(() -> {
       if (IndexBall.isIndexing()) {
         intake.intake(0.175);
@@ -354,9 +347,9 @@ public class RobotContainer {
         swerveDrive::getPose,
         swerveDrive.kinematics,
         // Position controllers
-        new PIDController(0.85, 0.001, 0.20), // x (forward/backwards)
-        new PIDController(0.85, 0.001, 0.20), // y (side to side)
-        new ProfiledPIDController(1.75, 0.001, 0.20, new TrapezoidProfile.Constraints(Math.PI, Math.PI)), // theta (rotation)
+        new PIDController(0.7, 0.005, 0.40), // x (forward/backwards)
+        new PIDController(0.85, 0.001, 0.40), // y (side to side)
+        new ProfiledPIDController(1.75, 0.001, 0.40, new TrapezoidProfile.Constraints(Math.PI, Math.PI)), // theta (rotation)
         swerveDrive::setModuleStates,
         swerveDrive
     );

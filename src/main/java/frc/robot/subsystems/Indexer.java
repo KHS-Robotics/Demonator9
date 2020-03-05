@@ -118,6 +118,12 @@ public class Indexer extends SubsystemBase {
     return Math.abs(motorEnc.getPosition() - setpoint) < .5;
   }
 
+  public void setNumBalls(int num) {
+    if(num >= 0 && num <= 5) {
+      numBalls = num;
+    }
+  }
+
   public void incrementBall() {
     numBalls++;
     if(numBalls > 5) {

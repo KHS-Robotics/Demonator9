@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.vision.Limelight.LightMode;
 import frc.robot.commands.CenterSwerveModules;
@@ -61,12 +63,20 @@ public class Robot extends TimedRobot {
 
     RobotContainer.swerveDrive.resetNavx(new Pose2d(0,0,Rotation2d.fromDegrees(0)));
 
+    RobotContainer.shooter.setShooter(-3000);
+    
+    Command putIntakeDown = new InstantCommand(() -> RobotContainer.intake.down())
+    .andThen(new WaitCommand(.5)
+    .andThen(() -> RobotContainer.intake.setOff()));
+
+    RobotContainer.indexer.setNumBalls(3);
+
     Command desiredAuton = robotContainer.getAutonomousCommand();
 
     if(!CenterSwerveModules.hasCalibrated()) {
-      autonCommand = new CenterSwerveModules().andThen(desiredAuton);
+      autonCommand = new CenterSwerveModules().alongWith(putIntakeDown).andThen(desiredAuton);
     } else {
-      autonCommand = desiredAuton;
+      autonCommand = putIntakeDown.alongWith(desiredAuton);
     }
 
     if(autonCommand != null) {
@@ -84,6 +94,7 @@ public class Robot extends TimedRobot {
     Limelight.setLedMode(LightMode.eOff);
     RobotContainer.hood.hoodMode(true);
     RobotContainer.CPManipulator.brakeMode(true);
+    RobotContainer.shooter.stop();
 
     if(autonCommand != null) {
       autonCommand.cancel();
