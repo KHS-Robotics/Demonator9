@@ -76,7 +76,7 @@ public class PixyCam {
 		Pixy2 pixy = RobotContainer.pixy;
 		pixy.getCCC().getBlocks(true, 255, 8);
 
-		blocks = pixy.getCCC().getBlocks();
+		blocks = pixy.getCCC().getBlockCache();
 
 		returnBlocks.clear();
 
