@@ -9,7 +9,6 @@ package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
 
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -20,19 +19,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
   private CANSparkMax motor;
-  private CANEncoder motorEnc;
   private DoubleSolenoid solenoid;
   private double speed = 0.3; //.7 made belt slip off
 
   public Intake() {
     motor = new CANSparkMax(RobotMap.INTAKE, MotorType.kBrushless);
     solenoid = new DoubleSolenoid(RobotMap.INTAKE_SOLENOID_1, RobotMap.INTAKE_SOLENOID_2);
-    motorEnc = motor.getEncoder();
 
     motor.setIdleMode(IdleMode.kBrake);
-
-    //motorEnc.setPositionConversionFactor(1.0 / 2.0);
-    motorEnc.setVelocityConversionFactor(1.0 / 2.0);
 
     //var tab = Shuffleboard.getTab("Intake");
     //tab.addNumber("Velocity", motorEnc::getVelocity);
