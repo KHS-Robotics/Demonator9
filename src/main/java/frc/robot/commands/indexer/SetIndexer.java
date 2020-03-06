@@ -31,15 +31,16 @@ public class SetIndexer extends CommandBase {
   public void execute() {
     if(RobotContainer.shooter.atSetpoint(shooterSpeed)) {
       RobotContainer.indexer.setMotor(speed);
+
+      if(RobotContainer.indexer.getNumBalls() < 3) {
+        RobotContainer.intake.intake();
+      }
+      
     } else {
       RobotContainer.indexer.stop();
-    }
-
-    if(RobotContainer.indexer.getNumBalls() < 3) {
-      RobotContainer.intake.intake();
-    } else {
       RobotContainer.intake.stop();
     }
+
   }
 
   // Called once the command ends or is interrupted.

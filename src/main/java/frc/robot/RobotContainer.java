@@ -186,8 +186,8 @@ public class RobotContainer {
     Button rampShooterWithGuide = new Button(() -> switchbox.rampShooter() && switchbox.guide());
     rampShooterWithGuide.whenPressed(new RampShooter(-3800));
 
-    Button releaseShooter = new Button(() -> !switchbox.rampShooter());
-    releaseShooter.whenPressed(() -> shooter.stop(), shooter);
+    Button releaseShooter = new Button(() -> switchbox.rampShooter());
+    releaseShooter.whenReleased(() -> shooter.stop(), shooter);
 
     Button targetZoneShot = new Button(() -> switchbox.shoot() && false);
     targetZoneShot.whenPressed(

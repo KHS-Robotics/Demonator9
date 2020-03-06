@@ -20,26 +20,20 @@ public class AlignHoodToTarget extends CommandBase {
   static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> highHoodAngleTable = new InterpolatingTreeMap<>();
 
   static {
-    hoodAngleTable.put(new InterpolatingDouble(0.07), new InterpolatingDouble(20.3));
-    hoodAngleTable.put(new InterpolatingDouble(0.5), new InterpolatingDouble(21.33));
-    hoodAngleTable.put(new InterpolatingDouble(2.0), new InterpolatingDouble(20.5));
-    hoodAngleTable.put(new InterpolatingDouble(3.5), new InterpolatingDouble(20.5));
+    hoodAngleTable.put(new InterpolatingDouble(0.0), new InterpolatingDouble(21.55));
     hoodAngleTable.put(new InterpolatingDouble(4.6), new InterpolatingDouble(20.8));
     hoodAngleTable.put(new InterpolatingDouble(8.3), new InterpolatingDouble(20.2));
-    hoodAngleTable.put(new InterpolatingDouble(9.2), new InterpolatingDouble(20.7));
-    //hoodAngleTable.put(new InterpolatingDouble(10.9), new InterpolatingDouble(19.1));
-    hoodAngleTable.put(new InterpolatingDouble(11.5), new InterpolatingDouble(20.6));
-
+    hoodAngleTable.put(new InterpolatingDouble(12.0), new InterpolatingDouble(19.6));
+    
     // Low
-    lowHoodAngleTable.put(new InterpolatingDouble(12.6), new InterpolatingDouble(20.25));
-    lowHoodAngleTable.put(new InterpolatingDouble(13.7), new InterpolatingDouble(19.8));
-    lowHoodAngleTable.put(new InterpolatingDouble(17.2), new InterpolatingDouble(19.66));
-    lowHoodAngleTable.put(new InterpolatingDouble(17.6), new InterpolatingDouble(19.25));
-
+    lowHoodAngleTable.put(new InterpolatingDouble(12.2), new InterpolatingDouble(20.0));
+    lowHoodAngleTable.put(new InterpolatingDouble(17.6), new InterpolatingDouble(19.0));
 
     // High
+    highHoodAngleTable.put(new InterpolatingDouble(-0.5), new InterpolatingDouble(21.7));
     highHoodAngleTable.put(new InterpolatingDouble(-3.3), new InterpolatingDouble(21.9));
-  }
+    highHoodAngleTable.put(new InterpolatingDouble(-6.1), new InterpolatingDouble(22.1));
+    }
 
   double ty;
 
