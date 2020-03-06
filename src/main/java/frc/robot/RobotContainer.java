@@ -7,29 +7,19 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -42,11 +32,8 @@ import frc.robot.commands.drive.rotate.RotateToTargetWhileDriving;
 import frc.robot.commands.indexer.ControlIndexer;
 import frc.robot.commands.indexer.IndexBall;
 import frc.robot.commands.indexer.SetIndexer;
-import frc.robot.commands.pid.TargetPIDTuner;
 import frc.robot.commands.hood.AlignHoodToTarget;
 import frc.robot.commands.hood.HoldHoodAngle;
-import frc.robot.commands.hood.MoveHood;
-import frc.robot.commands.hood.MoveHoodDown;
 import frc.robot.commands.hood.SetHoodAngle;
 import frc.robot.commands.shooter.RampShooter;
 import frc.robot.commands.shooter.Shoot;
@@ -58,7 +45,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.vision.Limelight;
-import frc.robot.vision.Limelight.LightMode;
 import io.github.pseudoresonance.pixy2api.Pixy2;
 import io.github.pseudoresonance.pixy2api.links.SPILink;
 
@@ -146,7 +132,7 @@ public class RobotContainer {
     holdAngle.whenHeld(new HoldAngleWhileDriving());
 
     Button moveHood = new Button(() -> switchbox.shooterOverride() && !switchbox.shoot());
-    moveHood.whileHeld(() -> hood.setHood(SmartDashboard.getNumber("Hood Angle", 0)), hood);
+    moveHood.whileHeld(() -> hood.moveHood(switchbox.getHoodSpeed()), hood);
     moveHood.whenReleased(() -> hood.moveHood(0), hood);
 
     Button controlPanel = new Button(switchbox::controlPanelOverride);
@@ -240,7 +226,7 @@ public class RobotContainer {
       new RampShooter(-3800)
       .andThen(new Shoot(-3800).alongWith(new SetIndexer(0.45, -3800)))
     );
-    trenchShoot.whenPressed(new SetHoodAngle(23).andThen(
+    trenchShoot.whenPressed(new SetHoodAngle(25).andThen(
       new RunCommand(() -> hood.moveHood(0.02), hood).withTimeout(0.75).andThen(
       new HoldHoodAngle()))
     );
@@ -333,27 +319,46 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    String trajectoryJSON = "output/TestCurve.wpilib.json";
-    Trajectory trajectory = null;
-    try {
-      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-    } catch (IOException ex) {
-      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+  public Command getAutonomousCommand(int id) {
+    Command autonCommand;
+
+    switch (id) {
+      case 0: 
+        autonCommand = AutoCommands.loadPathweaverTrajectory("output/MoveOffInitiation.wpilib.json").andThen(() -> swerveDrive.stop());
+      break;
+
+      case 1:
+        autonCommand = AutoCommands.sixBallAuto();
+      break;
+
+      case 2:
+        autonCommand = AutoCommands.shootOffInit();
+      break;
+
+      default:
+      autonCommand = null;
     }
+    return autonCommand;
+  }
 
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory,
-        swerveDrive::getPose,
-        swerveDrive.kinematics,
-        // Position controllers
-        new PIDController(0.7, 0.005, 0.40), // x (forward/backwards)
-        new PIDController(0.85, 0.001, 0.40), // y (side to side)
-        new ProfiledPIDController(1.75, 0.001, 0.40, new TrapezoidProfile.Constraints(Math.PI, Math.PI)), // theta (rotation)
-        swerveDrive::setModuleStates,
-        swerveDrive
-    );
+  public Pose2d getStartingPose(int id) {
+    Pose2d startPose;
+    switch (id) {
+      case 0: 
+        startPose = new Pose2d(3.43, -4.5, Rotation2d.fromDegrees(0));
+      break;
 
-    return swerveControllerCommand.andThen(() -> swerveDrive.stop());
+      case 1:
+        startPose = new Pose2d(3.43, 0, Rotation2d.fromDegrees(0));
+      break;
+
+      case 2:
+        startPose = new Pose2d(3.43, -3.4, Rotation2d.fromDegrees(0));
+      break;
+
+      default:
+        startPose = new Pose2d();
+    }
+    return startPose;
   }
 }

@@ -41,10 +41,6 @@ public class SwerveModule extends SubsystemBase {
 
   private final PIDController pivotPID;
   private final DigitalInput setDetection;
-  // private final CANPIDController pivotPID;
-
-  // TODO: speed control for driving
-  //private final PIDController drivePIDController = new PIDController(0, 0, 0);
 
   /**
    * Constructs a Swerve Module.
@@ -142,9 +138,7 @@ public class SwerveModule extends SubsystemBase {
    */
   public void setDesiredState(SwerveModuleState state, boolean useShortestPath) {
     pivotMotor.set(MathUtil.clamp(pivotPID.calculate(getAngle(), useShortestPath ? calculateShortestPath(state.angle.getDegrees()) : state.angle.getDegrees()), -1, 1));
-    //driveMotor.set(state.speedMetersPerSecond*(isInverted ? -1 : 1)*(isFlipped && useShortestPath ? -1 : 1));
     drivePID.setReference(state.speedMetersPerSecond*(isInverted ? -1 : 1)*(isFlipped && useShortestPath ? -1 : 1), ControlType.kVelocity); 
-    // TODO: speed control for driving
   }
 
   /**

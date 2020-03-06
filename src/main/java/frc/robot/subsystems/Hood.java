@@ -15,7 +15,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
@@ -43,7 +42,6 @@ public class Hood extends SubsystemBase {
     tab.addNumber("Hood Position", hoodEnc::getPosition);
     tab.addNumber("Hood Setpoint", () -> hoodPidSetpoint);
     tab.addNumber("Hood Error", () -> hoodPidSetpoint - hoodEnc.getPosition());
-    SmartDashboard.putNumber("Hood Angle", 0);
   }
 
   public void setHoodPid(double p, double i, double d) {

@@ -9,8 +9,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -57,11 +55,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    int id = 1;
+
     Limelight.setLedMode(LightMode.eOn);
     RobotContainer.hood.hoodMode(true);
     RobotContainer.CPManipulator.brakeMode(true);
 
-    RobotContainer.swerveDrive.resetNavx(new Pose2d(0,0,Rotation2d.fromDegrees(0)));
+    RobotContainer.swerveDrive.resetNavx(robotContainer.getStartingPose(id));
 
     RobotContainer.shooter.setShooter(-3000);
     
@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
 
     RobotContainer.indexer.setNumBalls(3);
 
-    Command desiredAuton = robotContainer.getAutonomousCommand().alongWith(putIntakeDown);
+    Command desiredAuton = robotContainer.getAutonomousCommand(id).alongWith(putIntakeDown);
 
     if(!CenterSwerveModules.hasCalibrated()) {
       autonCommand = new CenterSwerveModules().andThen(desiredAuton);
