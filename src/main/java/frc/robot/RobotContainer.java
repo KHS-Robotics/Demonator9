@@ -145,15 +145,17 @@ public class RobotContainer {
       // CPManipulator.setPosition(false);
     }, CPManipulator);
 
-    Button setPto = new Button(switchbox::engagePTO);
+    Button setPto = new Button(() -> switchbox.engagePTO() && RobotContainer.shooter.atSetpoint(0));
     setPto.whenPressed(() -> {
       climber.setPTO(true);
+      shooter.setBrake(true);
       servo.set(0.8);
-    }, climber);
+    }, climber, shooter);
     setPto.whenReleased(() -> {
       climber.setPTO(false);
+      shooter.setBrake(false);
       servo.set(0.225);
-    }, climber);
+    }, climber, shooter);
 
     Button telescope = new Button(() -> switchbox.engagePTO());
     telescope.whileHeld(() -> {
@@ -345,15 +347,15 @@ public class RobotContainer {
     Pose2d startPose;
     switch (id) {
       case 0: 
-        startPose = new Pose2d(3.43, -4.5, Rotation2d.fromDegrees(0));
+        startPose = new Pose2d(12.6, -5, Rotation2d.fromDegrees(0));
       break;
 
       case 1:
-        startPose = new Pose2d(3.43, 0, Rotation2d.fromDegrees(0));
+        startPose = new Pose2d(3.43, -5, Rotation2d.fromDegrees(0));
       break;
 
       case 2:
-        startPose = new Pose2d(3.43, -3.4, Rotation2d.fromDegrees(0));
+        startPose = new Pose2d(12.57, -7.88, Rotation2d.fromDegrees(0));
       break;
 
       default:

@@ -73,6 +73,6 @@ public class AutoCommands {
       new WaitCommand(0.20)
       .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000)))
       .andThen(new ShootAuto(-3000).withTimeout(5).alongWith(new SetIndexerAuto(0.45, -3000)))
-      .andThen(loadPathweaverTrajectory("output/ShootOffInit.wpilib.json"));
+      .andThen(loadPathweaverTrajectory("output/MoveOffInitiation.wpilib.json"));
   }
 }

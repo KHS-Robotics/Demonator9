@@ -66,9 +66,7 @@ public class Shooter extends SubsystemBase {
 
   public void setShooter(double speed) {
     if(!coastMode) {
-      leader.setIdleMode(IdleMode.kCoast);
-      follower.setIdleMode(IdleMode.kCoast);
-      coastMode = true;
+      setBrake(true);
     }
     shooterPid.setReference(speed, ControlType.kVelocity);
     shooterPidSetpoint = speed;
@@ -94,12 +92,16 @@ public class Shooter extends SubsystemBase {
     shooterPid.setFF(ff);
   }
 
+  public void setBrake(boolean brake) {
+    leader.setIdleMode(brake ? IdleMode.kBrake : IdleMode.kCoast);
+    follower.setIdleMode(brake ? IdleMode.kBrake : IdleMode.kCoast);
+    coastMode = !brake;
+  }
+
   public void enableForClimb() {
     isClimbing = true;
     leader.set(1);
-    leader.setIdleMode(IdleMode.kBrake);
-    follower.setIdleMode(IdleMode.kBrake);
-    coastMode = false;
+    setBrake(true);
   }
 
   public void disableForClimb() {
