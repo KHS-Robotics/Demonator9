@@ -71,8 +71,17 @@ public class Robot extends TimedRobot {
 
     RobotContainer.indexer.setNumBalls(3);
 
-    Command desiredAuton = robotContainer.getAutonomousCommand(id).alongWith(putIntakeDown);
-
+    Command desiredAuton = 
+      robotContainer.getAutonomousCommand(id)
+      .alongWith(putIntakeDown)
+      .andThen(() -> {
+        RobotContainer.swerveDrive.stop();
+        RobotContainer.shooter.stop();
+        RobotContainer.hood.stop();
+        RobotContainer.indexer.stop();
+        RobotContainer.intake.stop();
+    }, RobotContainer.swerveDrive, RobotContainer.shooter, RobotContainer.hood, RobotContainer.indexer, RobotContainer.intake);
+    
     if(!CenterSwerveModules.hasCalibrated()) {
       autonCommand = new CenterSwerveModules().andThen(desiredAuton);
     } else {
