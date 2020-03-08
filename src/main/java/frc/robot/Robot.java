@@ -28,7 +28,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robotContainer = new RobotContainer();
-
     AutoCommands.autoInit();
   }
 
