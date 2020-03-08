@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj.Servo;
 import frc.robot.commands.CenterSwerveModules;
 import frc.robot.commands.drive.DriveSwerveWithXbox;
 import frc.robot.commands.drive.rotate.HoldAngleWhileDriving;
+import frc.robot.commands.drive.rotate.RotateToAngleWhileDriving;
 import frc.robot.commands.drive.rotate.RotateToTargetWhileDriving;
 import frc.robot.commands.indexer.ControlIndexer;
 import frc.robot.commands.indexer.IndexBall;
@@ -185,7 +186,7 @@ public class RobotContainer {
       .alongWith(new SetHoodAngle(7.5))
       .andThen(
         new Shoot(-2800)
-        .alongWith(new SetIndexer(0.45, -2800))
+        .alongWith(new SetIndexer(0.65, -2800))
       )
     );
 
@@ -195,14 +196,14 @@ public class RobotContainer {
       .alongWith(new HoldHoodAngle())
       .andThen(
         new Shoot(-2800)
-        .alongWith(new SetIndexer(0.45, -2800))
+        .alongWith(new SetIndexer(0.65, -2800))
       )
     );
     
     Button shootWithVisionClose = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() > 12.2);
     shootWithVisionClose.whenPressed(
       new AlignHoodToTarget().alongWith(new RampShooter(-2800))
-      .andThen(new Shoot(-2800).alongWith(new SetIndexer(0.45, -2800)))
+      .andThen(new Shoot(-2800).alongWith(new SetIndexer(0.65, -2800)))
     ); 
     
     Button shooterStop = new Button(() -> switchbox.shoot());
@@ -216,19 +217,19 @@ public class RobotContainer {
     Button shootWithVisionMedium = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && (Limelight.getTy() <= 12.2 && Limelight.getTy() >= -0.5));
     shootWithVisionMedium.whenPressed(
       new AlignHoodToTarget().alongWith(new RampShooter(-3000))
-      .andThen(new Shoot(-3000).alongWith(new SetIndexer(0.45, -3000)))
+      .andThen(new Shoot(-3000).alongWith(new SetIndexer(0.65, -3000)))
     );
 
     Button shootWithVisionFar = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() < -0.5);
     shootWithVisionFar.whenPressed(
       new AlignHoodToTarget().alongWith(new RampShooter(-3300))
-      .andThen(new Shoot(-3300).alongWith(new SetIndexer(0.45, -3300)))
+      .andThen(new Shoot(-3300).alongWith(new SetIndexer(0.65, -3300)))
     );
 
     Button trenchShoot = new Button(() -> switchbox.shoot() && switchbox.guide());
     trenchShoot.whenPressed(
       new RampShooter(-3500)
-      .andThen(new Shoot(-3500).alongWith(new SetIndexer(0.45, -3500)))
+      .andThen(new Shoot(-3500).alongWith(new SetIndexer(0.65, -3500)))
     );
     trenchShoot.whenPressed(new SetHoodAngle(23).andThen(
       new RunCommand(() -> hood.moveHood(0.02), hood).withTimeout(0.75).andThen(
@@ -237,7 +238,7 @@ public class RobotContainer {
 
     Button collapseAll = new Button(() -> xboxController.getXButton());
     collapseAll.whenPressed(
-        new SetHoodAngle(1.2).alongWith(new InstantCommand(() -> CPManipulator.setPosition(false), CPManipulator)));
+        new SetHoodAngle(.8).alongWith(new InstantCommand(() -> CPManipulator.setPosition(false), CPManipulator)));
 
     Button raiseCPM = new Button(() -> xboxController.getBumper(Hand.kRight));
     raiseCPM.whenPressed(() -> CPManipulator.setPosition(true), CPManipulator);
@@ -267,6 +268,9 @@ public class RobotContainer {
     Button guideButton = new Button(switchbox::guide);
     guideButton.whenPressed(() -> guide.set(true));
     guideButton.whenReleased(() -> guide.set(false));
+
+    Button goToTrenchguideAngle = new Button(() -> xboxController.getStickButton(Hand.kRight));
+    goToTrenchguideAngle.whenHeld(new RotateToAngleWhileDriving(9.55));
 
     Button rotationControl = new Button(() -> switchbox.rotationControl() && xboxController.getBButton());
     rotationControl.whenPressed(() -> {
@@ -328,7 +332,7 @@ public class RobotContainer {
 
     switch (id) {
       case 0: 
-        autonCommand = AutoCommands.loadPathweaverTrajectory("output/MoveOffInit.wpilib.json");
+        autonCommand = AutoCommands.loadPathweaverTrajectory("MoveOffInit");
       break;
 
       case 1:

@@ -22,7 +22,7 @@ import frc.robot.vision.Limelight;
 
 
 public class Robot extends TimedRobot {
-  int id = 0;
+  int id = 1;
   RobotContainer robotContainer;
 
   Command autonCommand;
@@ -43,6 +43,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
+    Limelight.setLedMode(LightMode.eOn);
+
     RobotContainer.hood.hoodMode(false);
     RobotContainer.CPManipulator.brakeMode(false);
     SwerveDrive.kMaxSpeed = 3.5;
@@ -50,9 +52,7 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {
-    Limelight.setLedMode(LightMode.eOff);
-    
+  public void disabledPeriodic() {    
     if(RobotContainer.xboxController.getBButton() && RobotContainer.xboxController.getAButton() && RobotContainer.xboxController.getBumper(Hand.kLeft)) {
       RobotContainer.hood.resetEnc();
       RobotContainer.hood.stop();
@@ -76,6 +76,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    if(autonCommand != null) {
+      autonCommand.cancel();
+      CommandScheduler.getInstance().run();
+    }
+
     Limelight.setLedMode(LightMode.eOn);
     RobotContainer.hood.hoodMode(true);
     RobotContainer.CPManipulator.brakeMode(true);

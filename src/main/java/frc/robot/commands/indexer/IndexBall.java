@@ -36,7 +36,7 @@ public class IndexBall extends CommandBase {
     double speed = .45;//(RobotContainer.indexer.getNumBalls() < 3) ? .45 : .45;
     if (!toggled) {
       RobotContainer.indexer.setMotor(speed);
-      if (!RobotContainer.indexer.getSwitch1() && System.currentTimeMillis() - startTime > 300) {
+      if (!RobotContainer.indexer.getSwitch1() && System.currentTimeMillis() - startTime > 200) {
         toggled = true;
       }
     } else if (RobotContainer.indexer.getNumBalls() == 4 && RobotContainer.indexer.getSwitch3()) {

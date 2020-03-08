@@ -26,6 +26,7 @@ import frc.robot.commands.hood.AlignHoodToTarget;
 import frc.robot.commands.indexer.SetIndexerAuto;
 import frc.robot.commands.shooter.RampShooter;
 import frc.robot.commands.shooter.ShootAuto;
+import frc.robot.vision.Limelight;
 
 /**
  * Class to generate commands for autonomous movement
@@ -79,18 +80,18 @@ public class AutoCommands {
     return 
       wallLineUp
       .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000)))
-      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5))
-      .andThen(frontTrench)
+      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.65, -3000)).alongWith(new RotateToTarget()).withTimeout(5))
+      .andThen(frontTrench.withTimeout(3.5))
       .andThen(pickTrench)
       .andThen(returnTrench)//.alongWith(new WaitCommand(0.5))?
       .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()))  
-      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5));
+      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.65, -3000)).alongWith(new RotateToTarget()).withTimeout(5));
   }
 
   public static Command shootOffInit()  {
     return 
       new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000))
-      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5))
+      .andThen(new ShootAuto(-2800).alongWith(new SetIndexerAuto(0.65, -3000)).alongWith(new RotateToTarget()).withTimeout(5))
       .andThen(moveOffInit);
   }
 
@@ -99,11 +100,11 @@ public class AutoCommands {
       steal
       .andThen(moveFromSteal)
       .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000)))
-      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5))
+      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.65, -3000)).alongWith(new RotateToTarget()).withTimeout(5))
       .andThen(pick3Rendevous)
       .andThen(shootFromRendevous)
       .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000)))
-      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5));
+      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.65, -3000)).alongWith(new RotateToTarget()).withTimeout(5));
   }
 
   public static Command steal5BallAuto()  {
@@ -111,6 +112,6 @@ public class AutoCommands {
       steal
       .andThen(moveFromSteal)
       .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000)))
-      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5));
+      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.65, -3000)).alongWith(new RotateToTarget()).withTimeout(5));
   }
 }
