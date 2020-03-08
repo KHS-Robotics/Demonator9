@@ -21,6 +21,7 @@ import frc.robot.vision.Limelight;
 
 
 public class Robot extends TimedRobot {
+  int id = 0;
   RobotContainer robotContainer;
 
   Command autonCommand;
@@ -52,12 +53,18 @@ public class Robot extends TimedRobot {
       RobotContainer.hood.resetEnc();
       RobotContainer.hood.stop();
     }
+
+    if(RobotContainer.switchbox.shoot()) {
+      id = 0;
+
+      id += (RobotContainer.switchbox.engagePTO()) ? 1 : 0;
+      id += (RobotContainer.switchbox.controlPanelOverride()) ? 2 : 0;
+      id += (RobotContainer.switchbox.shooterOverride()) ? 4 : 0;
+    }
   }
 
   @Override
   public void autonomousInit() {
-    int id = 2;
-
     Limelight.setLedMode(LightMode.eOn);
     RobotContainer.hood.hoodMode(true);
     RobotContainer.CPManipulator.brakeMode(true);
