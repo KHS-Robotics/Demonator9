@@ -98,4 +98,12 @@ public class AutoCommands {
       .andThen(shootFromRendevous)
       .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5));
   }
+
+  public static Command steal5BallAuto()  {
+    return 
+      steal
+      .andThen(moveFromSteal)
+      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000)))
+      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5));
+  }
 }

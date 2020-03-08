@@ -330,11 +330,19 @@ public class RobotContainer {
       break;
 
       case 1:
-        autonCommand = AutoCommands.sixBallAuto();
+        autonCommand = AutoCommands.shootOffInit();
       break;
 
       case 2:
-        autonCommand = AutoCommands.shootOffInit();
+        autonCommand = AutoCommands.sixBallAuto();
+      break;
+
+      case 3:
+        autonCommand = AutoCommands.steal5BallAuto();
+      break;
+
+      case 4:
+        autonCommand = AutoCommands.steal8BallAuto();
       break;
 
       default:
@@ -351,11 +359,19 @@ public class RobotContainer {
       break;
 
       case 1:
-        startPose = new Pose2d(12.57, -7.88, Rotation2d.fromDegrees(0));
+        startPose = new Pose2d(12.6, -5, Rotation2d.fromDegrees(0));
       break;
 
       case 2:
-        startPose = new Pose2d(12.6, -5, Rotation2d.fromDegrees(0));
+        startPose = new Pose2d(12.57, -7.88, Rotation2d.fromDegrees(0));
+      break;
+
+      case 3:
+        startPose = new Pose2d(12.57, -.33, Rotation2d.fromDegrees(0));
+      break;
+
+      case 4:
+        startPose = new Pose2d(12.57, -.33, Rotation2d.fromDegrees(0));
       break;
 
       default:
