@@ -28,6 +28,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robotContainer = new RobotContainer();
+
+    AutoCommands.autoInit();
   }
 
   @Override
@@ -55,7 +57,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    int id = 1;
+    int id = 2;
 
     Limelight.setLedMode(LightMode.eOn);
     RobotContainer.hood.hoodMode(true);
@@ -64,6 +66,7 @@ public class Robot extends TimedRobot {
     RobotContainer.swerveDrive.resetNavx(robotContainer.getStartingPose(id));
 
     RobotContainer.shooter.setShooter(-3000);
+    RobotContainer.intake.intake();
     
     Command putIntakeDown = new InstantCommand(() -> RobotContainer.intake.down())
     .andThen(new WaitCommand(.5)
@@ -81,7 +84,7 @@ public class Robot extends TimedRobot {
         RobotContainer.indexer.stop();
         RobotContainer.intake.stop();
     }, RobotContainer.swerveDrive, RobotContainer.shooter, RobotContainer.hood, RobotContainer.indexer, RobotContainer.intake);
-    
+
     if(!CenterSwerveModules.hasCalibrated()) {
       autonCommand = new CenterSwerveModules().andThen(desiredAuton);
     } else {
@@ -104,6 +107,7 @@ public class Robot extends TimedRobot {
     RobotContainer.hood.hoodMode(true);
     RobotContainer.CPManipulator.brakeMode(true);
     RobotContainer.shooter.stop();
+    RobotContainer.intake.stop();
 
     if(autonCommand != null) {
       autonCommand.cancel();
@@ -117,6 +121,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
+    RobotContainer.intake.stop();
   }
 
   @Override

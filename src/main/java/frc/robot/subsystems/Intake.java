@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Intake extends SubsystemBase {
   private CANSparkMax motor;
   private DoubleSolenoid solenoid;
-  private double speed = 0.3; //.7 made belt slip off
+  private double speed = 0.5; //.7 made belt slip off
 
   public Intake() {
     motor = new CANSparkMax(RobotMap.INTAKE, MotorType.kBrushless);
@@ -57,11 +57,11 @@ public class Intake extends SubsystemBase {
 	}
 
   public void down() {
-    solenoid.set(Value.kForward);
+    solenoid.set(Value.kReverse);
   } 
 
   public void up() {
-    solenoid.set(Value.kReverse);
+    solenoid.set(Value.kForward);
   }
 
   public void setOff() {

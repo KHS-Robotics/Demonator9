@@ -12,7 +12,7 @@ import frc.robot.RobotContainer;
 
 public class Shoot extends CommandBase {
   boolean drop = false;
-  final double THRESHOLD = 23;
+  final double THRESHOLD = 23.0;
 
   /**
    * Creates a new shoot.

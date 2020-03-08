@@ -17,6 +17,12 @@ public class SetIndexerAuto extends SetIndexer {
     super(speed, shootingSpeed);
   }
 
+  @Override
+  public void end(boolean interupted) {
+    RobotContainer.indexer.stop();
+    RobotContainer.intake.intake();
+  }
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {

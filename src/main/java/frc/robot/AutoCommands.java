@@ -32,6 +32,15 @@ import frc.robot.commands.shooter.ShootAuto;
  * Add your docs here.
  */
 public class AutoCommands {
+  public static SwerveControllerCommand wallLineUp, frontTrench, pickTrench, returnTrench, moveOffInit;
+
+  public static void autoInit() {
+    wallLineUp = loadPathweaverTrajectory("output/WallLineUp.wpilib.json");
+    frontTrench = loadPathweaverTrajectory("output/FrontOffset.wpilib.json");
+    pickTrench = loadPathweaverTrajectory("output/PickTrench.wpilib.json");
+    returnTrench = loadPathweaverTrajectory("output/ReturnFromLastBall.wpilib.json");
+    moveOffInit = loadPathweaverTrajectory("output/MoveOffInit.wpilib.json");
+  }
     
   public static SwerveControllerCommand loadPathweaverTrajectory(String json) {
       Trajectory trajectory;
@@ -58,21 +67,21 @@ public class AutoCommands {
 
   public static Command sixBallAuto()  {
     return 
-      loadPathweaverTrajectory("output/WallLineUp.wpilib.json")
+      wallLineUp
       .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000)))
-      .andThen(new ShootAuto(-3000).withTimeout(5).alongWith(new SetIndexerAuto(0.45, -3000)))
-      .andThen(loadPathweaverTrajectory("output/FrontOffset.wpilib.json"))
-      .andThen(loadPathweaverTrajectory("output/PickupBallsTrench.wpilib.json").alongWith(new InstantCommand(() -> RobotContainer.intake.intake())))
-      .andThen(loadPathweaverTrajectory("output/ReturnFromLastBall.wpilib.json").alongWith(new WaitCommand(0.5).andThen(() -> RobotContainer.intake.stop())))
+      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5))
+      .andThen(frontTrench)
+      .andThen(pickTrench)
+      .andThen((returnTrench).alongWith(new WaitCommand(0.5)))
       .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()))  
-      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)));
+      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5));
   }
 
   public static Command shootOffInit()  {
     return 
-      new WaitCommand(0.20)
+      new WaitCommand(0.05)
       .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000)))
-      .andThen(new ShootAuto(-3000).withTimeout(5).alongWith(new SetIndexerAuto(0.45, -3000)))
-      .andThen(loadPathweaverTrajectory("output/MoveOffInitiation.wpilib.json"));
+      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5))
+      .andThen(moveOffInit);
   }
 }

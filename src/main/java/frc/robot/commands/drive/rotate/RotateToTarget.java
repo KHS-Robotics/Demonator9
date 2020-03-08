@@ -35,6 +35,11 @@ public class RotateToTarget extends CommandBase {
   }
 
   @Override
+  public void end(boolean interrupted) {
+    RobotContainer.swerveDrive.stop();
+  }
+
+  @Override
   public boolean isFinished() {
     return RobotContainer.swerveDrive.atSetpoint();
   }

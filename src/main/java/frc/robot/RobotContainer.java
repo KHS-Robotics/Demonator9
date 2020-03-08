@@ -145,7 +145,7 @@ public class RobotContainer {
       // CPManipulator.setPosition(false);
     }, CPManipulator);
 
-    Button setPto = new Button(() -> switchbox.engagePTO() && RobotContainer.shooter.atSetpoint(0));
+    Button setPto = new Button(() -> switchbox.engagePTO());// && RobotContainer.shooter.atSetpoint(0));
     setPto.whenPressed(() -> {
       climber.setPTO(true);
       shooter.setBrake(true);
@@ -225,10 +225,10 @@ public class RobotContainer {
 
     Button trenchShoot = new Button(() -> switchbox.shoot() && switchbox.guide());
     trenchShoot.whenPressed(
-      new RampShooter(-3800)
-      .andThen(new Shoot(-3800).alongWith(new SetIndexer(0.45, -3800)))
+      new RampShooter(-3500)
+      .andThen(new Shoot(-3500).alongWith(new SetIndexer(0.45, -3500)))
     );
-    trenchShoot.whenPressed(new SetHoodAngle(25).andThen(
+    trenchShoot.whenPressed(new SetHoodAngle(23).andThen(
       new RunCommand(() -> hood.moveHood(0.02), hood).withTimeout(0.75).andThen(
       new HoldHoodAngle()))
     );
@@ -326,7 +326,7 @@ public class RobotContainer {
 
     switch (id) {
       case 0: 
-        autonCommand = AutoCommands.loadPathweaverTrajectory("output/MoveOffInitiation.wpilib.json").andThen(() -> swerveDrive.stop());
+        autonCommand = AutoCommands.loadPathweaverTrajectory("output/MoveOffInit.wpilib.json");
       break;
 
       case 1:
@@ -351,11 +351,11 @@ public class RobotContainer {
       break;
 
       case 1:
-        startPose = new Pose2d(3.43, -5, Rotation2d.fromDegrees(0));
+        startPose = new Pose2d(12.57, -7.88, Rotation2d.fromDegrees(0));
       break;
 
       case 2:
-        startPose = new Pose2d(12.57, -7.88, Rotation2d.fromDegrees(0));
+        startPose = new Pose2d(12.6, -5, Rotation2d.fromDegrees(0));
       break;
 
       default:
