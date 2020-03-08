@@ -71,6 +71,9 @@ public class Indexer extends SubsystemBase {
     tab.addBoolean("Beam Break 3", input3::get);
     //tab.addBoolean("Beam Break 4", input4::get);
     tab.addBoolean("Beam Break 5", input5::get);
+
+    var matchTab = Shuffleboard.getTab("Match");
+    matchTab.addNumber("Num Balls", this::getNumBalls);
   }
 
   @Override

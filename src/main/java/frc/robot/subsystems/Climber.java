@@ -36,6 +36,9 @@ public class Climber extends SubsystemBase {
     // tab.addNumber("Raise Speed", () -> telescopeEnc.getVelocity());
     // tab.addNumber("Position", () -> telescopeEnc.getPosition());
     tab.addBoolean("PTO Engaged", pto::get);
+
+    var matchTab = Shuffleboard.getTab("Match");
+    matchTab.addBoolean("Climb", pto::get);
   }
 
   @Override

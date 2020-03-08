@@ -31,18 +31,25 @@ import frc.robot.commands.shooter.ShootAuto;
  * Class to generate commands for autonomous movement
  */
 public class AutoCommands {
+  private static boolean initialized = false;
   public static SwerveControllerCommand wallLineUp, frontTrench, pickTrench, returnTrench, moveOffInit, steal, moveFromSteal, pick3Rendevous, shootFromRendevous;
 
   public static void autoInit() {
-    wallLineUp = loadPathweaverTrajectory("WallLineUp");
-    frontTrench = loadPathweaverTrajectory("FrontOffset");
-    pickTrench = loadPathweaverTrajectory("PickTrench");
-    returnTrench = loadPathweaverTrajectory("ReturnFromLastBall");
-    moveOffInit = loadPathweaverTrajectory("MoveOffInit");
-    steal = loadPathweaverTrajectory("Steal");
-    moveFromSteal = loadPathweaverTrajectory("MoveFromSteal");
-    pick3Rendevous = loadPathweaverTrajectory("Pickup3Rendezvous");
-    shootFromRendevous = loadPathweaverTrajectory("MoveFromRendevous3");
+    if(!initialized) {
+      new Thread(() -> {
+        wallLineUp = loadPathweaverTrajectory("WallLineUp");
+        frontTrench = loadPathweaverTrajectory("FrontOffset");
+        pickTrench = loadPathweaverTrajectory("PickTrench");
+        returnTrench = loadPathweaverTrajectory("ReturnFromLastBall");
+        moveOffInit = loadPathweaverTrajectory("MoveOffInit");
+        steal = loadPathweaverTrajectory("Steal");
+        moveFromSteal = loadPathweaverTrajectory("MoveFromSteal");
+        pick3Rendevous = loadPathweaverTrajectory("Pickup3Rendezvous");
+        shootFromRendevous = loadPathweaverTrajectory("MoveFromRendevous3");
+      }).start();
+
+      initialized = true;
+    }
   }
     
   public static SwerveControllerCommand loadPathweaverTrajectory(String json) {
@@ -75,15 +82,14 @@ public class AutoCommands {
       .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5))
       .andThen(frontTrench)
       .andThen(pickTrench)
-      .andThen((returnTrench).alongWith(new WaitCommand(0.5)))
+      .andThen(returnTrench)//.alongWith(new WaitCommand(0.5))?
       .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()))  
       .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5));
   }
 
   public static Command shootOffInit()  {
     return 
-      new WaitCommand(0.05)
-      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000)))
+      new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000))
       .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5))
       .andThen(moveOffInit);
   }
@@ -96,6 +102,7 @@ public class AutoCommands {
       .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5))
       .andThen(pick3Rendevous)
       .andThen(shootFromRendevous)
+      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000)))
       .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5));
   }
 

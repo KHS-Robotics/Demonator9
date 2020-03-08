@@ -131,11 +131,11 @@ public class RobotContainer {
     Button holdAngle = new Button(() -> xboxController.getAButton());
     holdAngle.whenHeld(new HoldAngleWhileDriving());
 
-    Button moveHood = new Button(() -> switchbox.shooterOverride() && !switchbox.shoot());
+    Button moveHood = new Button(() -> switchbox.shooterOverride() && !switchbox.shoot() && RobotState.isOperatorControl());
     moveHood.whileHeld(() -> hood.moveHood(switchbox.getHoodSpeed()), hood);
     moveHood.whenReleased(() -> hood.moveHood(0), hood);
 
-    Button controlPanel = new Button(switchbox::controlPanelOverride);
+    Button controlPanel = new Button(() -> switchbox.controlPanelOverride() && RobotState.isOperatorControl());
     controlPanel.whileHeld(() -> {
       CPManipulator.spin(switchbox.getControlPanel());
       // CPManipulator.setPosition(true);
@@ -145,26 +145,28 @@ public class RobotContainer {
       // CPManipulator.setPosition(false);
     }, CPManipulator);
 
-    Button setPto = new Button(() -> switchbox.engagePTO());// && RobotContainer.shooter.atSetpoint(0));
-    setPto.whenPressed(() -> {
-      climber.setPTO(true);
+    Button wantsPto = new Button(() -> switchbox.engagePTO()  && RobotState.isOperatorControl());// && RobotContainer.shooter.atSetpoint(0));
+    wantsPto.whenPressed(() -> {
       shooter.setBrake(true);
       servo.set(0.8);
-    }, climber, shooter);
-    setPto.whenReleased(() -> {
-      climber.setPTO(false);
+    }, shooter);
+    wantsPto.whenReleased(() -> {
       shooter.setBrake(false);
       servo.set(0.225);
-    }, climber, shooter);
+    }, shooter);
 
-    Button telescope = new Button(() -> switchbox.engagePTO());
+    Button engagePTO = new Button(() -> switchbox.engagePTO() && RobotState.isOperatorControl() && shooter.canEngagePTO());
+    engagePTO.whenPressed(() -> climber.setPTO(true), climber, shooter);
+    engagePTO.whenReleased(() -> climber.setPTO(false), climber, shooter);
+
+    Button telescope = new Button(() -> switchbox.engagePTO() && RobotState.isOperatorControl());
     telescope.whileHeld(() -> {
       var speed = switchbox.getTelescopeSpeed();
       climber.setTelescope(Math.abs(speed) > 0.03 ? speed : 0.0);
     }, climber);
     telescope.whenReleased(() -> climber.setTelescope(0), climber);
 
-    Button startClimb = new Button(() -> (switchbox.engagePTO() && switchbox.climb()));
+    Button startClimb = new Button(() -> (switchbox.engagePTO() && switchbox.climb() && RobotState.isOperatorControl()));
     startClimb.whenPressed(shooter::enableForClimb, shooter, climber);
     startClimb.whenReleased(shooter::disableForClimb, shooter, climber);
 

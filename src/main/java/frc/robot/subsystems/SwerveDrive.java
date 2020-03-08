@@ -114,6 +114,9 @@ public class SwerveDrive extends SubsystemBase {
     tab.addNumber("Pose Norm", () -> this.getPose().getTranslation().getNorm());
     tab.addNumber("Pose Rotation", () -> this.getPose().getRotation().getDegrees());
     tab.addBoolean("Calibrated", CenterSwerveModules::hasCalibrated);
+
+    var matchTab = Shuffleboard.getTab("Match");
+    matchTab.addBoolean("Calibrated", CenterSwerveModules::hasCalibrated); 
   }
 
   /**

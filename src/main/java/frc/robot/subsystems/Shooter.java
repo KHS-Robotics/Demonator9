@@ -109,6 +109,10 @@ public class Shooter extends SubsystemBase {
     leader.set(0.0);
   }
 
+  public boolean canEngagePTO() {
+    return leaderEnc.getVelocity() > -100;
+  }
+
   public double getVertAngle() {
     return LIMELIGHT_ANGLE + Limelight.getTy();
   }
