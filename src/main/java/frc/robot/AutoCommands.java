@@ -31,7 +31,7 @@ import frc.robot.commands.shooter.ShootAuto;
  * Class to generate commands for autonomous movement
  */
 public class AutoCommands {
-  public static SwerveControllerCommand wallLineUp, frontTrench, pickTrench, returnTrench, moveOffInit, steal, moveFromSteal;
+  public static SwerveControllerCommand wallLineUp, frontTrench, pickTrench, returnTrench, moveOffInit, steal, moveFromSteal, pick3Rendevous, shootFromRendevous;
 
   public static void autoInit() {
     wallLineUp = loadPathweaverTrajectory("WallLineUp");
@@ -41,6 +41,8 @@ public class AutoCommands {
     moveOffInit = loadPathweaverTrajectory("MoveOffInit");
     steal = loadPathweaverTrajectory("Steal");
     moveFromSteal = loadPathweaverTrajectory("MoveFromSteal");
+    pick3Rendevous = loadPathweaverTrajectory("Pickup3Rendezvous");
+    shootFromRendevous = loadPathweaverTrajectory("MoveFromRendevous3");
   }
     
   public static SwerveControllerCommand loadPathweaverTrajectory(String json) {
@@ -86,11 +88,14 @@ public class AutoCommands {
       .andThen(moveOffInit);
   }
 
-  public static Command steal5BallAuto()  {
+  public static Command steal8BallAuto()  {
     return 
       steal
       .andThen(moveFromSteal)
       .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000)))
+      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5))
+      .andThen(pick3Rendevous)
+      .andThen(shootFromRendevous)
       .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.45, -3000)).alongWith(new RotateToTarget()).withTimeout(5));
   }
 }
