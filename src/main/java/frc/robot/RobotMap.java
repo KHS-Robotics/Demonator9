@@ -51,6 +51,7 @@ public class RobotMap {
   public static final int LIMIT_PORT_2 = 8;
   public static final int LIMIT_PORT_3 = 7; 
   public static final int LIMIT_PORT_5 = 6; 
+  public static final int LIMIT_PORT_DECREMENT = 5;
 
   public static final int GUIDE = 2;
   public static final int CAMERA_SERVO = 9;

@@ -7,33 +7,38 @@
 
 package frc.robot.commands.shooter;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class RampShooter extends CommandBase {
-  double speed;
+  DoubleSupplier speed;
   /**
    * Creates a new RampShooter.
    */
-  public RampShooter(double speed) {
+  public RampShooter(DoubleSupplier speed) {
     addRequirements(RobotContainer.shooter);
     this.speed = speed;
   }
 
   public RampShooter() {
     addRequirements(RobotContainer.shooter);
-    this.speed = -4500;
+    this.speed = () -> -4500;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.shooter.setShooter(speed);
+    RobotContainer.shooter.setShooter(speed.getAsDouble());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(Math.abs(RobotContainer.shooter.getSetpoint() - speed.getAsDouble()) > 1) {
+      RobotContainer.shooter.setShooter(speed.getAsDouble());
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -44,6 +49,6 @@ public class RampShooter extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.shooter.atSetpoint(speed);
+    return RobotContainer.shooter.atSetpoint(speed.getAsDouble());
   }
 }

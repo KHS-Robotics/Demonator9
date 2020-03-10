@@ -76,6 +76,10 @@ public class Shooter extends SubsystemBase {
     leader.set(speed);
   }
 
+  public double getSetpoint() {
+    return shooterPidSetpoint;
+  }
+
   public void stop() {
     leader.set(0.0);
     isClimbing = false;

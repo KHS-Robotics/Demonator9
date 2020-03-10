@@ -7,13 +7,15 @@
 
 package frc.robot.commands.shooter;
 
+import java.util.function.DoubleSupplier;
+
 import frc.robot.RobotContainer;
 
 public class ShootAuto extends Shoot {
   /**
    * Creates a new ShootAuto.
    */
-  public ShootAuto(double speed) {
+  public ShootAuto(DoubleSupplier speed) {
     super(speed);
   }
 

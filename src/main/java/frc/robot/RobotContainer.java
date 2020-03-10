@@ -172,38 +172,38 @@ public class RobotContainer {
     startClimb.whenReleased(shooter::disableForClimb, shooter, climber);
 
     Button rampShooterWithoutGuide = new Button(() -> switchbox.rampShooter() && !switchbox.guide());
-    rampShooterWithoutGuide.whenPressed(new RampShooter(-3000));
+    rampShooterWithoutGuide.whenPressed(new RampShooter(() -> -3000));
 
     Button rampShooterWithGuide = new Button(() -> switchbox.rampShooter() && switchbox.guide());
-    rampShooterWithGuide.whenPressed(new RampShooter(-3800));
+    rampShooterWithGuide.whenPressed(new RampShooter(() -> -3800));
 
     Button releaseShooter = new Button(() -> switchbox.rampShooter());
     releaseShooter.whenReleased(() -> shooter.stop(), shooter);
 
     Button targetZoneShot = new Button(() -> switchbox.shoot() && false);
     targetZoneShot.whenPressed(
-      new RampShooter(-2800)
+      new RampShooter(() -> -2800)
       .alongWith(new SetHoodAngle(7.5))
       .andThen(
-        new Shoot(-2800)
-        .alongWith(new SetIndexer(0.65, -2800))
+        new Shoot(() -> -2800)
+        .alongWith(new SetIndexer(0.65, () -> -2800))
       )
     );
 
     Button manualShoot = new Button(() -> switchbox.shoot() && !switchbox.guide() && switchbox.shooterOverride());
     manualShoot.whenPressed(
-      new RampShooter(-2800)
+      new RampShooter(() -> -2800)
       .alongWith(new HoldHoodAngle())
       .andThen(
-        new Shoot(-2800)
-        .alongWith(new SetIndexer(0.65, -2800))
+        new Shoot(() -> -2800)
+        .alongWith(new SetIndexer(0.65, () -> -2800))
       )
     );
     
     Button shootWithVisionClose = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() > 12.2);
     shootWithVisionClose.whenPressed(
-      new AlignHoodToTarget().alongWith(new RampShooter(-2800))
-      .andThen(new Shoot(-2800).alongWith(new SetIndexer(0.65, -2800)))
+      new AlignHoodToTarget().alongWith(new RampShooter(() -> -2800))
+      .andThen(new Shoot(() -> -2800).alongWith(new SetIndexer(0.65, () -> -2800)))
     ); 
     
     Button shooterStop = new Button(() -> switchbox.shoot());
@@ -216,20 +216,20 @@ public class RobotContainer {
 
     Button shootWithVisionMedium = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && (Limelight.getTy() <= 12.2 && Limelight.getTy() >= -0.5));
     shootWithVisionMedium.whenPressed(
-      new AlignHoodToTarget().alongWith(new RampShooter(-3000))
-      .andThen(new Shoot(-3000).alongWith(new SetIndexer(0.65, -3000)))
+      new AlignHoodToTarget().alongWith(new RampShooter(() -> -3000))
+      .andThen(new Shoot(() -> -3000).alongWith(new SetIndexer(0.65, () -> -3000)))
     );
 
     Button shootWithVisionFar = new Button(() -> !switchbox.guide() && !switchbox.shooterOverride() && switchbox.shoot() && Limelight.getTy() < -0.5);
     shootWithVisionFar.whenPressed(
-      new AlignHoodToTarget().alongWith(new RampShooter(-3300))
-      .andThen(new Shoot(-3300).alongWith(new SetIndexer(0.65, -3300)))
+      new AlignHoodToTarget().alongWith(new RampShooter(() -> -3300))
+      .andThen(new Shoot(() -> -3300).alongWith(new SetIndexer(0.65, () -> -3300)))
     );
 
     Button trenchShoot = new Button(() -> switchbox.shoot() && switchbox.guide());
     trenchShoot.whenPressed(
-      new RampShooter(-3500)
-      .andThen(new Shoot(-3500).alongWith(new SetIndexer(0.65, -3500)))
+      new RampShooter(() -> -3500)
+      .andThen(new Shoot(() -> -3500).alongWith(new SetIndexer(0.65, () -> -3500)))
     );
     trenchShoot.whenPressed(new SetHoodAngle(23).andThen(
       new RunCommand(() -> hood.moveHood(0.02), hood).withTimeout(0.75).andThen(
@@ -351,6 +351,10 @@ public class RobotContainer {
         autonCommand = AutoCommands.steal8BallAuto();
       break;
 
+      case 5:
+        autonCommand = AutoCommands.loadPathweaverTrajectory("Trench");
+      break;
+
       default:
       autonCommand = null;
     }
@@ -378,6 +382,10 @@ public class RobotContainer {
 
       case 4:
         startPose = new Pose2d(12.57, -.33, Rotation2d.fromDegrees(0));
+      break;
+
+      case 5:
+        startPose = new Pose2d(10.8, -7.65, Rotation2d.fromDegrees(0));
       break;
 
       default:

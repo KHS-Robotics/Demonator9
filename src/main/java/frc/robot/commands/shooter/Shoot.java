@@ -7,19 +7,21 @@
 
 package frc.robot.commands.shooter;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class Shoot extends CommandBase {
   boolean drop = false;
-  final double THRESHOLD = 23.0;
+  //final double THRESHOLD = 23.0;
 
   /**
    * Creates a new shoot.
    */
 
-  double speed;
-  public Shoot(double speed) {
+  DoubleSupplier speed;
+  public Shoot(DoubleSupplier speed) {
     addRequirements(RobotContainer.shooter);
     this.speed = speed;
   }
@@ -27,7 +29,7 @@ public class Shoot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.shooter.setShooter(speed);
+    RobotContainer.shooter.setShooter(speed.getAsDouble());
     drop = false;
     //RobotContainer.indexer.setMotor(.6);
   }
@@ -35,12 +37,16 @@ public class Shoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(RobotContainer.shooter.getCurrent() > THRESHOLD && !drop) {
-      drop = true;
-      RobotContainer.indexer.decrementBall();
-    } else if(drop && RobotContainer.shooter.getCurrent() < THRESHOLD) {
-      drop = false;
+    if(Math.abs(speed.getAsDouble() - RobotContainer.shooter.getSetpoint()) > 1) {
+      RobotContainer.shooter.setShooter(speed.getAsDouble());
     }
+
+    // if(RobotContainer.shooter.getCurrent() > THRESHOLD && !drop) {
+    //   drop = true;
+    //   RobotContainer.indexer.decrementBall();
+    // } else if(drop && RobotContainer.shooter.getCurrent() < THRESHOLD) {
+    //   drop = false;
+    // }
   }
 
   // Called once the command ends or is interrupted.

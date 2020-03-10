@@ -7,15 +7,18 @@
 
 package frc.robot.commands.indexer;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class SetIndexer extends CommandBase {
-  double speed, shooterSpeed;
+  double speed;
+  DoubleSupplier shooterSpeed;
   /**
    * Creates a new SetIndexer.
    */
-  public SetIndexer(double speed, double shooterSpeed) {
+  public SetIndexer(double speed, DoubleSupplier shooterSpeed) {
     addRequirements(RobotContainer.indexer, RobotContainer.intake);
     this.speed = speed;
     this.shooterSpeed = shooterSpeed;
@@ -29,7 +32,7 @@ public class SetIndexer extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(RobotContainer.shooter.atSetpoint(shooterSpeed)) {
+    if(RobotContainer.shooter.atSetpoint(shooterSpeed.getAsDouble())) {
       RobotContainer.indexer.setMotor(speed);
 
       if(RobotContainer.indexer.getNumBalls() < 4) {

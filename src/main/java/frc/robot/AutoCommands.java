@@ -40,7 +40,7 @@ public class AutoCommands {
       new Thread(() -> {
         wallLineUp = loadPathweaverTrajectory("WallLineUp");
         frontTrench = loadPathweaverTrajectory("FrontOffset");
-        pickTrench = loadPathweaverTrajectory("PickTrench");
+        pickTrench = loadPathweaverTrajectory("Trench");
         returnTrench = loadPathweaverTrajectory("ReturnFromLastBall");
         moveOffInit = loadPathweaverTrajectory("MoveOffInit");
         steal = loadPathweaverTrajectory("Steal");
@@ -79,19 +79,19 @@ public class AutoCommands {
   public static Command sixBallAuto()  {
     return 
       wallLineUp
-      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000)))
-      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.65, -3000)).alongWith(new RotateToTarget()).withTimeout(5))
+      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
+      .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5))
       .andThen(frontTrench.withTimeout(3.5))
       .andThen(pickTrench)
       .andThen(returnTrench)//.alongWith(new WaitCommand(0.5))?
       .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()))  
-      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.65, -3000)).alongWith(new RotateToTarget()).withTimeout(5));
+      .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5));
   }
 
   public static Command shootOffInit()  {
     return 
-      new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000))
-      .andThen(new ShootAuto(-2800).alongWith(new SetIndexerAuto(0.65, -3000)).alongWith(new RotateToTarget()).withTimeout(5))
+      new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000))
+      .andThen(new ShootAuto(() -> -2800).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5))
       .andThen(moveOffInit);
   }
 
@@ -99,19 +99,19 @@ public class AutoCommands {
     return 
       steal
       .andThen(moveFromSteal)
-      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000)))
-      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.65, -3000)).alongWith(new RotateToTarget()).withTimeout(5))
+      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
+      .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5))
       .andThen(pick3Rendevous)
       .andThen(shootFromRendevous)
-      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000)))
-      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.65, -3000)).alongWith(new RotateToTarget()).withTimeout(5));
+      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
+      .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5));
   }
 
   public static Command steal5BallAuto()  {
     return 
       steal
       .andThen(moveFromSteal)
-      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(-3000)))
-      .andThen(new ShootAuto(-3000).alongWith(new SetIndexerAuto(0.65, -3000)).alongWith(new RotateToTarget()).withTimeout(5));
+      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
+      .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5));
   }
 }

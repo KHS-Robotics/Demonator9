@@ -27,7 +27,8 @@ public class Indexer extends SubsystemBase {
   private CANSparkMax motor;
   private CANPIDController motorPid;
   private CANEncoder motorEnc;
-  private DigitalInput input1, input2, input3, input5;
+  private DigitalInput input1, input2, input3, input5, inputDecrement;
+
   /**
    * Creates a new Indexer.
    */
@@ -52,7 +53,7 @@ public class Indexer extends SubsystemBase {
     motorPid.setSmartMotionMaxAccel(10000, 0);
     motorPid.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
     motorPid.setSmartMotionMaxVelocity(MAX_VEL, 0);
-    //motorPid.setSmartMotionMinOutputVelocity(100, 0);
+    // motorPid.setSmartMotionMinOutputVelocity(100, 0);
     motorPid.setSmartMotionAllowedClosedLoopError(0.5, 0);
 
     motor.setIdleMode(IdleMode.kBrake);
@@ -61,19 +62,37 @@ public class Indexer extends SubsystemBase {
     input2 = new DigitalInput(RobotMap.LIMIT_PORT_2);
     input3 = new DigitalInput(RobotMap.LIMIT_PORT_3);
     input5 = new DigitalInput(RobotMap.LIMIT_PORT_5);
+    inputDecrement = new DigitalInput(RobotMap.LIMIT_PORT_DECREMENT);
 
     var tab = Shuffleboard.getTab("Indexer");
     tab.addNumber("Motor Speed", motorEnc::getVelocity);
-    //tab.addNumber("Position", motorEnc::getPosition);
+    // tab.addNumber("Position", motorEnc::getPosition);
     tab.addNumber("Num Balls", () -> numBalls);
     tab.addBoolean("Beam Break 1", input1::get);
     tab.addBoolean("Beam Break 2", input2::get);
     tab.addBoolean("Beam Break 3", input3::get);
-    //tab.addBoolean("Beam Break 4", input4::get);
+    // tab.addBoolean("Beam Break 4", input4::get);
     tab.addBoolean("Beam Break 5", input5::get);
 
     var matchTab = Shuffleboard.getTab("Match");
     matchTab.addNumber("Num Balls", this::getNumBalls);
+    matchTab.addBoolean("5 Balls", () -> getNumBalls() >= 5);
+
+    new Thread(() -> {
+      boolean wasRead = false;
+      while (true) {
+        if (inputDecrement.get() && !wasRead) {
+          wasRead = true;
+        } else if (!inputDecrement.get() && wasRead) {
+          numBalls--;
+          wasRead = false;
+        }
+        try {
+          Thread.sleep(5);
+        } catch (InterruptedException e) {
+        }
+      }
+    }).start();
   }
 
   @Override
@@ -107,6 +126,10 @@ public class Indexer extends SubsystemBase {
 
   public boolean getSwitch5() {
     return !input5.get();
+  }
+
+  public boolean getDecrementSwitch() {
+    return !inputDecrement.get();
   }
 
   public double getPosition() {

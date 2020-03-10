@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -23,6 +24,8 @@ import frc.robot.vision.Limelight;
 
 public class Robot extends TimedRobot {
   int id = 1;
+  NetworkTableEntry idChooser;
+
   RobotContainer robotContainer;
 
   Command autonCommand;
@@ -33,7 +36,7 @@ public class Robot extends TimedRobot {
     AutoCommands.autoInit();
 
     var matchTab = Shuffleboard.getTab("Match");
-    matchTab.addNumber("Auto ID", () -> id);
+    idChooser = matchTab.add("Auto ID", 1).getEntry();
   }
 
   @Override
@@ -58,13 +61,7 @@ public class Robot extends TimedRobot {
       RobotContainer.hood.stop();
     }
 
-    if(RobotContainer.switchbox.shoot()) {
-      id = 0;
-
-      id += (RobotContainer.switchbox.engagePTO()) ? 1 : 0;
-      id += (RobotContainer.switchbox.controlPanelOverride()) ? 2 : 0;
-      id += (RobotContainer.switchbox.shooterOverride()) ? 4 : 0;
-    }
+    id = (int) idChooser.getDouble(1);
 
     if(RobotContainer.xboxController.getXButtonPressed()) {
       Limelight.setLedMode(LightMode.eOn);
@@ -87,14 +84,14 @@ public class Robot extends TimedRobot {
 
     RobotContainer.swerveDrive.resetNavx(robotContainer.getStartingPose(id));
 
-    RobotContainer.shooter.setShooter(-3000);
+    //RobotContainer.shooter.setShooter(-3000);
     RobotContainer.intake.intake();
     
     Command putIntakeDown = new InstantCommand(() -> RobotContainer.intake.down())
     .andThen(new WaitCommand(.5)
     .andThen(() -> RobotContainer.intake.setOff()));
 
-    RobotContainer.indexer.setNumBalls(3);
+    RobotContainer.indexer.setNumBalls(0);
 
     Command desiredAuton = 
       robotContainer.getAutonomousCommand(id)
@@ -105,7 +102,7 @@ public class Robot extends TimedRobot {
         RobotContainer.hood.stop();
         RobotContainer.indexer.stop();
         RobotContainer.intake.stop();
-    }, RobotContainer.swerveDrive, RobotContainer.shooter, RobotContainer.hood, RobotContainer.indexer, RobotContainer.intake);
+    }, RobotContainer.swerveDrive);//, RobotContainer.shooter, RobotContainer.hood, RobotContainer.indexer, RobotContainer.intake);
 
     if(!CenterSwerveModules.hasCalibrated()) {
       autonCommand = new CenterSwerveModules().andThen(desiredAuton);

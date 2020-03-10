@@ -7,13 +7,15 @@
 
 package frc.robot.commands.indexer;
 
+import java.util.function.DoubleSupplier;
+
 import frc.robot.RobotContainer;
 
 public class SetIndexerAuto extends SetIndexer {
   /**
    * Creates a new SetIndexerAuto.
    */
-  public SetIndexerAuto(double speed, double shootingSpeed) {
+  public SetIndexerAuto(double speed, DoubleSupplier shootingSpeed) {
     super(speed, shootingSpeed);
   }
 

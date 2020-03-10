@@ -45,15 +45,15 @@ public class Intake extends SubsystemBase {
 	}
 	
 	public void intake() {    
-		motor.set(speed);
+		motor.setVoltage(speed * 12);
   }
   
   public void intake(double speed) {
-    motor.set(speed);
+    motor.setVoltage(speed * 12);
   }
 
 	public void reverse() {
-		motor.set(-speed);
+		motor.setVoltage(-speed * 12);
 	}
 
   public void down() {
