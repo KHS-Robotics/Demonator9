@@ -23,7 +23,7 @@ import frc.robot.RobotMap;
 
 public class Indexer extends SubsystemBase {
   private final double MAX_VEL = 10000;
-  private int numBalls = 0;
+  private volatile int numBalls = 0;
   private CANSparkMax motor;
   private CANPIDController motorPid;
   private CANEncoder motorEnc;
@@ -84,7 +84,7 @@ public class Indexer extends SubsystemBase {
         if (inputDecrement.get() && !wasRead) {
           wasRead = true;
         } else if (!inputDecrement.get() && wasRead) {
-          numBalls--;
+          decrementBall();
           wasRead = false;
         }
         try {

@@ -176,10 +176,10 @@ public class SwerveDrive extends SubsystemBase {
 
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.normalizeWheelSpeeds(desiredStates, kMaxSpeed);
-    frontLeft.setDesiredState(desiredStates[0], false);
-    frontRight.setDesiredState(desiredStates[1], false);
-    rearLeft.setDesiredState(desiredStates[2], false);
-    rearRight.setDesiredState(desiredStates[3], false);
+    frontLeft.setDesiredState(desiredStates[0], true);
+    frontRight.setDesiredState(desiredStates[1], true);
+    rearLeft.setDesiredState(desiredStates[2], true);
+    rearRight.setDesiredState(desiredStates[3], true);
   }
 
 

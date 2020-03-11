@@ -68,8 +68,9 @@ public class Shooter extends SubsystemBase {
     if(!coastMode) {
       setBrake(true);
     }
-    shooterPid.setReference(speed, ControlType.kVelocity);
-    shooterPidSetpoint = speed;
+
+    shooterPidSetpoint = speed * getRPMMultipler();
+    shooterPid.setReference(shooterPidSetpoint, ControlType.kVelocity);
   }
 
   public void setShooterWithoutPID(double speed) {

@@ -9,28 +9,32 @@ package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
   private CANSparkMax motor;
   private DoubleSolenoid solenoid;
   private double speed = 0.5; //.7 made belt slip off
+  private CANEncoder motorEnc;
 
   public Intake() {
     motor = new CANSparkMax(RobotMap.INTAKE, MotorType.kBrushless);
     solenoid = new DoubleSolenoid(RobotMap.INTAKE_SOLENOID_1, RobotMap.INTAKE_SOLENOID_2);
 
+    motorEnc = motor.getEncoder();
+
     motor.setIdleMode(IdleMode.kBrake);
 
-    //var tab = Shuffleboard.getTab("Intake");
-    //tab.addNumber("Velocity", motorEnc::getVelocity);
-    //tab.addBoolean("Down", () -> solenoid.get());
+    var tab = Shuffleboard.getTab("Intake");
+    tab.addNumber("Velocity", motorEnc::getVelocity);
 
     setOff();
   }
@@ -38,6 +42,10 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
 
+  }
+
+  public double getVelocity() {
+    return motorEnc.getVelocity();
   }
 
   public void stop() {

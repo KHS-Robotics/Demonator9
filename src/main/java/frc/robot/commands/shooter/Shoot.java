@@ -37,10 +37,6 @@ public class Shoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Math.abs(speed.getAsDouble() - RobotContainer.shooter.getSetpoint()) > 1) {
-      RobotContainer.shooter.setShooter(speed.getAsDouble());
-    }
-
     // if(RobotContainer.shooter.getCurrent() > THRESHOLD && !drop) {
     //   drop = true;
     //   RobotContainer.indexer.decrementBall();

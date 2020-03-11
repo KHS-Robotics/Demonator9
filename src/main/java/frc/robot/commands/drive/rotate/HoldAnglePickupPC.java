@@ -5,37 +5,37 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.drive.rotate;
 
-import java.util.function.DoubleSupplier;
-
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.SwerveDrive;
 
-public class RampShooter extends CommandBase {
-  DoubleSupplier speed;
+public class HoldAnglePickupPC extends CommandBase {
+  private double angle;
+  private int startingPC, numBalls;
+
   /**
-   * Creates a new RampShooter.
+   * Creates a new RotateToAngle.
    */
-  public RampShooter(DoubleSupplier speed) {
-    addRequirements(RobotContainer.shooter);
-    this.speed = speed;
-  }
-
-  public RampShooter() {
-    addRequirements(RobotContainer.shooter);
-    this.speed = () -> -4500;
+  public HoldAnglePickupPC(int numBallsIndexed) {
+    addRequirements(RobotContainer.swerveDrive);
+    numBalls = numBallsIndexed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.shooter.setShooter(speed.getAsDouble());
+    startingPC = RobotContainer.indexer.getNumBalls();
+    RobotContainer.swerveDrive.resetPid();
+    angle = RobotContainer.swerveDrive.getYaw();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    RobotContainer.swerveDrive.holdAngleWhileDriving(RobotContainer.intake.getVelocity() > 2500 ? -.5 : -.3, 0, angle, true);
   }
 
   // Called once the command ends or is interrupted.
@@ -46,6 +46,6 @@ public class RampShooter extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.shooter.atSetpoint(speed.getAsDouble());
+    return RobotContainer.indexer.getNumBalls() == startingPC + numBalls;
   }
 }
