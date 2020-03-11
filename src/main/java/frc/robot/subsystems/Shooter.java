@@ -54,9 +54,9 @@ public class Shooter extends SubsystemBase {
     tab.addNumber("Leader Speed", leaderEnc::getVelocity);
     tab.addNumber("Shooter Setpoint", () -> shooterPidSetpoint);
     tab.addNumber("Shooter Error", () -> shooterPidSetpoint - leaderEnc.getVelocity());
-    //tab.addBoolean("At Setpoint", () -> atSetpoint(-4500));
     tab.addBoolean("Is Climbing", () -> isClimbing);
     tab.addNumber("Current", () -> getCurrent());
+    tab.addNumber("Multiplier", this::getRPMMultipler);
   }
 
   @Override
