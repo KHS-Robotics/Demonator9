@@ -29,7 +29,7 @@ public class Shooter extends SubsystemBase {
   private CANPIDController shooterPid;
   private CANEncoder leaderEnc;
 
-  private double shooterPidSetpoint;
+  private double shooterPidSetpoint, rpmMultiplier = 1;
   private boolean isClimbing, coastMode;
 
   public Shooter() {
@@ -123,6 +123,18 @@ public class Shooter extends SubsystemBase {
 
   public double getCurrent() {
     return RobotContainer.pdp.getCurrent(12);
+  }
+
+  public double getRPMMultipler() {
+    return rpmMultiplier;
+  }
+
+  public void increaseRPM() {
+    rpmMultiplier += 0.05;
+  }
+
+  public void decreaseRPM() {
+    rpmMultiplier -= 0.05;    
   }
 
   public boolean atSetpoint(double speed) {

@@ -320,6 +320,12 @@ public class RobotContainer {
       SwerveDrive.kMaxSpeed = 3.5;
       SwerveDrive.kMaxAngularSpeed = Math.PI;
     });
+
+    Button increaseRPM = new Button(() -> (xboxController.getPOV() >= 315 || xboxController.getPOV() <= 45) && xboxController.getPOV() > -1);
+    increaseRPM.whenPressed(() -> shooter.increaseRPM());
+
+    Button decrease = new Button(() -> (xboxController.getPOV() >= 135 && xboxController.getPOV() <= 225) && xboxController.getPOV() > -1);
+    increaseRPM.whenPressed(() -> shooter.decreaseRPM());
   }
 
   /**
