@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    Limelight.setLedMode(LightMode.eOn);
+    Limelight.setLedMode(LightMode.eOff);
 
     RobotContainer.hood.hoodMode(false);
     RobotContainer.CPManipulator.brakeMode(false);

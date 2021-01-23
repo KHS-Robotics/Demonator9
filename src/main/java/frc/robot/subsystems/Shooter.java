@@ -57,6 +57,7 @@ public class Shooter extends SubsystemBase {
     tab.addBoolean("Is Climbing", () -> isClimbing);
     tab.addNumber("Current", () -> getCurrent());
     tab.addNumber("Multiplier", this::getRPMMultipler);
+    tab.addBoolean("PTO Switch", () -> RobotContainer.switchbox.engagePTO());
   }
 
   @Override

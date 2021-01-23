@@ -338,29 +338,29 @@ public class RobotContainer {
     Command autonCommand;
 
     switch (id) {
-      case 0: 
-        autonCommand = AutoCommands.loadPathweaverTrajectory("MoveOffInit");
-      break;
+      // case 0: 
+      //   autonCommand = AutoCommands.loadPathweaverTrajectory("MoveOffInit");
+      // break;
 
-      case 1:
-        autonCommand = AutoCommands.shootOffInit();
-      break;
+      // case 1:
+      //   autonCommand = AutoCommands.shootOffInit();
+      // break;
 
-      case 2:
-        autonCommand = AutoCommands.sixBallAuto();
-      break;
+      // case 2:
+      //   autonCommand = AutoCommands.sixBallAuto();
+      // break;
 
-      case 3:
-        autonCommand = AutoCommands.steal5BallAuto();
-      break;
+      // case 3:
+      //   autonCommand = AutoCommands.steal5BallAuto();
+      // break;
 
-      case 4:
-        autonCommand = AutoCommands.steal8BallAuto();
-      break;
+      // case 4:
+      //   autonCommand = AutoCommands.steal8BallAuto();
+      // break;
 
-      case 5:
-        autonCommand = new HoldAnglePickupPC(3);//AutoCommands.loadPathweaverTrajectory("Trench");
-      break;
+      // case 5:
+      //   autonCommand = new HoldAnglePickupPC(3);//AutoCommands.loadPathweaverTrajectory("Trench");
+      // break;
 
       default:
       autonCommand = null;

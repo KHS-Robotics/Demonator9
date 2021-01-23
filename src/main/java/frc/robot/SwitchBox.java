@@ -39,6 +39,7 @@ public class SwitchBox extends Joystick {
 
 	public boolean outtake() {
 		return this.getRawButton(6);
+
 	}
 
 	public boolean shoot() {
@@ -62,7 +63,8 @@ public class SwitchBox extends Joystick {
 	}
 
 	public boolean engagePTO() {
-		return !this.getRawButton(9);
+		return false;
+		//return !this.getRawButton(9);
 	}
 
 	public double getHoodSpeed() {

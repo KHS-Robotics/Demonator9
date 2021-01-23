@@ -33,20 +33,26 @@ import frc.robot.vision.Limelight;
  */
 public class AutoCommands {
   private static boolean initialized = false;
-  public static SwerveControllerCommand wallLineUp, frontTrench, pickTrench, returnTrench, moveOffInit, steal, moveFromSteal, pick3Rendevous, shootFromRendevous;
+  //public static SwerveControllerCommand wallLineUp, frontTrench, pickTrench, returnTrench, moveOffInit, steal, moveFromSteal, pick3Rendevous, shootFromRendevous;
+  public static SwerveControllerCommand groupAStart, groupARed, groupABlue, endGroupARed, endGroupABlue;
 
   public static void autoInit() {
     if(!initialized) {
       new Thread(() -> {
-        wallLineUp = loadPathweaverTrajectory("WallLineUp");
-        frontTrench = loadPathweaverTrajectory("FrontOffset");
-        pickTrench = loadPathweaverTrajectory("Trench");
-        returnTrench = loadPathweaverTrajectory("ReturnFromLastBall");
-        moveOffInit = loadPathweaverTrajectory("MoveOffInit");
-        steal = loadPathweaverTrajectory("Steal");
-        moveFromSteal = loadPathweaverTrajectory("MoveFromSteal");
-        pick3Rendevous = loadPathweaverTrajectory("Pickup3Rendezvous");
-        shootFromRendevous = loadPathweaverTrajectory("MoveFromRendevous3");
+        groupAStart = loadPathweaverTrajectory("Start3BallA");
+        groupARed = loadPathweaverTrajectory("3BallARed");
+        groupABlue = loadPathweaverTrajectory("3BallABlue");
+        endGroupARed = loadPathweaverTrajectory("End3BallARed");
+        endGroupABlue = loadPathweaverTrajectory("End3BallBlue");
+        /* wallLineUp = loadPathweaverTrajectory("WallLineUp");
+        // frontTrench = loadPathweaverTrajectory("FrontOffset");
+        // pickTrench = loadPathweaverTrajectory("Trench");
+        // returnTrench = loadPathweaverTrajectory("ReturnFromLastBall");
+        // moveOffInit = loadPathweaverTrajectory("MoveOffInit");
+        // steal = loadPathweaverTrajectory("Steal");
+        // moveFromSteal = loadPathweaverTrajectory("MoveFromSteal");
+        // pick3Rendevous = loadPathweaverTrajectory("Pickup3Rendezvous");
+        // shootFromRendevous = loadPathweaverTrajectory("MoveFromRendevous3"); */
       }).start();
 
       initialized = true;
@@ -76,42 +82,48 @@ public class AutoCommands {
       );
   }
 
-  public static Command sixBallAuto()  {
-    return 
-      wallLineUp
-      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
-      .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5))
-      .andThen(frontTrench.withTimeout(3.5))
-      .andThen(pickTrench)
-      .andThen(returnTrench)//.alongWith(new WaitCommand(0.5))?
-      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()))  
-      .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5));
-  }
+  /* public static Command sixBallAuto()  {
+  //   return 
+  //     wallLineUp
+  //     .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
+  //     .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5))
+  //     .andThen(frontTrench.withTimeout(3.5))
+  //     .andThen(pickTrench)
+  //     .andThen(returnTrench)//.alongWith(new WaitCommand(0.5))?
+  //     .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()))  
+  //     .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5));
+  // }
 
-  public static Command shootOffInit()  {
-    return 
-      new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000))
-      .andThen(new ShootAuto(() -> -2800).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5))
-      .andThen(moveOffInit);
-  }
+  // public static Command shootOffInit()  {
+  //   return 
+  //     new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000))
+  //     .andThen(new ShootAuto(() -> -2800).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5))
+  //     .andThen(moveOffInit);
+  // }
 
-  public static Command steal8BallAuto()  {
-    return 
-      steal
-      .andThen(moveFromSteal)
-      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
-      .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5))
-      .andThen(pick3Rendevous)
-      .andThen(shootFromRendevous)
-      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
-      .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5));
-  }
+  // public static Command steal8BallAuto()  {
+  //   return 
+  //     steal
+  //     .andThen(moveFromSteal)
+  //     .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
+  //     .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5))
+  //     .andThen(pick3Rendevous)
+  //     .andThen(shootFromRendevous)
+  //     .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
+  //     .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5));
+  // }
 
-  public static Command steal5BallAuto()  {
-    return 
-      steal
-      .andThen(moveFromSteal)
-      .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
-      .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5));
+  // public static Command steal5BallAuto()  {
+  //   return 
+  //     steal
+  //     .andThen(moveFromSteal)
+  //     .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
+  //     .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5));
+  // } */
+
+  public static Command groupA() {
+    return
+        groupAStart
+        .andThen((RobotContainer.indexer.getNumBalls() > 0 ? groupARed.andThen(endGroupARed) : groupABlue.andThen(endGroupABlue)));
   }
 }
