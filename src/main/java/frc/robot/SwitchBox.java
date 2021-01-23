@@ -63,8 +63,7 @@ public class SwitchBox extends Joystick {
 	}
 
 	public boolean engagePTO() {
-		return false;
-		//return !this.getRawButton(9);
+		return !this.getRawButton(9);
 	}
 
 	public double getHoodSpeed() {
