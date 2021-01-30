@@ -24,6 +24,7 @@ import frc.robot.vision.Limelight;
 
 public class Robot extends TimedRobot {
   int id = 1;
+  static int homeId = 0;
   NetworkTableEntry idChooser;
 
   RobotContainer robotContainer;
@@ -62,6 +63,7 @@ public class Robot extends TimedRobot {
     }
 
     id = (int) idChooser.getDouble(1);
+    homeId = (int) idChooser.getDouble(1);
 
     if(RobotContainer.xboxController.getXButtonPressed()) {
       Limelight.setLedMode(LightMode.eOn);

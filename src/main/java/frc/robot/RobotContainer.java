@@ -338,6 +338,12 @@ public class RobotContainer {
     Command autonCommand;
 
     switch (id) {
+      case 0: 
+        autonCommand = AutoCommands.groupA();
+        break;
+      case 1:
+        autonCommand = AutoCommands.groupB();
+        break;
       // case 0: 
       //   autonCommand = AutoCommands.loadPathweaverTrajectory("MoveOffInit");
       // break;
@@ -372,27 +378,11 @@ public class RobotContainer {
     Pose2d startPose;
     switch (id) {
       case 0: 
-        startPose = new Pose2d(12.6, -5, Rotation2d.fromDegrees(0));
+        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(180));
       break;
 
       case 1:
-        startPose = new Pose2d(12.6, -5, Rotation2d.fromDegrees(0));
-      break;
-
-      case 2:
-        startPose = new Pose2d(12.57, -7.88, Rotation2d.fromDegrees(0));
-      break;
-
-      case 3:
-        startPose = new Pose2d(12.57, -.33, Rotation2d.fromDegrees(0));
-      break;
-
-      case 4:
-        startPose = new Pose2d(12.57, -.33, Rotation2d.fromDegrees(0));
-      break;
-
-      case 5:
-        startPose = new Pose2d(10.8, -7.65, Rotation2d.fromDegrees(0));
+        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(180));
       break;
 
       default:

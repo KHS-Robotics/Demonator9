@@ -34,7 +34,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 public class AutoCommands {
   private static boolean initialized = false;
   //public static SwerveControllerCommand wallLineUp, frontTrench, pickTrench, returnTrench, moveOffInit, steal, moveFromSteal, pick3Rendevous, shootFromRendevous;
-  public static SwerveControllerCommand groupAStart, groupARed, groupABlue, endGroupARed, endGroupABlue;
+  public static SwerveControllerCommand groupAStart, groupARed, groupABlue, endGroupARed, endGroupABlue, groupBStart, groupBRed, groupBBlue, endGroupBRed, endGroupBBlue;
 
   public static void autoInit() {
     if(!initialized) {
@@ -43,7 +43,13 @@ public class AutoCommands {
         groupARed = loadPathweaverTrajectory("3BallARed");
         groupABlue = loadPathweaverTrajectory("3BallABlue");
         endGroupARed = loadPathweaverTrajectory("End3BallARed");
-        endGroupABlue = loadPathweaverTrajectory("End3BallBlue");
+        endGroupABlue = loadPathweaverTrajectory("End3BallABlue");
+
+        groupBStart = loadPathweaverTrajectory("Start3BallB");
+        groupBRed = loadPathweaverTrajectory("3BallBRed");
+        groupBBlue = loadPathweaverTrajectory("3BallBBlue");
+        endGroupBRed = loadPathweaverTrajectory("End3BallBRed");
+        endGroupBBlue = loadPathweaverTrajectory("End3BallBBlue");
         /* wallLineUp = loadPathweaverTrajectory("WallLineUp");
         // frontTrench = loadPathweaverTrajectory("FrontOffset");
         // pickTrench = loadPathweaverTrajectory("Trench");
@@ -121,9 +127,58 @@ public class AutoCommands {
   //     .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5));
   // } */
 
+  public static Command ballAuto() {
+    switch(Robot.homeId) {
+      case 0:
+        return groupAStart
+          .andThen(groupARed)
+          .andThen(endGroupARed);
+      
+      case 1:
+        return groupAStart
+          .andThen(groupABlue)
+          .andThen(endGroupABlue);
+
+      case 2:
+        return groupBStart
+          .andThen(groupBRed)
+          .andThen(endGroupBRed);
+
+      case 3:
+        return groupBStart
+        .andThen(groupBBlue)
+        .andThen(endGroupBBlue);
+        
+      default:
+        return null;
+    }
+  }
+
   public static Command groupA() {
-    return
+    if(false) {
+      return
         groupAStart
-        .andThen((RobotContainer.indexer.getNumBalls() > 0 ? groupARed.andThen(endGroupARed) : groupABlue.andThen(endGroupABlue)));
+        .andThen(groupARed)
+        .andThen(endGroupARed);
+    } else {
+      return
+        groupAStart
+        .andThen(groupABlue)
+        .andThen(endGroupABlue);
+    }
+  }
+
+  public static Command groupB() {
+    if(false) {
+      return
+        groupBStart
+        .andThen(groupBRed)
+        .andThen(endGroupBRed);
+    } else {
+      return
+        groupBStart
+        .andThen(groupBBlue)
+        .andThen(endGroupBBlue);
+    }
   }
 }
