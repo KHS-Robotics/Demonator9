@@ -339,34 +339,19 @@ public class RobotContainer {
 
     switch (id) {
       case 0: 
-        autonCommand = AutoCommands.groupA();
+        autonCommand = AutoCommands.groupARed();
         break;
       case 1:
-        autonCommand = AutoCommands.groupB();
+        autonCommand = AutoCommands.groupABlue();
         break;
-      // case 0: 
-      //   autonCommand = AutoCommands.loadPathweaverTrajectory("MoveOffInit");
-      // break;
 
-      // case 1:
-      //   autonCommand = AutoCommands.shootOffInit();
-      // break;
-
-      // case 2:
-      //   autonCommand = AutoCommands.sixBallAuto();
-      // break;
-
-      // case 3:
-      //   autonCommand = AutoCommands.steal5BallAuto();
-      // break;
-
-      // case 4:
-      //   autonCommand = AutoCommands.steal8BallAuto();
-      // break;
-
-      // case 5:
-      //   autonCommand = new HoldAnglePickupPC(3);//AutoCommands.loadPathweaverTrajectory("Trench");
-      // break;
+      case 2:
+        autonCommand = AutoCommands.groupBRed();
+        break;
+      
+      case 3:
+        autonCommand = AutoCommands.groupBBlue();
+        break;
 
       default:
       autonCommand = null;
@@ -378,11 +363,19 @@ public class RobotContainer {
     Pose2d startPose;
     switch (id) {
       case 0: 
-        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(180));
+        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(0));
       break;
 
       case 1:
-        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(180));
+        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(0));
+      break;
+
+      case 2: 
+        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(0));
+      break;
+
+      case 3:
+        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(0));
       break;
 
       default:

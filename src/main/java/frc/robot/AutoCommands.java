@@ -127,58 +127,32 @@ public class AutoCommands {
   //     .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5));
   // } */
 
-  public static Command ballAuto() {
-    switch(Robot.homeId) {
-      case 0:
-        return groupAStart
-          .andThen(groupARed)
-          .andThen(endGroupARed);
-      
-      case 1:
-        return groupAStart
-          .andThen(groupABlue)
-          .andThen(endGroupABlue);
 
-      case 2:
-        return groupBStart
-          .andThen(groupBRed)
-          .andThen(endGroupBRed);
-
-      case 3:
-        return groupBStart
-        .andThen(groupBBlue)
-        .andThen(endGroupBBlue);
-        
-      default:
-        return null;
-    }
+  public static Command groupARed() {
+    return
+      groupAStart
+      .andThen(groupARed)
+      .andThen(endGroupARed);
   }
 
-  public static Command groupA() {
-    if(false) {
-      return
-        groupAStart
-        .andThen(groupARed)
-        .andThen(endGroupARed);
-    } else {
-      return
-        groupAStart
-        .andThen(groupABlue)
-        .andThen(endGroupABlue);
-    }
+  public static Command groupABlue() {
+    return
+      groupAStart
+      .andThen(groupABlue)
+      .andThen(endGroupABlue);
   }
 
-  public static Command groupB() {
-    if(false) {
+  public static Command groupBRed() {
       return
         groupBStart
         .andThen(groupBRed)
         .andThen(endGroupBRed);
-    } else {
+  }
+
+  public static Command groupBBlue() {
       return
         groupBStart
         .andThen(groupBBlue)
         .andThen(endGroupBBlue);
     }
-  }
 }
