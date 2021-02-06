@@ -363,19 +363,19 @@ public class RobotContainer {
     Pose2d startPose;
     switch (id) {
       case 0: 
-        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(0));
+        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(180));
       break;
 
       case 1:
-        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(0));
+        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(180));
       break;
 
       case 2: 
-        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(0));
+        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(180));
       break;
 
       case 3:
-        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(0));
+        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(180));
       break;
 
       default:
