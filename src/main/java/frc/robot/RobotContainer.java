@@ -340,18 +340,19 @@ public class RobotContainer {
     switch (id) {
       case 0: 
         autonCommand = AutoCommands.groupARed();
-        break;
+      break;
+
       case 1:
         autonCommand = AutoCommands.groupABlue();
-        break;
+      break;
 
       case 2:
         autonCommand = AutoCommands.groupBRed();
-        break;
+      break;
       
       case 3:
         autonCommand = AutoCommands.groupBBlue();
-        break;
+      break;
 
       default:
       autonCommand = null;
