@@ -74,7 +74,7 @@ public class AutoCommands {
         DriverStation.reportError("Unable to open trajectory: " + json, ex.getStackTrace());
         return null;
       }
-    
+
       return new SwerveControllerCommand(
         trajectory,
         RobotContainer.swerveDrive::getPose,
@@ -144,9 +144,9 @@ public class AutoCommands {
 
   public static Command groupBRed() {
       return
-        groupBStart
-        .andThen(groupBRed)
-        .andThen(endGroupBRed);
+        groupAStart;
+        // .andThen(groupBRed)
+        // .andThen(endGroupBRed);
   }
 
   public static Command groupBBlue() {

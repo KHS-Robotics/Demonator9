@@ -38,6 +38,7 @@ public class Robot extends TimedRobot {
 
     var matchTab = Shuffleboard.getTab("Match");
     idChooser = matchTab.add("Auto ID", 1).getEntry();
+    matchTab.addNumber("Auto ID Echo", () -> id);
   }
 
   @Override
@@ -63,7 +64,6 @@ public class Robot extends TimedRobot {
     }
 
     id = (int) idChooser.getDouble(1);
-    homeId = (int) idChooser.getDouble(1);
 
     if(RobotContainer.xboxController.getXButtonPressed()) {
       Limelight.setLedMode(LightMode.eOn);
@@ -137,6 +137,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    RobotContainer.swerveDrive.updateOdometry();
   }
 
   @Override

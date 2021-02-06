@@ -372,7 +372,7 @@ public class RobotContainer {
       break;
 
       case 2: 
-        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(180));
+        startPose = new Pose2d(0.3, -2.286, Rotation2d.fromDegrees(0));
       break;
 
       case 3:
